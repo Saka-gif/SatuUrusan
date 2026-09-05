@@ -1,0 +1,18 @@
+"use client";
+
+import { useState } from "react";
+import { lifeEvents, type LifeEvent } from "@/data/life-events";
+import { EventCard } from "./EventCard";
+import { ProcessSection } from "./ProcessSection";
+import { ServiceExplorer } from "./ServiceExplorer";
+
+export function HomeContent() {
+  const [selectedEvent, setSelectedEvent] = useState<LifeEvent | null>(null);
+  return <main>
+    <section className="hero-section"><div className="hero-shell"><div className="hero-copy"><p className="eyebrow"><span>✦</span> Personal life-event navigator</p><h1>Satu peristiwa.<br /><em>Lebih sedikit bingung.</em></h1><p className="hero-lede">SatuUrusan membantu kamu memahami urusan administratif yang muncul dari sebuah kejadian hidup, lalu menyusunnya menjadi langkah yang jelas.</p><div className="hero-actions"><a href="#mulai" className="primary-button">Mulai dari peristiwa <span>→</span></a><a href="#cara-kerja" className="secondary-button">Lihat cara kerja</a></div><div className="trust-note"><span className="shield">✓</span> Panduan netral · Terhubung ke kanal resmi</div></div><div className="hero-visual" aria-label="Ilustrasi peta urusan yang saling terhubung"><div className="orbit orbit-one" /><div className="orbit orbit-two" /><div className="map-card"><div className="map-card-top"><span className="mini-mark">✓</span><span>peta urusan</span><b>•••</b></div><div className="map-title">Pindah tempat<br /><strong>tinggal</strong></div><div className="map-line"><i className="line-dot blue-dot" /><span>Alamat & dokumen</span><small>01</small></div><div className="map-line"><i className="line-dot orange-dot" /><span>Kesehatan keluarga</span><small>02</small></div><div className="map-line faded"><i className="line-dot violet-dot" /><span>Pendidikan anak</span><small>03</small></div></div><div className="floating-chip chip-top">✦ <span>1 peristiwa</span></div><div className="floating-chip chip-bottom"><span className="pulse-dot" /> 8 langkah tersusun</div></div></div></section>
+    <section className="events-section" id="mulai"><div className="section-shell"><div className="section-heading"><div><p className="section-kicker">Mulai dari yang sedang terjadi</p><h2>Apa yang sedang kamu urus?</h2></div><p className="section-aside">Pilih satu peristiwa. Kami bantu<br />memetakan urusannya.</p></div><div className="event-grid">{lifeEvents.map((event) => <EventCard key={event.title} event={event} onSelect={setSelectedEvent} />)}</div>{selectedEvent && <div className="selection-banner"><span className="selection-icon">{selectedEvent.icon}</span><span><strong>{selectedEvent.title}</strong> dipilih. Selanjutnya kami akan menyusun {selectedEvent.tasks} langkah yang relevan untukmu.</span><button type="button" onClick={() => setSelectedEvent(null)} aria-label="Tutup">×</button></div>}</div></section>
+    <ServiceExplorer />
+    <ProcessSection />
+    <section className="principles-section" id="cara-kerja"><div className="section-shell principle-grid"><div><p className="section-kicker">Bukan layanan pemerintah</p><h2>Kami merapikan<br /><em>jalannya.</em></h2></div><div className="principle-copy"><p>SatuUrusan tidak membuat KTP, mendaftarkan BPJS, atau menggantikan instansi mana pun.</p><p>Kami membantu kamu melihat hubungan antar-urusan, tahu apa yang perlu disiapkan, dan menemukan pintu resmi yang tepat.</p><a href="/cara-kerja">Pelajari cara kerja kami <span>→</span></a></div><div className="number-list"><div><b>01</b><span>Pahami peristiwanya</span></div><div><b>02</b><span>Susun urutan langkah</span></div><div><b>03</b><span>Hubungkan ke kanal resmi</span></div></div></div></section>
+  </main>;
+}
