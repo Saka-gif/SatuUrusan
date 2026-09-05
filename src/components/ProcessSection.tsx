@@ -5,5 +5,5 @@ const steps = [
 ];
 
 export function ProcessSection() {
-  return <section className="process-section"><div className="section-shell"><div className="process-heading"><p className="section-kicker">Sederhana sejak langkah pertama</p><h2>Cara Kerja <em>SatuUrusan</em></h2><p>Tiga langkah sederhana untuk menyelesaikan urusanmu.</p></div><div className="process-grid">{steps.map((step) => <article className="process-card" key={step.number}><div className="process-top"><span className="process-icon">{step.icon}</span><span>{step.number}</span></div><h3>{step.title}</h3><p>{step.text}</p><span className="process-line" /></article>)}</div></div></section>;
+  return <section className="process-section"><div className="section-shell"><div className="process-heading"><p className="section-kicker">Sederhana sejak langkah pertama</p><h2>Cara Kerja <em>SatuUrusan</em></h2><p>Tiga langkah sederhana untuk menyelesaikan urusanmu.</p></div><div className="process-grid">{steps.map((step) => <article className="process-item" key={step.number}><span className="process-icon">{step.icon}</span><span className="process-number">{step.number}</span><h3>{step.title}</h3><p>{step.text}</p></article>)}</div></div></section>;
 }
