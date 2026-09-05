@@ -1,0 +1,9 @@
+"use client";
+
+import { useState } from "react";
+import { serviceCategories, type ServiceCategory } from "@/data/service-categories";
+
+export function ServiceExplorer() {
+  const [active, setActive] = useState<ServiceCategory | null>(null);
+  return <section className="service-explorer" id="layanan"><div className="section-shell"><div className="service-heading"><div><p className="section-kicker">Jelajahi berdasarkan kebutuhan</p><h2>Apa yang ingin <em>kamu urus?</em></h2></div><p>Temukan layanan administrasi<br />dengan cara yang lebih mudah.</p></div><div className="service-grid">{serviceCategories.map((service) => <button className={`service-card ${active?.name === service.name ? "is-active" : ""}`} key={service.name} type="button" onClick={() => setActive(active?.name === service.name ? null : service)}><span className={`service-icon ${service.accent}`}>{service.icon}</span><strong>{service.name}</strong><span className="service-description">{service.description}</span><span className={`service-badge ${service.accent}`}>{service.count} layanan</span><span className="service-corner">↗</span></button>)}</div><div className="service-footer"><span>{active ? <><b>{active.name}</b> punya {active.count} layanan yang bisa dipetakan.</> : "Butuh panduan yang lebih spesifik?"}</span><button type="button" onClick={() => setActive(serviceCategories[0])}>Lihat semua layanan <b>→</b></button></div>{active && <div className="service-preview"><div><span className={`service-icon ${active.accent}`}>{active.icon}</span><div><p className="preview-label">Peta layanan</p><h3>{active.name}</h3></div></div><div className="preview-tags">{active.tags.map((tag) => <span key={tag}>{tag}</span>)}</div><button type="button" onClick={() => setActive(null)} aria-label="Tutup detail">×</button></div>}</div></section>;
+}
