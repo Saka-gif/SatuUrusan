@@ -9,7 +9,6 @@ import {
   Receipt, 
   Car, 
   Building2, 
-  Sparkles, 
   Clock, 
   CheckCircle2, 
   ExternalLink, 
@@ -17,8 +16,7 @@ import {
   X,
   FileCheck,
   Search,
-  ChevronRight,
-  HelpCircle
+  ChevronRight
 } from "lucide-react";
 import { serviceCategories } from "@/data/service-categories";
 import { ServiceCategory, ServiceItem } from "@/lib/supabase/types";
@@ -68,11 +66,11 @@ export function ServiceExplorer() {
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
           <div className="space-y-3 max-w-2xl">
             <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 border border-blue-200 text-blue-700 text-xs font-bold shadow-2xs">
-              <Sparkles className="w-3.5 h-3.5 text-blue-600" />
+              <span className="w-1.5 h-1.5 rounded-full bg-blue-600 animate-pulse-soft" />
               <span>Jelajahi Berdasarkan Kebutuhan</span>
             </div>
             <h2 className="font-display text-3xl sm:text-4xl font-extrabold text-[#0f274a] tracking-tight">
-              Apa yang ingin <span className="text-blue-600">kamu urus?</span>
+              Apa yang ingin <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-sky-600">kamu urus?</span>
             </h2>
             <p className="text-sm sm:text-base text-slate-500 leading-relaxed">
               Cari layanan tanpa perlu bingung menghafal nama kementerian atau dinas. Kami petakan syarat dan alurnya secara jelas.
@@ -87,12 +85,12 @@ export function ServiceExplorer() {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Cari layanan (KTP, BPJS, SIM...)"
-              className="w-full pl-10 pr-4 py-3 bg-white border border-slate-200 rounded-xl text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 shadow-sm transition-all"
+              className="w-full pl-10 pr-4 py-3 bg-white border border-slate-200 rounded-2xl text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 shadow-sm transition-all"
             />
           </div>
         </div>
 
-        {/* Category Pills Slider / Grid */}
+        {/* Category Pills Slider / Grid with Fluid Hover */}
         <div className="flex items-center gap-3 overflow-x-auto pb-4 mb-8 no-scrollbar">
           {filteredCategories.map((category) => {
             const Icon = CATEGORY_ICONS[category.name] || IdCard;
@@ -107,10 +105,10 @@ export function ServiceExplorer() {
                 className={`flex-shrink-0 flex items-center gap-2.5 px-5 py-3.5 rounded-2xl border text-xs font-bold transition-all duration-300 ease-out transform hover:-translate-y-1 cursor-pointer ${
                   isCurrent
                     ? "bg-[#0f274a] border-[#0f274a] text-white shadow-xl shadow-blue-950/20"
-                    : "bg-white border-slate-200/90 text-slate-700 hover:bg-slate-50 hover:border-slate-300 shadow-sm"
+                    : "bg-white border-slate-200/90 text-slate-700 hover:bg-blue-50/50 hover:text-blue-700 hover:border-blue-300 shadow-sm"
                 }`}
               >
-                <div className={`w-7 h-7 rounded-lg flex items-center justify-center ${isCurrent ? "bg-white/15 text-white" : colors.bg}`}>
+                <div className={`w-7 h-7 rounded-xl flex items-center justify-center transition-colors ${isCurrent ? "bg-white/15 text-white" : "bg-blue-50 text-blue-600"}`}>
                   <Icon className="w-4 h-4" />
                 </div>
                 <span>{category.name}</span>
@@ -149,7 +147,7 @@ export function ServiceExplorer() {
                 {selectedCategory.tags.map((tag) => (
                   <span
                     key={tag}
-                    className="px-3 py-1 rounded-full bg-slate-100 text-slate-600 text-[11px] font-bold border border-slate-200/60"
+                    className="px-3 py-1 rounded-full bg-slate-50 text-slate-600 text-[11px] font-semibold border border-slate-200/80 hover:bg-blue-50 hover:text-blue-700 hover:border-blue-200 transition-colors"
                   >
                     #{tag}
                   </span>
@@ -157,29 +155,29 @@ export function ServiceExplorer() {
               </div>
             </div>
 
-            {/* Grid of Service Items */}
+            {/* Grid of Service Items with Electric Blue Hover Lift */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
               {selectedCategory.items?.map((item) => (
                 <div
                   key={item.title}
                   onClick={() => setSelectedItem(item)}
-                  className="group relative bg-slate-50/70 hover:bg-white rounded-2xl p-6 border border-slate-200/80 hover:border-blue-400 hover:shadow-2xl hover:shadow-blue-500/10 transition-all duration-300 ease-out transform hover:-translate-y-1.5 cursor-pointer flex flex-col justify-between h-full"
+                  className="group relative bg-white hover:bg-gradient-to-b hover:from-white hover:to-blue-50/30 rounded-2xl p-6 border border-slate-200/80 hover:border-blue-400 hover:shadow-xl hover:shadow-blue-500/12 transition-all duration-300 ease-out transform hover:-translate-y-2 cursor-pointer flex flex-col justify-between h-full"
                 >
                   <div className="space-y-3">
                     <div className="flex items-start justify-between gap-2">
                       <h4 className="font-display font-bold text-sm sm:text-base text-[#0f274a] group-hover:text-blue-600 transition-colors">
                         {item.title}
                       </h4>
-                      <div className="w-7 h-7 rounded-full bg-white group-hover:bg-blue-600 group-hover:text-white flex items-center justify-center text-slate-400 flex-shrink-0 transition-all shadow-2xs">
+                      <div className="w-7 h-7 rounded-full bg-slate-100 group-hover:bg-blue-600 group-hover:text-white flex items-center justify-center text-slate-400 flex-shrink-0 transition-all shadow-2xs">
                         <ChevronRight className="w-4 h-4 transform group-hover:translate-x-0.5 transition-transform" />
                       </div>
                     </div>
-                    <p className="text-xs text-slate-500 leading-relaxed">
+                    <p className="text-xs text-slate-500 leading-relaxed line-clamp-3">
                       {item.description}
                     </p>
                   </div>
 
-                  <div className="mt-6 pt-4 border-t border-slate-200/60 flex items-center justify-between text-xs">
+                  <div className="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between text-xs">
                     <span className="flex items-center gap-1.5 font-bold text-slate-500 text-[11px]">
                       <Clock className="w-3.5 h-3.5 text-blue-500" />
                       <span>{item.duration}</span>
