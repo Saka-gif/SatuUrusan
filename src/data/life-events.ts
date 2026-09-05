@@ -1,16 +1,66 @@
-export type LifeEvent = {
-  title: string;
-  description: string;
-  icon: string;
-  accent: string;
-  tasks: number;
-};
+import { LifeEvent } from "@/lib/supabase/types";
+
+export type { LifeEvent };
 
 export const lifeEvents: LifeEvent[] = [
-  { title: "Pindah tempat tinggal", description: "Perbarui hal-hal penting setelah pindah rumah atau kota.", icon: "⌂", accent: "blue", tasks: 8 },
-  { title: "Memulai pekerjaan baru", description: "Siapkan administrasi dan kebutuhan di tempat kerja baru.", icon: "✦", accent: "orange", tasks: 6 },
-  { title: "Menikah", description: "Susun urusan setelah perubahan status keluarga.", icon: "♡", accent: "rose", tasks: 7 },
-  { title: "Memiliki anak", description: "Temukan langkah penting untuk menyambut anggota keluarga baru.", icon: "✺", accent: "green", tasks: 9 },
-  { title: "Memulai sekolah", description: "Atur kebutuhan administrasi untuk perjalanan pendidikan.", icon: "▤", accent: "violet", tasks: 5 },
-  { title: "Merawat keluarga", description: "Kelola kebutuhan administratif saat mendampingi keluarga.", icon: "☼", accent: "teal", tasks: 4 },
+  {
+    id: "le-1",
+    slug: "pindah-domisili",
+    title: "Pindah Tempat Tinggal",
+    description: "Perbarui KTP, Kartu Keluarga, faskes BPJS, dan surat domisili setelah pindah rumah atau kota.",
+    icon: "Home",
+    accent: "blue",
+    tasks_count: 8,
+    order_index: 1,
+  },
+  {
+    id: "le-2",
+    slug: "pekerjaan-baru",
+    title: "Memulai Pekerjaan Baru",
+    description: "Siapkan NPWP, BPJS Ketenagakerjaan, rekening payroll, dan dokumen administratif karir.",
+    icon: "Briefcase",
+    accent: "orange",
+    tasks_count: 6,
+    order_index: 2,
+  },
+  {
+    id: "le-3",
+    slug: "menikah",
+    title: "Menikah & Berkeluarga",
+    description: "Urus surat nikah KUA/Catpil, pecah Kartu Keluarga baru, update KTP status kawin, dan gabung BPJS.",
+    icon: "Heart",
+    accent: "rose",
+    tasks_count: 7,
+    order_index: 3,
+  },
+  {
+    id: "le-4",
+    slug: "memiliki-anak",
+    title: "Kelahiran Anggota Keluarga",
+    description: "Daftarkan Akta Kelahiran, masukkan anak ke Kartu Keluarga, dan daftarkan BPJS Kesehatan bayi baru lahir.",
+    icon: "Baby",
+    accent: "green",
+    tasks_count: 9,
+    order_index: 4,
+  },
+  {
+    id: "le-5",
+    slug: "memulai-usaha",
+    title: "Membuka Usaha Mandiri (UMKM)",
+    description: "Urus NIB (Nomor Induk Berusaha) di OSS, izin edar PIRT/BPOM, sertifikat halal, dan rekening bisnis.",
+    icon: "Building2",
+    accent: "violet",
+    tasks_count: 8,
+    order_index: 5,
+  },
+  {
+    id: "le-6",
+    slug: "pendidikan",
+    title: "Pendidikan & Sekolah",
+    description: "Persiapan PPDB sekolah, legalisir ijazah, pengajuan KIP Kuliah/Beasiswa, dan mutasi sekolah.",
+    icon: "GraduationCap",
+    accent: "teal",
+    tasks_count: 5,
+    order_index: 6,
+  },
 ];
