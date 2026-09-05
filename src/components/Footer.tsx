@@ -1,13 +1,18 @@
+"use client";
+
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { BrandMark } from "./BrandMark";
 
 export function Footer() {
+  const pathname = usePathname();
+  if (["/mulai", "/daftar", "/masuk", "/onboarding", "/dashboard"].some((path) => pathname.startsWith(path))) return null;
   return <>
     <section className="footer-cta">
       <p className="section-kicker">Langkah pertama dimulai di sini</p>
-      <h2>Mulai urus sekarang.</h2>
-      <p>Gratis. Tidak perlu kartu kredit. Temukan peta urusanmu dalam hitungan menit.</p>
-      <div className="footer-cta-actions"><Link className="primary-button" href="/#mulai">Buat Peta Gratis <span>→</span></Link><Link className="secondary-button" href="/bantuan">Pelajari dulu</Link></div>
+      <h2>Siap mulai mengurus?</h2>
+      <p>Masuk untuk melanjutkan, atau mulai sekarang untuk menemukan langkah yang relevan dengan situasimu.</p>
+      <div className="footer-cta-actions"><Link className="secondary-button" href="/masuk">Masuk</Link><Link className="primary-button" href="/mulai">Mulai Sekarang <span>→</span></Link></div>
     </section>
     <footer className="site-footer">
       <div className="footer-grid">
