@@ -1,16 +1,13 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 
 export function CursorGlow() {
-  const [mounted, setMounted] = useState(false);
   const glowRef = useRef<HTMLDivElement>(null);
   const posRef = useRef({ x: -250, y: -250 });
   const targetRef = useRef({ x: -250, y: -250 });
 
   useEffect(() => {
-    setMounted(true);
-
     const handlePointerMove = (e: PointerEvent) => {
       targetRef.current = { x: e.clientX, y: e.clientY };
     };
@@ -38,8 +35,6 @@ export function CursorGlow() {
       cancelAnimationFrame(animationFrameId);
     };
   }, []);
-
-  if (!mounted) return null;
 
   return (
     <div

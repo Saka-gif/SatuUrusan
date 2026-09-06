@@ -7,7 +7,6 @@ import {
   CheckSquare, 
   ExternalLink, 
   ArrowRight, 
-  ShieldCheck,
   ChevronRight,
   Info
 } from "lucide-react";

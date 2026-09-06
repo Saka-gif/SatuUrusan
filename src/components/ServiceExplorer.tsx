@@ -95,8 +95,6 @@ export function ServiceExplorer() {
           {filteredCategories.map((category) => {
             const Icon = CATEGORY_ICONS[category.name] || IdCard;
             const isCurrent = selectedCategory?.name === category.name;
-            const colors = CATEGORY_COLORS[category.accent] || CATEGORY_COLORS.blue;
-
             return (
               <button
                 key={category.name}

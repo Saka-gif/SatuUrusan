@@ -8,11 +8,8 @@ import {
   User, 
   ArrowRight, 
   Compass, 
-  ShieldCheck, 
   ExternalLink,
   ChevronRight,
-  HelpCircle,
-  MessageSquare
 } from "lucide-react";
 import Link from "next/link";
 
@@ -117,6 +114,7 @@ export function AiAssistantModal() {
   ]);
   const [isTyping, setIsTyping] = useState(false);
   const chatEndRef = useRef<HTMLDivElement>(null);
+  const messageIdRef = useRef(0);
 
   useEffect(() => {
     const handleOpen = () => setIsOpen(true);
@@ -135,7 +133,7 @@ export function AiAssistantModal() {
     if (!query) return;
 
     const userMsg: ChatMessage = {
-      id: `user_${Date.now()}`,
+      id: `user_${messageIdRef.current++}`,
       sender: "user",
       text: query
     };

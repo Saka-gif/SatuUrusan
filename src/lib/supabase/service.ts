@@ -1,7 +1,5 @@
 import { getSupabase } from "./client";
-import { UserRoadmap, RoadmapTask, LifeEvent, ServiceCategory, FaqItem } from "./types";
-import { lifeEvents as defaultLifeEvents } from "@/data/life-events";
-import { serviceCategories as defaultServiceCategories } from "@/data/service-categories";
+import { UserRoadmap, RoadmapTask } from "./types";
 import { addNotification } from "@/lib/notifications";
 
 const LOCAL_ROADMAPS_KEY = "satuurusan_roadmaps_v2";

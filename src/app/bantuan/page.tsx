@@ -7,9 +7,6 @@ import {
   HelpCircle, 
   ChevronDown, 
   ChevronUp, 
-  Mail, 
-  ShieldCheck, 
-  FileText,
   MessageSquare,
   ArrowRight
 } from "lucide-react";
@@ -193,7 +190,7 @@ export function HelpContent() {
 
           {filtered.length === 0 && (
             <div className="bg-white rounded-2xl p-8 text-center border border-slate-200 text-slate-500 text-xs">
-              Tidak ada pertanyaan yang sesuai dengan kata kunci "{query}".
+              Tidak ada pertanyaan yang sesuai dengan kata kunci &quot;{query}&quot;.
             </div>
           )}
         </div>

@@ -2,18 +2,11 @@
 
 import { useState } from "react";
 import { 
-  Compass, 
-  ListOrdered, 
-  CheckCircle2, 
-  ExternalLink, 
   Search, 
   ChevronDown, 
   ChevronUp, 
   ArrowRight,
   ArrowLeft,
-  ShieldCheck,
-  FileText,
-  HelpCircle,
   Info
 } from "lucide-react";
 import Link from "next/link";

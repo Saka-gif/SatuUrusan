@@ -9,7 +9,6 @@ import {
   Clock, 
   CheckCircle2, 
   ArrowRight, 
-  ExternalLink, 
   Layers, 
   X,
   FileCheck,
@@ -133,7 +132,7 @@ export default function ServicesPage() {
 
               {filteredCategories.length === 0 && (
                 <div className="bg-white p-8 rounded-2xl text-center border border-slate-200 text-slate-500 text-xs">
-                  Tidak ada kategori yang cocok dengan pencarian "{query}".
+                  Tidak ada kategori yang cocok dengan pencarian &quot;{query}&quot;.
                 </div>
               )}
             </div>

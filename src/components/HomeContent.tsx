@@ -4,13 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { 
   ArrowRight, 
-  ShieldCheck, 
-  Compass, 
-  Layers,
-  ChevronRight,
-  CheckCircle2,
   Clock,
-  Building2,
   FileCheck2,
   CheckCircle,
   Circle

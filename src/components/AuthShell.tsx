@@ -1,7 +1,7 @@
 "use client";
 
 import { AuthBrand } from "./AuthBrand";
-import { ShieldCheck, HelpCircle, ArrowLeft } from "lucide-react";
+import { ShieldCheck, ArrowLeft } from "lucide-react";
 import Link from "next/link";
 
 export function AuthShell({ children }: { children: React.ReactNode }) {
@@ -31,7 +31,7 @@ export function AuthShell({ children }: { children: React.ReactNode }) {
           {children}
 
           {/* Trust & Security Guarantee */}
-          <div className="pt-4 border-t border-slate-100 flex items-center justify-center gap-2 text-[11px] font-semibold text-slate-400">
+          <div className="pt-4 border-t border-slate-100 flex items-center justify-center gap-2 text-xs font-semibold text-slate-500">
             <ShieldCheck className="w-4 h-4 text-emerald-500 flex-shrink-0" />
             <span>100% Gratis & Terhubung ke Sistem Resmi Pemerintah</span>
           </div>
@@ -39,7 +39,7 @@ export function AuthShell({ children }: { children: React.ReactNode }) {
       </div>
 
       {/* Bottom Footer Note */}
-      <footer className="max-w-5xl mx-auto w-full text-center text-[11px] text-slate-400 relative z-10 py-2">
+      <footer className="max-w-5xl mx-auto w-full text-center text-xs text-slate-500 relative z-10 py-2">
         © {new Date().getFullYear()} SatuUrusan. Panduan urusan publik netral & terpercaya.
       </footer>
     </main>

@@ -31,20 +31,15 @@ export function LegacyDashboardPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [showAddModal, setShowAddModal] = useState(false);
   const [selectedEventSlug, setSelectedEventSlug] = useState("pindah-domisili");
-  const [profileName, setProfileName] = useState("Teman Satu");
-
-  // Membaca localStorage di useEffect untuk mencegah Hydration Mismatch
-  useEffect(() => {
+  const [profileName] = useState(() => {
+    if (typeof window === "undefined") return "Teman Satu";
     try {
       const session = window.localStorage.getItem("satuurusan_session");
-      const parsed = session ? (JSON.parse(session) as { name?: string }) : null;
-      if (parsed?.name) {
-        setProfileName(parsed.name);
-      }
-    } catch (err) {
-      console.error("Gagal membaca sesi pengguna", err);
+      return session ? (JSON.parse(session) as { name?: string }).name || "Teman Satu" : "Teman Satu";
+    } catch {
+      return "Teman Satu";
     }
-  }, []);
+  });
 
   useEffect(() => {
     async function loadData() {

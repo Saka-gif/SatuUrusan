@@ -5,7 +5,6 @@ import { usePathname, useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import { BrandMark } from "./BrandMark";
 import { 
-  Sparkles, 
   Menu, 
   X, 
   ArrowRight, 
