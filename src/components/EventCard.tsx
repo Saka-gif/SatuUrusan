@@ -7,10 +7,7 @@ import {
   Baby, 
   Building2, 
   GraduationCap, 
-  ArrowRight, 
-  ChevronRight,
-  Clock,
-  Layers
+  ChevronRight
 } from "lucide-react";
 import { LifeEvent } from "@/lib/supabase/types";
 

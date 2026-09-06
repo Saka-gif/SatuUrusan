@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import { AlertTriangle, CheckCircle2, Info, LoaderCircle } from "lucide-react";
 import { AppNotification, getNotifications, markAllNotificationsRead } from "@/lib/notifications";
 
@@ -9,10 +10,16 @@ function formatDate(value: string) {
 }
 
 export function NotificationsPanel() {
+  const router = useRouter();
   const [notifications, setNotifications] = useState<AppNotification[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    if (!window.localStorage.getItem("satuurusan_session")) {
+      router.replace("/masuk");
+      return;
+    }
+
     const sync = () => {
       setNotifications(getNotifications());
       setIsLoading(false);
@@ -20,7 +27,7 @@ export function NotificationsPanel() {
     sync();
     window.addEventListener("satuurusan-notifications-changed", sync);
     return () => window.removeEventListener("satuurusan-notifications-changed", sync);
-  }, []);
+  }, [router]);
 
   const iconFor = (notification: AppNotification) => {
     if (notification.type === "success") return <CheckCircle2 className="h-5 w-5 text-emerald-500" />;
