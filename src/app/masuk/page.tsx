@@ -16,6 +16,11 @@ export default function LoginPage() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
+    window.localStorage.setItem("satuurusan_session", JSON.stringify({
+      name: email.split("@")[0] || "Teman Satu",
+      email,
+    }));
+    window.dispatchEvent(new CustomEvent("satuurusan-session-changed"));
     setTimeout(() => {
       router.push("/dashboard");
     }, 400);

@@ -1,16 +1,15 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import Link from "next/link";
+import { Navbar } from "@/components/Navbar";
 import { 
   fetchUserRoadmaps, 
   createUserRoadmap, 
   toggleTaskCompletion, 
   deleteUserRoadmap 
 } from "@/lib/supabase/service";
-import { UserRoadmap, RoadmapTask } from "@/lib/supabase/types";
+import { UserRoadmap } from "@/lib/supabase/types";
 import { lifeEvents } from "@/data/life-events";
-import { AuthBrand } from "@/components/AuthBrand";
 import { 
   Sparkles, 
   Plus, 
@@ -19,23 +18,30 @@ import {
   Clock, 
   ExternalLink, 
   Trash2, 
-  ArrowRight, 
   FileText, 
   Trophy, 
   Compass, 
-  Layers, 
-  LogOut,
-  ChevronDown,
   Info
 } from "lucide-react";
 import confetti from "canvas-confetti";
+import { DashboardOverview } from "@/components/DashboardOverview";
 
-export default function DashboardPage() {
+export function LegacyDashboardPage() {
   const [roadmaps, setRoadmaps] = useState<UserRoadmap[]>([]);
   const [selectedRoadmapId, setSelectedRoadmapId] = useState<string>("");
   const [isLoading, setIsLoading] = useState(true);
   const [showAddModal, setShowAddModal] = useState(false);
   const [selectedEventSlug, setSelectedEventSlug] = useState("pindah-domisili");
+  const [profileName] = useState(() => {
+    if (typeof window === "undefined") return "Teman Satu";
+    try {
+      const session = window.localStorage.getItem("satuurusan_session");
+      const parsed = session ? JSON.parse(session) as { name?: string } : null;
+      return parsed?.name || "Teman Satu";
+    } catch {
+      return "Teman Satu";
+    }
+  });
 
   useEffect(() => {
     async function loadData() {
@@ -56,13 +62,19 @@ export default function DashboardPage() {
   }, []);
 
   const activeRoadmap = roadmaps.find((r) => r.id === selectedRoadmapId) || roadmaps[0];
+  const completedTasks = roadmaps.reduce(
+    (total, roadmap) => total + (roadmap.tasks?.filter((task) => task.is_completed).length || 0),
+    0
+  );
+  const inProgressCount = roadmaps.filter((roadmap) => roadmap.progress_pct > 0 && roadmap.progress_pct < 100).length;
+  const needsActionCount = roadmaps.filter((roadmap) => roadmap.progress_pct < 100).length;
 
   const handleToggleTask = async (taskId: string, currentCompleted: boolean) => {
     if (!activeRoadmap) return;
     const newStatus = !currentCompleted;
 
     try {
-      const { roadmap: updatedRm, completed } = await toggleTaskCompletion(
+      const { roadmap: updatedRm } = await toggleTaskCompletion(
         activeRoadmap.id,
         taskId,
         newStatus
@@ -111,32 +123,8 @@ export default function DashboardPage() {
   };
 
   return (
-    <main className="min-h-screen bg-slate-50/70 text-slate-800 flex flex-col font-sans">
-      {/* Top Bar */}
-      <header className="sticky top-0 z-20 bg-white/90 backdrop-blur-md border-b border-slate-200/80 px-4 sm:px-8 py-3.5 flex items-center justify-between">
-        <AuthBrand />
-        <div className="flex items-center gap-3">
-          <Link
-            href="/layanan"
-            className="hidden sm:inline-flex items-center gap-1.5 text-xs font-bold text-slate-600 hover:text-blue-600 px-3 py-1.5 rounded-lg hover:bg-slate-100 transition-colors"
-          >
-            <Layers className="w-3.5 h-3.5" />
-            <span>Katalog Layanan</span>
-          </Link>
-          <div className="flex items-center gap-2 pl-3 border-l border-slate-200">
-            <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-blue-600 to-indigo-600 text-white flex items-center justify-center font-bold text-xs shadow-sm">
-              TS
-            </div>
-            <div className="hidden sm:block text-left">
-              <span className="text-xs font-bold block leading-none text-slate-800">Teman Satu</span>
-              <span className="text-[10px] text-emerald-600 font-semibold flex items-center gap-1">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 inline-block" />
-                Aktif
-              </span>
-            </div>
-          </div>
-        </div>
-      </header>
+    <main aria-busy={isLoading} className="min-h-screen bg-slate-50/70 text-slate-800 flex flex-col font-sans">
+      <Navbar />
 
       {/* Main Content Dashboard */}
       <div className="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-8 flex-1 space-y-8">
@@ -151,7 +139,7 @@ export default function DashboardPage() {
               <span>Personal Life-Event Roadmap</span>
             </div>
             <h1 className="font-display text-2xl sm:text-4xl font-extrabold tracking-tight">
-              Halo! Siap menuntaskan urusan apa hari ini?
+              Halo, {profileName}. Mau menuntaskan urusan apa hari ini?
             </h1>
             <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
               Pantau progres dokumen prasyarat, urutan prioritas antar dinas, dan checklist langkah tanpa rasa bingung.
@@ -167,6 +155,26 @@ export default function DashboardPage() {
             <span>Buat Peta Urusan Baru</span>
           </button>
         </div>
+
+        <section className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4" aria-label="Ringkasan urusan">
+          {[
+            { label: "Total Urusan", value: roadmaps.length, color: "text-blue-600", icon: FileText },
+            { label: "Sedang Berjalan", value: inProgressCount, color: "text-amber-600", icon: Clock },
+            { label: "Langkah Selesai", value: completedTasks, color: "text-emerald-600", icon: CheckCircle2 },
+            { label: "Perlu Tindakan", value: needsActionCount, color: "text-rose-600", icon: Info },
+          ].map((stat) => {
+            const Icon = stat.icon;
+            return (
+              <div key={stat.label} className="bg-white rounded-2xl p-4 border border-slate-200/80 shadow-sm">
+                <div className="flex items-center justify-between gap-2">
+                  <span className="text-[11px] font-semibold text-slate-500">{stat.label}</span>
+                  <Icon className={`w-4 h-4 ${stat.color}`} />
+                </div>
+                <strong className={`block mt-2 font-display text-2xl ${stat.color}`}>{stat.value}</strong>
+              </div>
+            );
+          })}
+        </section>
 
         {/* Roadmap Selector Tabs */}
         {roadmaps.length > 0 && (
@@ -199,7 +207,7 @@ export default function DashboardPage() {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
             
             {/* Left Col: Tasks Checklist */}
-            <div className="lg:col-span-8 space-y-6">
+            <div id="urusan" className="lg:col-span-8 space-y-6">
               <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/80 shadow-sm space-y-6">
                 
                 {/* Roadmap Info Header */}
@@ -479,5 +487,14 @@ export default function DashboardPage() {
         </div>
       )}
     </main>
+  );
+}
+
+export default function DashboardPage() {
+  return (
+    <>
+      <Navbar />
+      <DashboardOverview />
+    </>
   );
 }

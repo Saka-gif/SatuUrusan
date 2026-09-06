@@ -1,30 +1,66 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import { BrandMark } from "./BrandMark";
-import { Sparkles, Menu, X, ArrowRight, Compass, Layers, HelpCircle, User } from "lucide-react";
+import { Sparkles, Menu, X, ArrowRight, Compass, Layers, HelpCircle, ClipboardList, History, LogOut, Bell } from "lucide-react";
 
 export function Navbar() {
   const pathname = usePathname();
+  const router = useRouter();
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [profileName, setProfileName] = useState("Teman Satu");
 
   useEffect(() => {
+    const syncSession = () => {
+      const rawSession = window.localStorage.getItem("satuurusan_session");
+      if (!rawSession) {
+        setIsAuthenticated(false);
+        setProfileName("Teman Satu");
+        return;
+      }
+
+      try {
+        const session = JSON.parse(rawSession) as { name?: string };
+        setIsAuthenticated(true);
+        setProfileName(session.name || "Teman Satu");
+      } catch {
+        window.localStorage.removeItem("satuurusan_session");
+        setIsAuthenticated(false);
+      }
+    };
+
+    syncSession();
+    window.addEventListener("storage", syncSession);
+    window.addEventListener("satuurusan-session-changed", syncSession);
     const handleScroll = () => {
       setScrolled(window.scrollY > 15);
     };
     window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("storage", syncSession);
+      window.removeEventListener("satuurusan-session-changed", syncSession);
+      window.removeEventListener("scroll", handleScroll);
+    };
   }, []);
 
-  const navLinks = [
-    { href: "/", label: "Beranda", icon: Compass },
-    { href: "/layanan", label: "Ruang Layanan", icon: Layers },
-    { href: "/cara-kerja", label: "Cara Kerja", icon: Compass },
-    { href: "/bantuan", label: "Pusat Bantuan", icon: HelpCircle },
-  ];
+  const navLinks = isAuthenticated
+    ? [
+        { href: "/dashboard", label: "Dashboard", icon: Compass },
+        { href: "/layanan", label: "Layanan", icon: Layers },
+        { href: "/urusan-saya", label: "Urusan Saya", icon: ClipboardList },
+        { href: "/riwayat", label: "Riwayat", icon: History },
+        { href: "/bantuan", label: "Bantuan", icon: HelpCircle },
+      ]
+    : [
+        { href: "/", label: "Beranda", icon: Compass },
+        { href: "/layanan", label: "Ruang Layanan", icon: Layers },
+        { href: "/cara-kerja", label: "Cara Kerja", icon: Compass },
+        { href: "/bantuan", label: "Pusat Bantuan", icon: HelpCircle },
+      ];
 
   const isActive = (path: string) => {
     if (path === "/") return pathname === "/";
@@ -37,6 +73,13 @@ export function Navbar() {
     }
   };
 
+  const handleLogout = () => {
+    window.localStorage.removeItem("satuurusan_session");
+    window.dispatchEvent(new CustomEvent("satuurusan-session-changed"));
+    setMenuOpen(false);
+    router.push("/");
+  };
+
   return (
     <header
       className={`sticky top-0 z-30 transition-all duration-300 ${
@@ -47,7 +90,7 @@ export function Navbar() {
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
         {/* Brand */}
-        <Link href="/" className="flex items-center gap-3 group focus:outline-none" aria-label="SatuUrusan Beranda">
+        <Link href={isAuthenticated ? "/dashboard" : "/"} className="flex items-center gap-3 group focus:outline-none" aria-label="SatuUrusan Beranda">
           <BrandMark />
           <div className="flex flex-col">
             <span className="font-display font-extrabold text-xl tracking-tight text-[#0f274a] group-hover:text-blue-600 transition-colors">
@@ -91,22 +134,29 @@ export function Navbar() {
             <span>SatuAI</span>
           </button>
 
-          {/* Login */}
-          <Link
-            href="/masuk"
-            className="px-4 py-2 text-xs font-bold text-slate-700 hover:text-slate-900 hover:bg-slate-100 rounded-xl transition-colors"
-          >
-            Masuk
-          </Link>
-
-          {/* Primary CTA */}
-          <Link
-            href="/mulai"
-            className="flex items-center gap-1.5 px-4 py-2 text-xs font-bold text-white bg-gradient-to-r from-[#0f274a] via-[#17345b] to-[#1e4976] hover:from-[#17345b] hover:to-[#2563eb] rounded-xl shadow-md shadow-blue-950/15 hover:shadow-blue-950/25 transition-all duration-200 transform hover:-translate-y-0.5"
-          >
-            <span>Mulai Sekarang</span>
-            <ArrowRight className="w-3.5 h-3.5 text-blue-300" />
-          </Link>
+          {isAuthenticated ? (
+            <>
+              <Link href="/notifikasi" className="p-2 text-slate-400 hover:text-blue-600 rounded-lg hover:bg-slate-50" title="Notifikasi">
+                <Bell className="w-4 h-4" />
+              </Link>
+              <div className="flex items-center gap-2 pl-2 border-l border-slate-200">
+                <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-blue-600 to-indigo-600 text-white flex items-center justify-center font-bold text-xs">
+                  {profileName.slice(0, 1).toUpperCase()}
+                </div>
+                <span className="max-w-24 truncate text-xs font-bold text-slate-700">{profileName}</span>
+              </div>
+              <button type="button" onClick={handleLogout} className="p-2 text-slate-400 hover:text-rose-600 rounded-lg hover:bg-rose-50" title="Keluar">
+                <LogOut className="w-4 h-4" />
+              </button>
+            </>
+          ) : (
+            <>
+              <Link href="/masuk" className="px-4 py-2 text-xs font-bold text-slate-700 hover:text-slate-900 hover:bg-slate-100 rounded-xl transition-colors">Masuk</Link>
+              <Link href="/mulai" className="flex items-center gap-1.5 px-4 py-2 text-xs font-bold text-white bg-gradient-to-r from-[#0f274a] via-[#17345b] to-[#1e4976] hover:from-[#17345b] hover:to-[#2563eb] rounded-xl shadow-md shadow-blue-950/15 transition-all duration-200">
+                <span>Mulai Sekarang</span><ArrowRight className="w-3.5 h-3.5 text-blue-300" />
+              </Link>
+            </>
+          )}
         </div>
 
         {/* Mobile menu button */}
@@ -155,23 +205,16 @@ export function Navbar() {
               <span>Tanya SatuAI</span>
             </button>
 
-            <div className="grid grid-cols-2 gap-2">
-              <Link
-                href="/masuk"
-                onClick={() => setMenuOpen(false)}
-                className="flex items-center justify-center py-2.5 text-xs font-bold text-slate-700 bg-slate-100 hover:bg-slate-200 rounded-xl transition-colors"
-              >
-                Masuk
-              </Link>
-              <Link
-                href="/mulai"
-                onClick={() => setMenuOpen(false)}
-                className="flex items-center justify-center gap-1 py-2.5 text-xs font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-xl transition-colors shadow-sm"
-              >
-                <span>Mulai</span>
-                <ArrowRight className="w-3.5 h-3.5" />
-              </Link>
-            </div>
+            {isAuthenticated ? (
+              <button type="button" onClick={handleLogout} className="flex items-center justify-center gap-2 w-full py-2.5 text-xs font-bold text-rose-600 bg-rose-50 rounded-xl border border-rose-200">
+                <LogOut className="w-3.5 h-3.5" /><span>Keluar dari akun</span>
+              </button>
+            ) : (
+              <div className="grid grid-cols-2 gap-2">
+                <Link href="/masuk" onClick={() => setMenuOpen(false)} className="flex items-center justify-center py-2.5 text-xs font-bold text-slate-700 bg-slate-100 hover:bg-slate-200 rounded-xl transition-colors">Masuk</Link>
+                <Link href="/mulai" onClick={() => setMenuOpen(false)} className="flex items-center justify-center gap-1 py-2.5 text-xs font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-xl transition-colors shadow-sm">Mulai <ArrowRight className="w-3.5 h-3.5" /></Link>
+              </div>
+            )}
           </div>
         </div>
       )}
