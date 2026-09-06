@@ -5,7 +5,6 @@ import { Navbar } from "@/components/Navbar";
 import { 
   Search, 
   HelpCircle, 
-  Sparkles, 
   ChevronDown, 
   ChevronUp, 
   Mail, 
@@ -153,25 +152,33 @@ export function HelpContent() {
             return (
               <div
                 key={item.q}
-                className="bg-white rounded-2xl border border-slate-200/80 overflow-hidden shadow-sm transition-all"
+                className={`bg-white rounded-2xl border transition-all duration-300 overflow-hidden shadow-sm ${
+                  isOpen
+                    ? "border-blue-400 ring-2 ring-blue-500/10 shadow-md shadow-blue-500/5"
+                    : "border-slate-200/90 hover:border-blue-300 hover:shadow-md hover:shadow-blue-500/5 hover:-translate-y-0.5"
+                }`}
               >
                 <button
                   type="button"
                   onClick={() => setOpenIndex(isOpen ? null : idx)}
-                  className="w-full p-5 text-left flex items-start justify-between gap-4 focus:outline-none"
+                  className="w-full p-5 text-left flex items-start justify-between gap-4 focus:outline-none group"
                 >
                   <div className="space-y-1">
                     <span className="text-[10px] font-bold text-blue-600 uppercase tracking-wider">
                       {item.category}
                     </span>
-                    <h3 className="font-display font-bold text-sm sm:text-base text-[#0f274a]">
+                    <h3 className="font-display font-bold text-sm sm:text-base text-[#0f274a] group-hover:text-blue-600 transition-colors">
                       {item.q}
                     </h3>
                   </div>
                   {isOpen ? (
-                    <ChevronUp className="w-5 h-5 text-blue-600 flex-shrink-0 mt-1" />
+                    <div className="w-8 h-8 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center flex-shrink-0 mt-1">
+                      <ChevronUp className="w-4 h-4" />
+                    </div>
                   ) : (
-                    <ChevronDown className="w-5 h-5 text-slate-400 flex-shrink-0 mt-1" />
+                    <div className="w-8 h-8 rounded-full bg-slate-50 group-hover:bg-blue-50 group-hover:text-blue-600 text-slate-400 flex items-center justify-center flex-shrink-0 mt-1 transition-colors">
+                      <ChevronDown className="w-4 h-4" />
+                    </div>
                   )}
                 </button>
 

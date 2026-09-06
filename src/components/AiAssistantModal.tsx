@@ -2,17 +2,17 @@
 
 import { useState, useEffect, useRef } from "react";
 import { 
-  Sparkles, 
   X, 
   Send, 
   Bot, 
   User, 
   ArrowRight, 
-  FileText, 
+  Compass, 
   ShieldCheck, 
   ExternalLink,
   ChevronRight,
-  RotateCcw
+  HelpCircle,
+  MessageSquare
 } from "lucide-react";
 import Link from "next/link";
 
@@ -106,7 +106,7 @@ export function AiAssistantModal() {
     {
       id: "welcome",
       sender: "ai",
-      text: "Halo! Saya **SatuAI**, asisten navigasi birokrasi & urusan publik Anda. Ada peristiwa hidup atau urusan administrasi yang sedang Anda hadapi?",
+      text: "Halo! Saya **SatuAI**, asisten panduan administrasi & urusan publik Anda. Ada peristiwa hidup atau urusan berkas yang sedang Anda hadapi?",
       steps: [
         "Pindah tempat tinggal / ganti KTP & KK",
         "Pendaftaran BPJS Kesehatan & Ketenagakerjaan",
@@ -202,15 +202,15 @@ export function AiAssistantModal() {
       {/* Floating trigger button on bottom-right */}
       <button
         onClick={() => setIsOpen(true)}
-        className="fixed bottom-6 right-6 z-40 flex items-center gap-2.5 px-4 py-3 bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-700 hover:from-blue-500 hover:to-indigo-600 text-white rounded-full shadow-xl shadow-blue-600/30 hover:shadow-blue-600/50 transition-all duration-300 transform hover:-translate-y-1 group border border-white/20"
-        aria-label="Buka Asisten SatuAI"
+        className="fixed bottom-6 right-6 z-40 flex items-center gap-2.5 px-4 py-3 bg-blue-600 hover:bg-blue-500 text-white rounded-full shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50 transition-all duration-300 transform hover:-translate-y-1 group border border-blue-400/30"
+        aria-label="Buka Asisten Panduan"
       >
-        <span className="relative flex h-3 w-3">
-          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-300 opacity-75" />
-          <span className="relative inline-flex rounded-full h-3 w-3 bg-amber-400" />
+        <span className="relative flex h-2.5 w-2.5">
+          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-sky-300 opacity-75" />
+          <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-white" />
         </span>
-        <Sparkles className="w-4 h-4 text-amber-300 group-hover:rotate-12 transition-transform" />
-        <span className="font-bold text-xs tracking-wide">Tanya SatuAI</span>
+        <Compass className="w-4 h-4 text-blue-100 group-hover:rotate-45 transition-transform duration-300" />
+        <span className="font-bold text-xs tracking-wide">Tanya Panduan</span>
       </button>
 
       {/* Modal / Slide-in Drawer */}
@@ -225,7 +225,7 @@ export function AiAssistantModal() {
             <div className="bg-gradient-to-r from-[#0f274a] via-[#173960] to-[#1e4976] px-5 py-4 text-white flex items-center justify-between border-b border-white/10">
               <div className="flex items-center gap-3">
                 <div className="w-9 h-9 rounded-xl bg-blue-500/20 border border-blue-400/30 flex items-center justify-center text-blue-300">
-                  <Bot className="w-5 h-5 text-amber-300" />
+                  <Compass className="w-5 h-5 text-sky-300" />
                 </div>
                 <div>
                   <div className="flex items-center gap-2">
@@ -234,7 +234,7 @@ export function AiAssistantModal() {
                       Online
                     </span>
                   </div>
-                  <p className="text-[11px] text-slate-300">Navigator cerdas urusan birokrasi Indonesia</p>
+                  <p className="text-[11px] text-slate-300">Navigator panduan urusan birokrasi Indonesia</p>
                 </div>
               </div>
               <button
@@ -255,7 +255,7 @@ export function AiAssistantModal() {
                 >
                   {msg.sender === "ai" && (
                     <div className="w-7 h-7 rounded-lg bg-blue-600 flex-shrink-0 flex items-center justify-center text-white text-xs font-bold shadow-sm">
-                      <Sparkles className="w-3.5 h-3.5 text-amber-300" />
+                      <Compass className="w-3.5 h-3.5 text-sky-200" />
                     </div>
                   )}
 

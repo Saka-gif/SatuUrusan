@@ -6,7 +6,6 @@ import { serviceCategories } from "@/data/service-categories";
 import { ServiceCategory, ServiceItem } from "@/lib/supabase/types";
 import { 
   Search, 
-  Sparkles, 
   Clock, 
   CheckCircle2, 
   ArrowRight, 
@@ -110,22 +109,22 @@ export default function ServicesPage() {
                     key={cat.name}
                     type="button"
                     onClick={() => setSelectedCategory(cat)}
-                    className={`w-full text-left p-4 rounded-2xl border transition-all flex items-center justify-between ${
+                    className={`w-full text-left p-4 rounded-2xl border transition-all duration-300 flex items-center justify-between group ${
                       isSelected
-                        ? "bg-white border-blue-500 ring-2 ring-blue-500/20 shadow-md shadow-blue-500/5 text-[#0f274a]"
-                        : "bg-white/80 border-slate-200 hover:bg-white text-slate-700 shadow-sm"
+                        ? "bg-white border-blue-500 ring-2 ring-blue-500/20 shadow-md shadow-blue-500/10 text-[#0f274a]"
+                        : "bg-white border-slate-200/90 hover:border-blue-400/60 hover:bg-blue-50/20 text-slate-700 shadow-sm hover:shadow-md hover:shadow-blue-500/5 hover:-translate-y-0.5"
                     }`}
                   >
                     <div className="flex items-center gap-3.5">
-                      <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${isSelected ? "bg-blue-600 text-white" : "bg-slate-100 text-slate-600"}`}>
+                      <div className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-300 ${isSelected ? "bg-blue-600 text-white shadow-md shadow-blue-600/25" : "bg-slate-100 text-slate-600 group-hover:bg-blue-100 group-hover:text-blue-600"}`}>
                         <Icon className="w-5 h-5" />
                       </div>
                       <div>
-                        <strong className="font-display font-bold text-sm block">{cat.name}</strong>
+                        <strong className="font-display font-bold text-sm block group-hover:text-blue-600 transition-colors">{cat.name}</strong>
                         <small className="text-xs text-slate-500 block">{cat.description}</small>
                       </div>
                     </div>
-                    <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${isSelected ? "bg-blue-100 text-blue-700" : "bg-slate-100 text-slate-600"}`}>
+                    <span className={`text-xs font-bold px-2.5 py-0.5 rounded-full transition-colors ${isSelected ? "bg-blue-100 text-blue-700" : "bg-slate-100 text-slate-600 group-hover:bg-blue-100/70 group-hover:text-blue-600"}`}>
                       {cat.count}
                     </span>
                   </button>
@@ -142,7 +141,7 @@ export default function ServicesPage() {
 
           {/* Right Selected Category Items Showcase */}
           <div className="lg:col-span-7">
-            <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-6">
+            <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/90 shadow-sm space-y-6">
               <div className="flex items-start justify-between gap-4 pb-4 border-b border-slate-100">
                 <div>
                   <span className="text-xs font-bold text-blue-600 uppercase tracking-wider">
@@ -163,8 +162,9 @@ export default function ServicesPage() {
                   <div
                     key={item.title}
                     onClick={() => setSelectedItem(item)}
-                    className="p-4 sm:p-5 rounded-2xl bg-slate-50/80 hover:bg-blue-50/50 border border-slate-200/80 hover:border-blue-300 transition-all cursor-pointer flex flex-col sm:flex-row sm:items-center justify-between gap-3 group"
+                    className="p-4 sm:p-5 rounded-2xl bg-white hover:bg-blue-50/40 border border-slate-200/80 hover:border-blue-300 hover:shadow-md hover:shadow-blue-500/10 hover:-translate-y-0.5 transition-all duration-300 cursor-pointer flex flex-col sm:flex-row sm:items-center justify-between gap-3 group relative overflow-hidden"
                   >
+                    <div className="absolute top-0 left-0 w-1 h-full bg-transparent group-hover:bg-blue-500 transition-all rounded-l-2xl" />
                     <div className="space-y-1">
                       <h3 className="font-display font-bold text-sm text-[#0f274a] group-hover:text-blue-600 transition-colors">
                         {item.title}
@@ -175,13 +175,13 @@ export default function ServicesPage() {
                     </div>
 
                     <div className="flex items-center justify-between sm:justify-end gap-3 flex-shrink-0 pt-2 sm:pt-0 border-t sm:border-0 border-slate-200/60 text-xs">
-                      <span className="flex items-center gap-1 font-semibold text-slate-500 text-[11px]">
+                      <span className="flex items-center gap-1 font-semibold text-slate-500 text-[11px] bg-slate-50 group-hover:bg-white px-2.5 py-1 rounded-lg border border-slate-200/60">
                         <Clock className="w-3.5 h-3.5 text-blue-500" />
                         {item.duration}
                       </span>
                       <span className="inline-flex items-center gap-1 text-blue-600 font-bold text-xs group-hover:underline">
                         <span>Syarat</span>
-                        <ArrowRight className="w-3.5 h-3.5 transform group-hover:translate-x-0.5 transition-transform" />
+                        <ArrowRight className="w-3.5 h-3.5 transform group-hover:translate-x-1 transition-transform" />
                       </span>
                     </div>
                   </div>

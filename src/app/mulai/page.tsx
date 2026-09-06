@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { AuthBrand } from "@/components/AuthBrand";
-import { Sparkles, ArrowRight, ShieldCheck, CheckCircle2, Compass } from "lucide-react";
+import { ArrowRight, ShieldCheck, CheckCircle2, Compass } from "lucide-react";
 
 export default function StartPage() {
   return (
@@ -25,7 +25,7 @@ export default function StartPage() {
       {/* Hero Center */}
       <div className="max-w-4xl mx-auto w-full py-12 relative z-10 text-center space-y-6">
         <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-100/80 border border-blue-200 text-blue-700 text-xs font-bold">
-          <Sparkles className="w-3.5 h-3.5 text-amber-500" />
+          <Compass className="w-3.5 h-3.5 text-blue-600" />
           <span>Langkah Awal yang Teratur</span>
         </div>
 

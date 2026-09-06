@@ -12,7 +12,6 @@ import { UserRoadmap, RoadmapTask } from "@/lib/supabase/types";
 import { lifeEvents } from "@/data/life-events";
 import { AuthBrand } from "@/components/AuthBrand";
 import { 
-  Sparkles, 
   Plus, 
   CheckCircle2, 
   Circle, 
@@ -24,9 +23,9 @@ import {
   Trophy, 
   Compass, 
   Layers, 
-  LogOut,
-  ChevronDown,
-  Info
+  Info,
+  Building2,
+  FileCheck2
 } from "lucide-react";
 import confetti from "canvas-confetti";
 
@@ -78,7 +77,7 @@ export default function DashboardPage() {
           particleCount: 120,
           spread: 80,
           origin: { y: 0.6 },
-          colors: ["#2563eb", "#f59e0b", "#10b981", "#8b5cf6"]
+          colors: ["#2563eb", "#38bdf8", "#10b981", "#6366f1"]
         });
       }
     } catch (err) {
@@ -130,7 +129,7 @@ export default function DashboardPage() {
             <div className="hidden sm:block text-left">
               <span className="text-xs font-bold block leading-none text-slate-800">Teman Satu</span>
               <span className="text-[10px] text-emerald-600 font-semibold flex items-center gap-1">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 inline-block" />
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 inline-block animate-pulse-soft" />
                 Aktif
               </span>
             </div>
@@ -146,8 +145,8 @@ export default function DashboardPage() {
           <div className="absolute top-0 right-0 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl pointer-events-none" />
           
           <div className="space-y-2 relative z-10 max-w-2xl">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/20 border border-blue-400/30 text-blue-300 text-xs font-bold">
-              <Sparkles className="w-3.5 h-3.5 text-amber-300" />
+            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white/10 border border-white/15 text-blue-200 text-xs font-bold">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse-soft" />
               <span>Personal Life-Event Roadmap</span>
             </div>
             <h1 className="font-display text-2xl sm:text-4xl font-extrabold tracking-tight">
@@ -161,7 +160,7 @@ export default function DashboardPage() {
           <button
             type="button"
             onClick={() => setShowAddModal(true)}
-            className="relative z-10 flex-shrink-0 inline-flex items-center gap-2 px-5 py-3 rounded-2xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold shadow-lg shadow-blue-600/30 transition-all transform hover:-translate-y-0.5"
+            className="relative z-10 flex-shrink-0 inline-flex items-center gap-2 px-5 py-3 rounded-2xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold shadow-lg shadow-blue-600/30 transition-all transform hover:-translate-y-0.5 cursor-pointer"
           >
             <Plus className="w-4 h-4" />
             <span>Buat Peta Urusan Baru</span>
@@ -178,14 +177,14 @@ export default function DashboardPage() {
                   key={rm.id}
                   type="button"
                   onClick={() => setSelectedRoadmapId(rm.id)}
-                  className={`flex-shrink-0 px-4 py-2.5 rounded-xl text-xs font-bold border transition-all flex items-center gap-2 ${
+                  className={`flex-shrink-0 px-4 py-2.5 rounded-2xl text-xs font-bold border transition-all flex items-center gap-2 cursor-pointer ${
                     isCurrent
-                      ? "bg-white text-blue-700 border-blue-300 shadow-sm ring-1 ring-blue-500/20"
-                      : "bg-white/60 text-slate-600 border-slate-200 hover:bg-white"
+                      ? "bg-white text-blue-700 border-blue-300 shadow-md ring-2 ring-blue-500/20"
+                      : "bg-white/80 text-slate-600 border-slate-200 hover:bg-blue-50/50 hover:border-blue-200"
                   }`}
                 >
                   <span>{rm.title}</span>
-                  <span className={`px-2 py-0.5 rounded-full text-[10px] ${rm.progress_pct === 100 ? "bg-emerald-100 text-emerald-700" : "bg-blue-50 text-blue-600"}`}>
+                  <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${rm.progress_pct === 100 ? "bg-emerald-100 text-emerald-700" : "bg-blue-50 text-blue-600"}`}>
                     {rm.progress_pct}%
                   </span>
                 </button>
@@ -200,23 +199,23 @@ export default function DashboardPage() {
             
             {/* Left Col: Tasks Checklist */}
             <div className="lg:col-span-8 space-y-6">
-              <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/80 shadow-sm space-y-6">
+              <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/90 shadow-sm space-y-6">
                 
                 {/* Roadmap Info Header */}
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-slate-100">
                   <div>
-                    <h2 className="font-display font-bold text-xl sm:text-2xl text-[#0f274a]">
+                    <h2 className="font-display font-extrabold text-xl sm:text-2xl text-[#0f274a]">
                       {activeRoadmap.title}
                     </h2>
                     <p className="text-xs text-slate-500 mt-1">
-                      {activeRoadmap.description || "Daftar langkah penting terurut"}
+                      {activeRoadmap.description || "Daftar langkah penting terurut antar instansi"}
                     </p>
                   </div>
                   <div className="flex items-center gap-2">
                     <button
                       type="button"
                       onClick={() => handleDeleteRoadmap(activeRoadmap.id)}
-                      className="p-2 text-slate-400 hover:text-rose-600 rounded-xl hover:bg-rose-50 transition-colors"
+                      className="p-2 text-slate-400 hover:text-rose-600 rounded-xl hover:bg-rose-50 transition-colors cursor-pointer"
                       title="Hapus Roadmap"
                     >
                       <Trash2 className="w-4 h-4" />
@@ -244,22 +243,22 @@ export default function DashboardPage() {
                   </div>
                 </div>
 
-                {/* Task Checklist Items */}
+                {/* Task Checklist Items with Light Blue Hover */}
                 <div className="space-y-3 pt-2">
                   {activeRoadmap.tasks?.map((task, idx) => (
                     <div
                       key={task.id}
-                      className={`p-4 sm:p-5 rounded-2xl border transition-all duration-200 ${
+                      className={`p-4 sm:p-5 rounded-2xl border transition-all duration-300 hover-lift-blue ${
                         task.is_completed
-                          ? "bg-emerald-50/40 border-emerald-200/70 opacity-90"
-                          : "bg-slate-50/70 hover:bg-white border-slate-200/80 hover:border-blue-300 hover:shadow-md hover:shadow-blue-500/5"
+                          ? "bg-emerald-50/30 border-emerald-200/70"
+                          : "bg-white border-slate-200/90"
                       }`}
                     >
                       <div className="flex items-start gap-3.5">
                         <button
                           type="button"
                           onClick={() => handleToggleTask(task.id, task.is_completed)}
-                          className="mt-0.5 flex-shrink-0 focus:outline-none"
+                          className="mt-0.5 flex-shrink-0 focus:outline-none cursor-pointer"
                         >
                           {task.is_completed ? (
                             <CheckCircle2 className="w-5 h-5 text-emerald-600 fill-emerald-100" />
@@ -270,11 +269,11 @@ export default function DashboardPage() {
 
                         <div className="flex-1 space-y-2">
                           <div className="flex flex-wrap items-center justify-between gap-2">
-                            <h4 className={`font-display font-bold text-sm ${task.is_completed ? "line-through text-slate-500" : "text-[#0f274a]"}`}>
+                            <h4 className={`font-display font-bold text-sm ${task.is_completed ? "line-through text-slate-400" : "text-[#0f274a]"}`}>
                               {idx + 1}. {task.title}
                             </h4>
                             <div className="flex items-center gap-1.5">
-                              <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-200/80 text-slate-700">
+                              <span className="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-blue-50 text-blue-700 border border-blue-100">
                                 {task.category}
                               </span>
                               <span className="text-[10px] font-semibold text-slate-500 flex items-center gap-1">
@@ -295,7 +294,7 @@ export default function DashboardPage() {
                               {task.requirements.map((req, rIdx) => (
                                 <span
                                   key={rIdx}
-                                  className="text-[10px] px-2 py-0.5 bg-white border border-slate-200 rounded-md text-slate-600 font-medium"
+                                  className="text-[10px] px-2.5 py-0.5 bg-slate-50 border border-slate-200 rounded-md text-slate-600 font-medium"
                                 >
                                   {req}
                                 </span>
@@ -329,9 +328,9 @@ export default function DashboardPage() {
             {/* Right Col: Advice & Quick Guide Card */}
             <div className="lg:col-span-4 space-y-6">
               {/* Status card */}
-              <div className="bg-white rounded-3xl p-6 border border-slate-200/80 shadow-sm space-y-4">
+              <div className="bg-white rounded-3xl p-6 border border-slate-200/90 shadow-sm space-y-4">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center font-bold">
+                  <div className="w-10 h-10 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center font-bold border border-amber-100">
                     <Trophy className="w-5 h-5 text-amber-500" />
                   </div>
                   <div>
@@ -372,15 +371,15 @@ export default function DashboardPage() {
                       window.dispatchEvent(new CustomEvent("open-satu-ai"));
                     }
                   }}
-                  className="w-full flex items-center justify-center gap-2 py-2.5 bg-blue-50 hover:bg-blue-100/80 text-blue-700 font-bold text-xs rounded-xl border border-blue-200 transition-colors"
+                  className="w-full flex items-center justify-center gap-2 py-2.5 bg-blue-50 hover:bg-blue-100 text-blue-700 font-bold text-xs rounded-xl border border-blue-200 transition-colors cursor-pointer"
                 >
-                  <Sparkles className="w-3.5 h-3.5 text-amber-500" />
-                  <span>Konsultasi Roadmap ke SatuAI</span>
+                  <span className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse-soft" />
+                  <span>Konsultasi Alur ke Asisten</span>
                 </button>
               </div>
 
               {/* Disclaimer reminder */}
-              <div className="bg-blue-50/50 rounded-2xl p-5 border border-blue-100/80 text-xs text-slate-600 space-y-2">
+              <div className="bg-blue-50/60 rounded-2xl p-5 border border-blue-100 text-xs text-slate-600 space-y-2">
                 <div className="flex items-center gap-2 text-blue-900 font-bold">
                   <Info className="w-4 h-4 text-blue-600 flex-shrink-0" />
                   <span>Penting Diketahui</span>
@@ -393,17 +392,17 @@ export default function DashboardPage() {
 
           </div>
         ) : (
-          <div className="bg-white rounded-3xl p-12 text-center border border-slate-200 space-y-4">
-            <Compass className="w-12 h-12 text-blue-500 mx-auto animate-bounce" />
+          <div className="bg-white rounded-3xl p-12 text-center border border-slate-200 space-y-4 shadow-sm">
+            <Compass className="w-12 h-12 text-blue-500 mx-auto" />
             <h3 className="font-display font-bold text-lg text-slate-800">
               Belum ada Peta Urusan yang dibuat
             </h3>
-            <p className="text-xs text-slate-500 max-w-sm mx-auto">
+            <p className="text-xs text-slate-500 max-w-sm mx-auto leading-relaxed">
               Pilih satu peristiwa hidup untuk otomatis menyusun urutan langkah dan persiapan dokumen Anda.
             </p>
             <button
               onClick={() => setShowAddModal(true)}
-              className="inline-flex items-center gap-2 px-5 py-2.5 bg-blue-600 text-white text-xs font-bold rounded-xl shadow-sm hover:bg-blue-700"
+              className="inline-flex items-center gap-2 px-5 py-2.5 bg-blue-600 text-white text-xs font-bold rounded-xl shadow-sm hover:bg-blue-700 cursor-pointer"
             >
               <Plus className="w-4 h-4" />
               <span>Buat Peta Urusan Sekarang</span>
@@ -442,9 +441,9 @@ export default function DashboardPage() {
                   key={ev.slug}
                   type="button"
                   onClick={() => setSelectedEventSlug(ev.slug)}
-                  className={`w-full text-left p-3.5 rounded-xl border transition-all flex items-center justify-between ${
+                  className={`w-full text-left p-3.5 rounded-2xl border transition-all flex items-center justify-between cursor-pointer ${
                     selectedEventSlug === ev.slug
-                      ? "bg-blue-50 border-blue-500 ring-1 ring-blue-500/20 text-blue-900"
+                      ? "bg-blue-50 border-blue-500 ring-2 ring-blue-500/20 text-blue-900"
                       : "bg-white border-slate-200 hover:bg-slate-50 text-slate-700"
                   }`}
                 >
@@ -452,7 +451,7 @@ export default function DashboardPage() {
                     <strong className="text-xs font-bold block">{ev.title}</strong>
                     <small className="text-[10px] text-slate-500 block">{ev.desc}</small>
                   </div>
-                  <span className="text-[10px] font-bold text-blue-600 bg-blue-100/80 px-2 py-0.5 rounded-full">
+                  <span className="text-[10px] font-bold text-blue-600 bg-blue-100/80 px-2.5 py-0.5 rounded-full">
                     {ev.count} langkah
                   </span>
                 </button>
@@ -463,14 +462,14 @@ export default function DashboardPage() {
               <button
                 type="button"
                 onClick={() => setShowAddModal(false)}
-                className="px-4 py-2 text-xs font-bold text-slate-500 hover:bg-slate-100 rounded-xl"
+                className="px-4 py-2.5 text-xs font-bold text-slate-500 hover:bg-slate-100 rounded-xl cursor-pointer"
               >
                 Batal
               </button>
               <button
                 type="button"
                 onClick={handleCreateRoadmap}
-                className="px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold rounded-xl shadow-md shadow-blue-600/25 transition-all"
+                className="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold rounded-xl shadow-md shadow-blue-600/25 transition-all cursor-pointer"
               >
                 Buat Peta Urusan
               </button>
@@ -481,3 +480,4 @@ export default function DashboardPage() {
     </main>
   );
 }
+
