@@ -236,10 +236,7 @@ function getLocalRoadmaps(): UserRoadmap[] {
   try {
     const raw = localStorage.getItem(LOCAL_ROADMAPS_KEY);
     if (!raw) {
-      // Seed default roadmap
-      const defaultRoadmap = createDefaultRoadmap("pindah-domisili", "Pindah Tempat Tinggal");
-      saveLocalRoadmaps([defaultRoadmap]);
-      return [defaultRoadmap];
+      return [];
     }
     return JSON.parse(raw);
   } catch (err) {

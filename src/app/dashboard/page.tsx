@@ -1,6 +1,8 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import Link from "next/link";
 import { Navbar } from "@/components/Navbar";
 import { 
   fetchUserRoadmaps, 
@@ -20,43 +22,52 @@ import {
   FileText, 
   Trophy, 
   Compass, 
-<<<<<<< HEAD
-  Layers, 
   Info,
-  Building2,
-  FileCheck2
-=======
-  Info
->>>>>>> 897ef1a4896e3e2e39fd8881977ae0887ac792b1
+  Sparkles,
+  Layers,
+  Search,
+  ClipboardList,
+  Bell,
+  UserRound,
+  CheckCircle,
+  X
 } from "lucide-react";
 import confetti from "canvas-confetti";
-import { DashboardOverview } from "@/components/DashboardOverview";
 
-export function LegacyDashboardPage() {
+function DashboardContent() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
   const [roadmaps, setRoadmaps] = useState<UserRoadmap[]>([]);
   const [selectedRoadmapId, setSelectedRoadmapId] = useState<string>("");
   const [isLoading, setIsLoading] = useState(true);
   const [showAddModal, setShowAddModal] = useState(false);
   const [selectedEventSlug, setSelectedEventSlug] = useState("pindah-domisili");
-  const [profileName] = useState(() => {
-    if (typeof window === "undefined") return "Teman Satu";
-    try {
-      const session = window.localStorage.getItem("satuurusan_session");
-      const parsed = session ? JSON.parse(session) as { name?: string } : null;
-      return parsed?.name || "Teman Satu";
-    } catch {
-      return "Teman Satu";
-    }
-  });
+  const [profileName, setProfileName] = useState("Teman Satu");
 
   useEffect(() => {
+    const rawSession = window.localStorage.getItem("satuurusan_session");
+    if (!rawSession) {
+      router.replace("/masuk");
+      return;
+    }
+
+    try {
+      const parsed = JSON.parse(rawSession) as { name?: string };
+      setProfileName(parsed.name || "Teman Satu");
+    } catch {
+      router.replace("/masuk");
+      return;
+    }
+
     async function loadData() {
       setIsLoading(true);
       try {
         const data = await fetchUserRoadmaps();
         setRoadmaps(data);
         if (data.length > 0) {
-          setSelectedRoadmapId(data[0].id);
+          const targetId = searchParams.get("id");
+          const found = targetId ? data.find((r) => r.id === targetId) : null;
+          setSelectedRoadmapId(found ? found.id : data[0].id);
         }
       } catch (err) {
         console.error("Failed to load roadmaps", err);
@@ -64,8 +75,9 @@ export function LegacyDashboardPage() {
         setIsLoading(false);
       }
     }
+
     loadData();
-  }, []);
+  }, [router, searchParams]);
 
   const activeRoadmap = roadmaps.find((r) => r.id === selectedRoadmapId) || roadmaps[0];
   const completedTasks = roadmaps.reduce(
@@ -73,6 +85,7 @@ export function LegacyDashboardPage() {
     0
   );
   const inProgressCount = roadmaps.filter((roadmap) => roadmap.progress_pct > 0 && roadmap.progress_pct < 100).length;
+  const completedRoadmapsCount = roadmaps.filter((roadmap) => roadmap.progress_pct === 100).length;
   const needsActionCount = roadmaps.filter((roadmap) => roadmap.progress_pct < 100).length;
 
   const handleToggleTask = async (taskId: string, currentCompleted: boolean) => {
@@ -90,7 +103,7 @@ export function LegacyDashboardPage() {
         prev.map((r) => (r.id === updatedRm.id ? updatedRm : r))
       );
 
-      // Trigger confetti celebration when reaching 100%
+      // Trigger celebratory confetti when reaching 100%
       if (updatedRm.progress_pct === 100) {
         confetti({
           particleCount: 120,
@@ -104,13 +117,13 @@ export function LegacyDashboardPage() {
     }
   };
 
-  const handleCreateRoadmap = async () => {
+  const handleCreateRoadmap = async (slugToCreate?: string) => {
+    const slug = slugToCreate || selectedEventSlug;
     const eventObj = lifeEvents.find((e) => {
-      const slug = e.title.toLowerCase().replace(/\s+/g, "-");
-      return slug === selectedEventSlug || e.title.toLowerCase().includes(selectedEventSlug);
+      const eSlug = e.slug || e.title.toLowerCase().replace(/\s+/g, "-");
+      return eSlug === slug || e.title.toLowerCase().includes(slug);
     }) || lifeEvents[0];
 
-    const slug = selectedEventSlug;
     const newRm = await createUserRoadmap(slug, eventObj.title);
     setRoadmaps((prev) => [newRm, ...prev]);
     setSelectedRoadmapId(newRm.id);
@@ -124,42 +137,15 @@ export function LegacyDashboardPage() {
       setRoadmaps(remaining);
       if (remaining.length > 0) {
         setSelectedRoadmapId(remaining[0].id);
+      } else {
+        setSelectedRoadmapId("");
       }
     }
   };
 
   return (
-<<<<<<< HEAD
-    <main className="min-h-screen bg-slate-50/70 text-slate-800 flex flex-col font-sans">
-      {/* Top Bar */}
-      <header className="sticky top-0 z-20 bg-white/90 backdrop-blur-md border-b border-slate-200/80 px-4 sm:px-8 py-3.5 flex items-center justify-between">
-        <AuthBrand />
-        <div className="flex items-center gap-3">
-          <Link
-            href="/layanan"
-            className="hidden sm:inline-flex items-center gap-1.5 text-xs font-bold text-slate-600 hover:text-blue-600 px-3 py-1.5 rounded-lg hover:bg-slate-100 transition-colors"
-          >
-            <Layers className="w-3.5 h-3.5" />
-            <span>Katalog Layanan</span>
-          </Link>
-          <div className="flex items-center gap-2 pl-3 border-l border-slate-200">
-            <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-blue-600 to-indigo-600 text-white flex items-center justify-center font-bold text-xs shadow-sm">
-              TS
-            </div>
-            <div className="hidden sm:block text-left">
-              <span className="text-xs font-bold block leading-none text-slate-800">Teman Satu</span>
-              <span className="text-[10px] text-emerald-600 font-semibold flex items-center gap-1">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 inline-block animate-pulse-soft" />
-                Aktif
-              </span>
-            </div>
-          </div>
-        </div>
-      </header>
-=======
     <main aria-busy={isLoading} className="min-h-screen bg-slate-50/70 text-slate-800 flex flex-col font-sans">
       <Navbar />
->>>>>>> 897ef1a4896e3e2e39fd8881977ae0887ac792b1
 
       {/* Main Content Dashboard */}
       <div className="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-8 flex-1 space-y-8">
@@ -174,23 +160,38 @@ export function LegacyDashboardPage() {
               <span>Personal Life-Event Roadmap</span>
             </div>
             <h1 className="font-display text-2xl sm:text-4xl font-extrabold tracking-tight">
-              Halo, {profileName}. Mau menuntaskan urusan apa hari ini?
+              Halo, {profileName} <span aria-hidden="true">👋</span>
             </h1>
             <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
               Pantau progres dokumen prasyarat, urutan prioritas antar dinas, dan checklist langkah tanpa rasa bingung.
             </p>
           </div>
 
-          <button
-            type="button"
-            onClick={() => setShowAddModal(true)}
-            className="relative z-10 flex-shrink-0 inline-flex items-center gap-2 px-5 py-3 rounded-2xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold shadow-lg shadow-blue-600/30 transition-all transform hover:-translate-y-0.5 cursor-pointer"
-          >
-            <Plus className="w-4 h-4" />
-            <span>Buat Peta Urusan Baru</span>
-          </button>
+          <div className="relative z-10 flex flex-wrap items-center gap-3">
+            <button
+              type="button"
+              onClick={() => {
+                if (typeof window !== "undefined") {
+                  window.dispatchEvent(new CustomEvent("open-satu-ai"));
+                }
+              }}
+              className="inline-flex items-center gap-2 px-4 py-3 rounded-2xl bg-white/10 hover:bg-white/20 border border-white/20 text-white text-xs font-bold transition-all cursor-pointer"
+            >
+              <Sparkles className="w-4 h-4 text-amber-300" />
+              <span>Tanya SatuAI</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => setShowAddModal(true)}
+              className="inline-flex items-center gap-2 px-5 py-3 rounded-2xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold shadow-lg shadow-blue-600/30 transition-all transform hover:-translate-y-0.5 cursor-pointer"
+            >
+              <Plus className="w-4 h-4" />
+              <span>Buat Peta Urusan Baru</span>
+            </button>
+          </div>
         </div>
 
+        {/* Overview Stats */}
         <section className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4" aria-label="Ringkasan urusan">
           {[
             { label: "Total Urusan", value: roadmaps.length, color: "text-blue-600", icon: FileText },
@@ -213,27 +214,37 @@ export function LegacyDashboardPage() {
 
         {/* Roadmap Selector Tabs */}
         {roadmaps.length > 0 && (
-          <div className="flex items-center gap-2 overflow-x-auto pb-2 no-scrollbar">
-            {roadmaps.map((rm) => {
-              const isCurrent = rm.id === selectedRoadmapId;
-              return (
-                <button
-                  key={rm.id}
-                  type="button"
-                  onClick={() => setSelectedRoadmapId(rm.id)}
-                  className={`flex-shrink-0 px-4 py-2.5 rounded-2xl text-xs font-bold border transition-all flex items-center gap-2 cursor-pointer ${
-                    isCurrent
-                      ? "bg-white text-blue-700 border-blue-300 shadow-md ring-2 ring-blue-500/20"
-                      : "bg-white/80 text-slate-600 border-slate-200 hover:bg-blue-50/50 hover:border-blue-200"
-                  }`}
-                >
-                  <span>{rm.title}</span>
-                  <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${rm.progress_pct === 100 ? "bg-emerald-100 text-emerald-700" : "bg-blue-50 text-blue-600"}`}>
-                    {rm.progress_pct}%
-                  </span>
-                </button>
-              );
-            })}
+          <div className="space-y-2">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">
+                Peta Urusan Aktif ({roadmaps.length})
+              </span>
+              <Link href="/urusan-saya" className="text-xs font-bold text-blue-600 hover:underline">
+                Kelola Semua Urusan →
+              </Link>
+            </div>
+            <div className="flex items-center gap-2 overflow-x-auto pb-2 no-scrollbar">
+              {roadmaps.map((rm) => {
+                const isCurrent = rm.id === (activeRoadmap ? activeRoadmap.id : "");
+                return (
+                  <button
+                    key={rm.id}
+                    type="button"
+                    onClick={() => setSelectedRoadmapId(rm.id)}
+                    className={`flex-shrink-0 px-4 py-2.5 rounded-2xl text-xs font-bold border transition-all flex items-center gap-2 cursor-pointer ${
+                      isCurrent
+                        ? "bg-white text-blue-700 border-blue-400 shadow-md ring-2 ring-blue-500/20"
+                        : "bg-white/80 text-slate-600 border-slate-200 hover:bg-blue-50/50 hover:border-blue-200"
+                    }`}
+                  >
+                    <span>{rm.title.replace("Peta Urusan: ", "")}</span>
+                    <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${rm.progress_pct === 100 ? "bg-emerald-100 text-emerald-700" : "bg-blue-50 text-blue-600"}`}>
+                      {rm.progress_pct}%
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
           </div>
         )}
 
@@ -242,25 +253,23 @@ export function LegacyDashboardPage() {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
             
             {/* Left Col: Tasks Checklist */}
-<<<<<<< HEAD
-            <div className="lg:col-span-8 space-y-6">
-              <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/90 shadow-sm space-y-6">
-=======
             <div id="urusan" className="lg:col-span-8 space-y-6">
-              <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/80 shadow-sm space-y-6">
->>>>>>> 897ef1a4896e3e2e39fd8881977ae0887ac792b1
+              <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/90 shadow-sm space-y-6">
                 
                 {/* Roadmap Info Header */}
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-slate-100">
                   <div>
-                    <h2 className="font-display font-extrabold text-xl sm:text-2xl text-[#0f274a]">
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-blue-600">
+                      Checklist Alur & Dokumen
+                    </span>
+                    <h2 className="font-display font-extrabold text-xl sm:text-2xl text-[#0f274a] mt-0.5">
                       {activeRoadmap.title}
                     </h2>
                     <p className="text-xs text-slate-500 mt-1">
                       {activeRoadmap.description || "Daftar langkah penting terurut antar instansi"}
                     </p>
                   </div>
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-2 flex-shrink-0">
                     <button
                       type="button"
                       onClick={() => handleDeleteRoadmap(activeRoadmap.id)}
@@ -276,8 +285,8 @@ export function LegacyDashboardPage() {
                 <div className="space-y-2">
                   <div className="flex items-center justify-between text-xs font-bold">
                     <span className="text-slate-600">Progres Keseluruhan</span>
-                    <span className={activeRoadmap.progress_pct === 100 ? "text-emerald-600" : "text-blue-600"}>
-                      {activeRoadmap.progress_pct}% Selesai
+                    <span className={activeRoadmap.progress_pct === 100 ? "text-emerald-600 font-bold" : "text-blue-600"}>
+                      {activeRoadmap.progress_pct}% Selesai ({activeRoadmap.tasks?.filter((t) => t.is_completed).length || 0}/{activeRoadmap.tasks?.length || 0} langkah)
                     </span>
                   </div>
                   <div className="w-full h-3 bg-slate-100 rounded-full overflow-hidden">
@@ -292,15 +301,15 @@ export function LegacyDashboardPage() {
                   </div>
                 </div>
 
-                {/* Task Checklist Items with Light Blue Hover */}
+                {/* Task Checklist Items */}
                 <div className="space-y-3 pt-2">
                   {activeRoadmap.tasks?.map((task, idx) => (
                     <div
                       key={task.id}
-                      className={`p-4 sm:p-5 rounded-2xl border transition-all duration-300 hover-lift-blue ${
+                      className={`p-4 sm:p-5 rounded-2xl border transition-all duration-300 ${
                         task.is_completed
                           ? "bg-emerald-50/30 border-emerald-200/70"
-                          : "bg-white border-slate-200/90"
+                          : "bg-white border-slate-200/90 hover:border-blue-300 hover:shadow-xs"
                       }`}
                     >
                       <div className="flex items-start gap-3.5">
@@ -308,6 +317,7 @@ export function LegacyDashboardPage() {
                           type="button"
                           onClick={() => handleToggleTask(task.id, task.is_completed)}
                           className="mt-0.5 flex-shrink-0 focus:outline-none cursor-pointer"
+                          aria-label={task.is_completed ? "Tandai belum selesai" : "Tandai selesai"}
                         >
                           {task.is_completed ? (
                             <CheckCircle2 className="w-5 h-5 text-emerald-600 fill-emerald-100" />
@@ -427,6 +437,29 @@ export function LegacyDashboardPage() {
                 </button>
               </div>
 
+              {/* Quick Actions Card */}
+              <div className="bg-white rounded-3xl p-6 border border-slate-200/90 shadow-sm space-y-3">
+                <h3 className="font-display font-bold text-sm text-[#0f274a]">Aksi Cepat</h3>
+                <div className="space-y-1">
+                  <Link href="/layanan" className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-xs text-slate-600 hover:bg-blue-50 hover:text-blue-600 transition-colors">
+                    <Search className="w-4 h-4 text-blue-500" />
+                    <span>Cari Katalog Layanan Baru</span>
+                  </Link>
+                  <Link href="/riwayat" className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-xs text-slate-600 hover:bg-blue-50 hover:text-blue-600 transition-colors">
+                    <ClipboardList className="w-4 h-4 text-violet-500" />
+                    <span>Lihat Riwayat Langkah Selesai</span>
+                  </Link>
+                  <Link href="/bantuan" className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-xs text-slate-600 hover:bg-blue-50 hover:text-blue-600 transition-colors">
+                    <Bell className="w-4 h-4 text-amber-500" />
+                    <span>Pusat Informasi & FAQ</span>
+                  </Link>
+                  <Link href="/urusan-saya" className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-xs text-slate-600 hover:bg-blue-50 hover:text-blue-600 transition-colors">
+                    <UserRound className="w-4 h-4 text-indigo-500" />
+                    <span>Kelola Seluruh Peta Urusan</span>
+                  </Link>
+                </div>
+              </div>
+
               {/* Disclaimer reminder */}
               <div className="bg-blue-50/60 rounded-2xl p-5 border border-blue-100 text-xs text-slate-600 space-y-2">
                 <div className="flex items-center gap-2 text-blue-900 font-bold">
@@ -441,21 +474,60 @@ export function LegacyDashboardPage() {
 
           </div>
         ) : (
-          <div className="bg-white rounded-3xl p-12 text-center border border-slate-200 space-y-4 shadow-sm">
-            <Compass className="w-12 h-12 text-blue-500 mx-auto" />
-            <h3 className="font-display font-bold text-lg text-slate-800">
-              Belum ada Peta Urusan yang dibuat
-            </h3>
-            <p className="text-xs text-slate-500 max-w-sm mx-auto leading-relaxed">
-              Pilih satu peristiwa hidup untuk otomatis menyusun urutan langkah dan persiapan dokumen Anda.
-            </p>
+          /* Empty State when 0 roadmaps exist */
+          <div className="bg-white rounded-3xl p-8 sm:p-12 text-center border border-slate-200/90 space-y-6 shadow-sm">
+            <div className="w-16 h-16 rounded-3xl bg-blue-50 text-blue-600 flex items-center justify-center mx-auto border border-blue-100">
+              <Compass className="w-8 h-8" />
+            </div>
+            
+            <div className="space-y-1.5 max-w-md mx-auto">
+              <h3 className="font-display font-black text-xl sm:text-2xl text-[#0f274a]">
+                Belum ada Peta Urusan yang dibuat
+              </h3>
+              <p className="text-xs sm:text-sm text-slate-500 leading-relaxed">
+                Pilih satu peristiwa hidup yang sedang kamu jalani untuk menyusun daftar langkah, dokumen prasyarat, dan urutan prioritas antar dinas.
+              </p>
+            </div>
+
             <button
+              type="button"
               onClick={() => setShowAddModal(true)}
-              className="inline-flex items-center gap-2 px-5 py-2.5 bg-blue-600 text-white text-xs font-bold rounded-xl shadow-sm hover:bg-blue-700 cursor-pointer"
+              className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 text-white text-xs sm:text-sm font-bold rounded-2xl shadow-md shadow-blue-600/25 hover:bg-blue-700 cursor-pointer transition-all transform hover:-translate-y-0.5"
             >
               <Plus className="w-4 h-4" />
               <span>Buat Peta Urusan Sekarang</span>
             </button>
+
+            {/* Quick Starter Templates */}
+            <div className="pt-4 border-t border-slate-100">
+              <span className="text-xs font-bold text-slate-400 uppercase tracking-wider block mb-3">
+                Atau pilih langsung alur siap pakai:
+              </span>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 text-left">
+                {[
+                  { slug: "pindah-domisili", title: "Pindah Domisili / Rumah", desc: "KTP, KK, BPJS faskes, SKPWNI" },
+                  { slug: "pekerjaan-baru", title: "Pekerjaan / Karir Baru", desc: "NPWP, BPJS TK, rekening, SKCK" },
+                  { slug: "menikah", title: "Pernikahan & Keluarga", desc: "SIMKAH, pecah KK, KTP kawin, BPJS" },
+                  { slug: "memiliki-anak", title: "Kelahiran Anggota Baru", desc: "Akta lahir, tambah KK, BPJS bayi, KIA" },
+                  { slug: "memulai-usaha", title: "Membuka Usaha (UMKM)", desc: "NIB OSS RBA, sertifikat halal, PIRT" },
+                  { slug: "pendidikan", title: "Pendidikan & Sekolah", desc: "PPDB online, legalisir ijazah, KIP" },
+                ].map((item) => (
+                  <button
+                    key={item.slug}
+                    type="button"
+                    onClick={() => handleCreateRoadmap(item.slug)}
+                    className="p-3.5 rounded-2xl border border-slate-200 hover:border-blue-400 hover:bg-blue-50/40 text-left transition-all group cursor-pointer"
+                  >
+                    <strong className="text-xs font-bold text-[#0f274a] group-hover:text-blue-600 block transition-colors">
+                      {item.title}
+                    </strong>
+                    <span className="text-[10px] text-slate-500 block mt-0.5">
+                      {item.desc}
+                    </span>
+                  </button>
+                ))}
+              </div>
+            </div>
           </div>
         )}
 
@@ -465,16 +537,25 @@ export function LegacyDashboardPage() {
       {showAddModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-in fade-in duration-200">
           <div className="bg-white rounded-3xl max-w-md w-full p-6 sm:p-8 shadow-2xl border border-slate-200 space-y-6 animate-in zoom-in-95">
-            <div>
-              <span className="text-[11px] font-bold uppercase tracking-wider text-blue-600">
-                Pilih Peristiwa Hidup
-              </span>
-              <h3 className="font-display font-extrabold text-xl text-[#0f274a] mt-1">
-                Buat Peta Urusan Baru
-              </h3>
-              <p className="text-xs text-slate-500 mt-1">
-                Pilih template alur yang sesuai dengan kebutuhan Anda saat ini:
-              </p>
+            <div className="flex items-start justify-between gap-4">
+              <div>
+                <span className="text-[11px] font-bold uppercase tracking-wider text-blue-600">
+                  Pilih Peristiwa Hidup
+                </span>
+                <h3 className="font-display font-extrabold text-xl text-[#0f274a] mt-1">
+                  Buat Peta Urusan Baru
+                </h3>
+                <p className="text-xs text-slate-500 mt-1">
+                  Pilih template alur yang sesuai dengan kebutuhan Anda saat ini:
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setShowAddModal(false)}
+                className="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 flex items-center justify-center"
+              >
+                <X className="w-4 h-4" />
+              </button>
             </div>
 
             <div className="space-y-2.5 max-h-72 overflow-y-auto pr-1">
@@ -517,7 +598,7 @@ export function LegacyDashboardPage() {
               </button>
               <button
                 type="button"
-                onClick={handleCreateRoadmap}
+                onClick={() => handleCreateRoadmap()}
                 className="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold rounded-xl shadow-md shadow-blue-600/25 transition-all cursor-pointer"
               >
                 Buat Peta Urusan
@@ -530,14 +611,14 @@ export function LegacyDashboardPage() {
   );
 }
 
-<<<<<<< HEAD
-=======
 export default function DashboardPage() {
   return (
-    <>
-      <Navbar />
-      <DashboardOverview />
-    </>
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center bg-slate-50 text-slate-500 text-xs">
+        Memuat dashboard...
+      </div>
+    }>
+      <DashboardContent />
+    </Suspense>
   );
 }
->>>>>>> 897ef1a4896e3e2e39fd8881977ae0887ac792b1

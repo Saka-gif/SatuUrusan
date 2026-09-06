@@ -78,7 +78,10 @@ export function AccountRoadmaps({ mode }: { mode: "active" | "history" }) {
                 </div>
                 <div className="mt-4 flex items-center justify-between text-[11px] text-slate-500">
                   <span>{roadmap.tasks?.filter((task) => task.is_completed).length || 0} dari {roadmap.tasks?.length || 0} langkah selesai</span>
-                  <Link href="/dashboard" className="font-bold text-blue-600 hover:underline">Lanjutkan</Link>
+                  <Link href={`/dashboard?id=${roadmap.id}`} className="font-bold text-blue-600 hover:text-blue-800 hover:underline inline-flex items-center gap-1">
+                    <span>Lihat Detail Checklist</span>
+                    <ArrowRight className="w-3 h-3" />
+                  </Link>
                 </div>
               </article>
             ))}
@@ -99,10 +102,18 @@ export function AccountRoadmaps({ mode }: { mode: "active" | "history" }) {
         )}
 
         {((mode === "active" && roadmaps.length === 0) || (mode === "history" && completedTasks.length === 0)) && (
-          <div className="rounded-2xl border border-dashed border-slate-300 bg-white p-10 text-center">
+          <div className="rounded-2xl border border-dashed border-slate-300 bg-white p-10 text-center space-y-3">
             {mode === "active" ? <ClipboardList className="mx-auto h-9 w-9 text-blue-500" /> : <Clock className="mx-auto h-9 w-9 text-slate-400" />}
-            <h2 className="mt-3 font-display font-bold text-[#0f274a]">{mode === "active" ? "Belum ada urusan tersimpan" : "Belum ada aktivitas selesai"}</h2>
-            <p className="mx-auto mt-1 max-w-sm text-xs leading-relaxed text-slate-500">{mode === "active" ? "Buat peta urusan pertamamu dari dashboard untuk mulai menyusun langkah." : "Checklist yang kamu selesaikan akan muncul di sini."}</p>
+            <h2 className="font-display font-bold text-[#0f274a]">{mode === "active" ? "Belum ada urusan tersimpan" : "Belum ada aktivitas selesai"}</h2>
+            <p className="mx-auto max-w-sm text-xs leading-relaxed text-slate-500">{mode === "active" ? "Buat peta urusan pertamamu dari dashboard untuk mulai menyusun langkah." : "Checklist yang kamu selesaikan akan muncul di sini."}</p>
+            {mode === "active" && (
+              <div className="pt-2">
+                <Link href="/dashboard" className="inline-flex items-center gap-1.5 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold transition-all shadow-sm">
+                  <span>Buka Dashboard & Buat Urusan</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </Link>
+              </div>
+            )}
           </div>
         )}
       </div>

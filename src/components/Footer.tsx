@@ -22,9 +22,16 @@ import {
 
 export function Footer() {
   const pathname = usePathname();
-  const isAccountArea = ["/dashboard", "/urusan-saya", "/riwayat", "/notifikasi"].some((path) => 
-    pathname.startsWith(path)
-  );
+  const shouldHideFooter = [
+    "/dashboard", 
+    "/urusan-saya", 
+    "/riwayat", 
+    "/notifikasi",
+    "/daftar",
+    "/masuk",
+    "/mulai",
+    "/onboarding"
+  ].some((path) => pathname === path || pathname.startsWith(path));
 
   const scrollToTop = () => {
     if (typeof window !== "undefined") {
@@ -38,7 +45,7 @@ export function Footer() {
     }
   };
 
-  if (isAccountArea) return null;
+  if (shouldHideFooter) return null;
 
   const popularTags = [
     { label: "#KTP-el", href: "/layanan" },

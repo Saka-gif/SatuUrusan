@@ -16,23 +16,30 @@ export default function LoginPage() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
+    const username = email.split("@")[0] || "Teman Satu";
+    const formattedName = username.charAt(0).toUpperCase() + username.slice(1);
     window.localStorage.setItem("satuurusan_session", JSON.stringify({
-      name: email.split("@")[0] || "Teman Satu",
+      name: formattedName,
       email,
     }));
     window.dispatchEvent(new CustomEvent("satuurusan-session-changed"));
     setTimeout(() => {
       router.push("/dashboard");
-    }, 400);
+    }, 300);
   };
 
   const handleDemoLogin = () => {
     setEmail("warga@bantugerak.id");
     setPassword("password123");
     setIsLoading(true);
+    window.localStorage.setItem("satuurusan_session", JSON.stringify({
+      name: "Warga Demo",
+      email: "demo@satuurusan.id",
+    }));
+    window.dispatchEvent(new CustomEvent("satuurusan-session-changed"));
     setTimeout(() => {
       router.push("/dashboard");
-    }, 400);
+    }, 300);
   };
 
   return (

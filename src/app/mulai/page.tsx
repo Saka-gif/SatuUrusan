@@ -1,10 +1,22 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { AuthBrand } from "@/components/AuthBrand";
 import { ArrowRight, ShieldCheck, Compass } from "lucide-react";
 
 export default function StartPage() {
+  const router = useRouter();
+
+  const handleDemoClick = () => {
+    window.localStorage.setItem("satuurusan_session", JSON.stringify({
+      name: "Warga Demo",
+      email: "demo@satuurusan.id",
+    }));
+    window.dispatchEvent(new CustomEvent("satuurusan-session-changed"));
+    router.push("/dashboard");
+  };
+
   return (
     <main className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/40 to-slate-100 flex flex-col justify-between p-4 sm:p-8 relative overflow-hidden font-sans">
       {/* Ambient background glow */}
@@ -48,12 +60,13 @@ export default function StartPage() {
             <span>Buat Akun Sekarang</span>
             <ArrowRight className="w-4 h-4 text-blue-300" />
           </Link>
-          <Link
-            href="/dashboard"
-            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-white hover:bg-slate-50 text-slate-700 font-bold text-sm border border-slate-200 shadow-sm transition-all"
+          <button
+            type="button"
+            onClick={handleDemoClick}
+            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-white hover:bg-slate-50 text-slate-700 font-bold text-sm border border-slate-200 shadow-sm transition-all cursor-pointer"
           >
             <span>Lihat Mode Demo</span>
-          </Link>
+          </button>
         </div>
 
         <div className="pt-6 flex items-center justify-center gap-2 text-xs text-slate-500 font-semibold">
