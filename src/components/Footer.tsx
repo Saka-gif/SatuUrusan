@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { BrandMark } from "./BrandMark";
 import { 
   ShieldCheck, 
@@ -15,12 +16,16 @@ import {
   ArrowUp, 
   Lock, 
   Zap, 
-  Clock,
   ArrowRight,
   Globe
 } from "lucide-react";
 
 export function Footer() {
+  const pathname = usePathname();
+  const isAccountArea = ["/dashboard", "/urusan-saya", "/riwayat", "/notifikasi"].some((path) => 
+    pathname.startsWith(path)
+  );
+
   const scrollToTop = () => {
     if (typeof window !== "undefined") {
       window.scrollTo({ top: 0, behavior: "smooth" });
@@ -32,6 +37,8 @@ export function Footer() {
       window.dispatchEvent(new CustomEvent("open-satu-ai"));
     }
   };
+
+  if (isAccountArea) return null;
 
   const popularTags = [
     { label: "#KTP-el", href: "/layanan" },

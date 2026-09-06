@@ -4,7 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { AuthShell } from "@/components/AuthShell";
-import { Eye, EyeOff, ArrowRight, Lock, Mail, User, Phone, CheckSquare, AlertCircle } from "lucide-react";
+import { Eye, EyeOff, ArrowRight, Lock, Mail, User, Phone, AlertCircle } from "lucide-react";
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -29,6 +29,11 @@ export default function RegisterPage() {
     }
 
     setIsLoading(true);
+    window.localStorage.setItem("satuurusan_session", JSON.stringify({
+      name: form.get("name") || "Teman Satu",
+      email: form.get("email") || "",
+    }));
+    window.dispatchEvent(new CustomEvent("satuurusan-session-changed"));
     setTimeout(() => {
       router.push("/onboarding");
     }, 400);

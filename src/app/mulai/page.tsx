@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { AuthBrand } from "@/components/AuthBrand";
-import { ArrowRight, ShieldCheck, CheckCircle2, Compass } from "lucide-react";
+import { ArrowRight, ShieldCheck, Compass } from "lucide-react";
 
 export default function StartPage() {
   return (
@@ -45,14 +45,14 @@ export default function StartPage() {
             href="/daftar"
             className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-xl bg-gradient-to-r from-[#0f274a] via-[#17345b] to-[#2563eb] hover:from-[#17345b] hover:to-[#1d4ed8] text-white font-bold text-sm shadow-xl shadow-blue-950/20 hover:shadow-blue-950/30 transition-all transform hover:-translate-y-0.5"
           >
-            <span>Daftar Sekarang (Gratis)</span>
+            <span>Buat Akun Sekarang</span>
             <ArrowRight className="w-4 h-4 text-blue-300" />
           </Link>
           <Link
             href="/dashboard"
             className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-white hover:bg-slate-50 text-slate-700 font-bold text-sm border border-slate-200 shadow-sm transition-all"
           >
-            <span>Coba Tanpa Akun</span>
+            <span>Lihat Mode Demo</span>
           </Link>
         </div>
 

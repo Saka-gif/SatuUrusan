@@ -2,6 +2,7 @@ import { getSupabase } from "./client";
 import { UserRoadmap, RoadmapTask, LifeEvent, ServiceCategory, FaqItem } from "./types";
 import { lifeEvents as defaultLifeEvents } from "@/data/life-events";
 import { serviceCategories as defaultServiceCategories } from "@/data/service-categories";
+import { addNotification } from "@/lib/notifications";
 
 const LOCAL_ROADMAPS_KEY = "satuurusan_roadmaps_v2";
 
@@ -392,6 +393,13 @@ export async function toggleTaskCompletion(
         .single();
 
       if (updatedRm) {
+        if (isCompleted) {
+          addNotification({
+            title: "Langkah berhasil diselesaikan",
+            message: `Satu langkah dari ${updatedRm.title.replace("Peta Urusan: ", "")} sudah selesai.`,
+            type: "success",
+          });
+        }
         return { roadmap: updatedRm as UserRoadmap, completed: isCompleted };
       }
     } catch (e) {
@@ -419,6 +427,13 @@ export async function toggleTaskCompletion(
   targetRm.updated_at = new Date().toISOString();
 
   saveLocalRoadmaps(roadmaps);
+  if (isCompleted) {
+    addNotification({
+      title: "Langkah berhasil diselesaikan",
+      message: `Satu langkah dari ${targetRm.title.replace("Peta Urusan: ", "")} sudah selesai.`,
+      type: "success",
+    });
+  }
   return { roadmap: targetRm, completed: isCompleted };
 }
 
