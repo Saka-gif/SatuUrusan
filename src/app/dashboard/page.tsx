@@ -20,14 +20,10 @@ import {
   FileText, 
   Trophy, 
   Compass, 
-<<<<<<< HEAD
   Layers, 
   Info,
   Building2,
   FileCheck2
-=======
-  Info
->>>>>>> 897ef1a4896e3e2e39fd8881977ae0887ac792b1
 } from "lucide-react";
 import confetti from "canvas-confetti";
 import { DashboardOverview } from "@/components/DashboardOverview";
@@ -42,7 +38,7 @@ export function LegacyDashboardPage() {
     if (typeof window === "undefined") return "Teman Satu";
     try {
       const session = window.localStorage.getItem("satuurusan_session");
-      const parsed = session ? JSON.parse(session) as { name?: string } : null;
+      const parsed = session ? (JSON.parse(session) as { name?: string }) : null;
       return parsed?.name || "Teman Satu";
     } catch {
       return "Teman Satu";
@@ -90,7 +86,6 @@ export function LegacyDashboardPage() {
         prev.map((r) => (r.id === updatedRm.id ? updatedRm : r))
       );
 
-      // Trigger confetti celebration when reaching 100%
       if (updatedRm.progress_pct === 100) {
         confetti({
           particleCount: 120,
@@ -129,37 +124,8 @@ export function LegacyDashboardPage() {
   };
 
   return (
-<<<<<<< HEAD
-    <main className="min-h-screen bg-slate-50/70 text-slate-800 flex flex-col font-sans">
-      {/* Top Bar */}
-      <header className="sticky top-0 z-20 bg-white/90 backdrop-blur-md border-b border-slate-200/80 px-4 sm:px-8 py-3.5 flex items-center justify-between">
-        <AuthBrand />
-        <div className="flex items-center gap-3">
-          <Link
-            href="/layanan"
-            className="hidden sm:inline-flex items-center gap-1.5 text-xs font-bold text-slate-600 hover:text-blue-600 px-3 py-1.5 rounded-lg hover:bg-slate-100 transition-colors"
-          >
-            <Layers className="w-3.5 h-3.5" />
-            <span>Katalog Layanan</span>
-          </Link>
-          <div className="flex items-center gap-2 pl-3 border-l border-slate-200">
-            <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-blue-600 to-indigo-600 text-white flex items-center justify-center font-bold text-xs shadow-sm">
-              TS
-            </div>
-            <div className="hidden sm:block text-left">
-              <span className="text-xs font-bold block leading-none text-slate-800">Teman Satu</span>
-              <span className="text-[10px] text-emerald-600 font-semibold flex items-center gap-1">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 inline-block animate-pulse-soft" />
-                Aktif
-              </span>
-            </div>
-          </div>
-        </div>
-      </header>
-=======
     <main aria-busy={isLoading} className="min-h-screen bg-slate-50/70 text-slate-800 flex flex-col font-sans">
       <Navbar />
->>>>>>> 897ef1a4896e3e2e39fd8881977ae0887ac792b1
 
       {/* Main Content Dashboard */}
       <div className="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-8 flex-1 space-y-8">
@@ -242,13 +208,8 @@ export function LegacyDashboardPage() {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
             
             {/* Left Col: Tasks Checklist */}
-<<<<<<< HEAD
-            <div className="lg:col-span-8 space-y-6">
-              <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/90 shadow-sm space-y-6">
-=======
             <div id="urusan" className="lg:col-span-8 space-y-6">
               <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/80 shadow-sm space-y-6">
->>>>>>> 897ef1a4896e3e2e39fd8881977ae0887ac792b1
                 
                 {/* Roadmap Info Header */}
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-slate-100">
@@ -292,7 +253,7 @@ export function LegacyDashboardPage() {
                   </div>
                 </div>
 
-                {/* Task Checklist Items with Light Blue Hover */}
+                {/* Task Checklist Items */}
                 <div className="space-y-3 pt-2">
                   {activeRoadmap.tasks?.map((task, idx) => (
                     <div
@@ -530,8 +491,6 @@ export function LegacyDashboardPage() {
   );
 }
 
-<<<<<<< HEAD
-=======
 export default function DashboardPage() {
   return (
     <>
@@ -540,4 +499,3 @@ export default function DashboardPage() {
     </>
   );
 }
->>>>>>> 897ef1a4896e3e2e39fd8881977ae0887ac792b1
