@@ -128,7 +128,7 @@ export function AiAssistantModal() {
     }
   }, [messages, isOpen, isTyping]);
 
-  const handleSend = (textToSend?: string) => {
+  const handleSend = async (textToSend?: string) => {
     const query = (textToSend || input).trim();
     if (!query) return;
 
@@ -142,57 +142,46 @@ export function AiAssistantModal() {
     setInput("");
     setIsTyping(true);
 
-    // Smart matcher
-    setTimeout(() => {
-      const qLower = query.toLowerCase();
-      let matchedResponse = null;
+    // Call API
+    try {
+      const response = await fetch("/api/chat", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ messages: [...messages, userMsg] }),
+      });
 
-      if (qLower.includes("pindah") || qLower.includes("domisili") || qLower.includes("ktp") || qLower.includes("kk")) {
-        matchedResponse = PRESET_RESPONSES["pindah"];
-      } else if (qLower.includes("nikah") || qLower.includes("kawin") || qLower.includes("suami") || qLower.includes("istri")) {
-        matchedResponse = PRESET_RESPONSES["menikah"];
-      } else if (qLower.includes("bpjs") || qLower.includes("sehat") || qLower.includes("faskes")) {
-        matchedResponse = PRESET_RESPONSES["bpjs"];
-      } else if (qLower.includes("usaha") || qLower.includes("nib") || qLower.includes("oss") || qLower.includes("umkm")) {
-        matchedResponse = PRESET_RESPONSES["nib"];
-      } else if (qLower.includes("sim") || qLower.includes("stnk") || qLower.includes("kendaraan") || qLower.includes("motor") || qLower.includes("mobil")) {
-        matchedResponse = PRESET_RESPONSES["sim"];
+      if (!response.ok) {
+        throw new Error("Gagal mengambil respon API");
       }
 
-      if (matchedResponse) {
-        setMessages((prev) => [
-          ...prev,
-          {
-            id: `ai_${Date.now()}`,
-            sender: "ai",
-            text: matchedResponse.text,
-            steps: matchedResponse.steps,
-            officialUrl: matchedResponse.officialUrl,
-            actionUrl: matchedResponse.actionUrl,
-            actionLabel: matchedResponse.actionLabel
-          }
-        ]);
-      } else {
-        setMessages((prev) => [
-          ...prev,
-          {
-            id: `ai_${Date.now()}`,
-            sender: "ai",
-            text: `Saya memahami Anda ingin mengetahui informasi tentang "${query}". Berikut panduan umum alurnya:`,
-            steps: [
-              "1. Pastikan dokumen identitas dasar lengkap (KTP-el & Kartu Keluarga asli)",
-              "2. Periksa apakah instansi terkait memiliki portal pendaftaran online resmi",
-              "3. Siapkan scan dokumen dalam format PDF/JPG jelas berukuran di bawah 2MB",
-              "4. Anda dapat menyusun checklist langkah ini secara rapi di Dashboard SatuUrusan"
-            ],
-            officialUrl: "https://indonesia.go.id",
-            actionUrl: "/dashboard",
-            actionLabel: "Susun Roadmap di Dashboard"
-          }
-        ]);
+      const data = await response.json();
+      
+      if (data.error) {
+        throw new Error(data.error);
       }
+
+      setMessages((prev) => [
+        ...prev,
+        {
+          id: `ai_${Date.now()}`,
+          sender: "ai",
+          text: data.content,
+        }
+      ]);
+    } catch (error: any) {
+      setMessages((prev) => [
+        ...prev,
+        {
+          id: `ai_${Date.now()}`,
+          sender: "ai",
+          text: `Mohon maaf, sistem AI kami sedang sibuk atau mengalami kendala jaringan. (${error.message || 'Error'})`,
+        }
+      ]);
+    } finally {
       setIsTyping(false);
-    }, 650);
+    }
   };
 
   return (
@@ -264,7 +253,17 @@ export function AiAssistantModal() {
                         : "bg-white text-slate-800 border border-slate-200/80 rounded-bl-none space-y-2.5"
                     }`}
                   >
-                    <p className="whitespace-pre-line">{msg.text}</p>
+                    <div 
+                      className="whitespace-pre-line" 
+                      dangerouslySetInnerHTML={{
+                        __html: msg.text
+                          .replace(/</g, "&lt;")
+                          .replace(/>/g, "&gt;")
+                          .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
+                          .replace(/\*(.*?)\*/g, "<em>$1</em>")
+                          .replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2" target="_blank" class="text-blue-500 underline hover:text-blue-700">$1</a>')
+                      }}
+                    />
 
                     {/* Step by step highlight */}
                     {msg.steps && msg.steps.length > 0 && (

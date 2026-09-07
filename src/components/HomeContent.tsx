@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { DotLottieReact } from '@lottiefiles/dotlottie-react';
 import { 
   ArrowRight, 
   Clock,
@@ -74,7 +75,7 @@ export function HomeContent() {
   return (
     <main className="flex-1">
       {/* Human-Crafted Editorial Hero Section */}
-      <section className="relative overflow-hidden pt-12 pb-20 lg:pt-20 lg:pb-28 bg-gradient-to-b from-blue-50/60 via-slate-50/70 to-white">
+      <section className="relative overflow-hidden pt-32 pb-20 lg:pt-40 lg:pb-28 bg-gradient-to-b from-blue-50/60 via-slate-50/70 to-white">
         {/* Soft Ambient Light Glows */}
         <div className="absolute top-10 right-1/4 w-[500px] h-[500px] bg-blue-400/10 rounded-full blur-3xl pointer-events-none" />
         <div className="absolute bottom-10 left-10 w-96 h-96 bg-indigo-400/10 rounded-full blur-3xl pointer-events-none" />
@@ -95,7 +96,7 @@ export function HomeContent() {
               {/* Bold Editorial Headline */}
               <h1 className="font-display font-black text-4xl sm:text-5xl lg:text-6xl text-[#0f274a] tracking-tight leading-[1.12]">
                 Satu peristiwa hidup.<br />
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-sky-600 to-indigo-600">
+                <span className="text-blue-600">
                   Satu alur yang teratur.
                 </span>
               </h1>
@@ -135,127 +136,19 @@ export function HomeContent() {
                 </div>
                 <div>
                   <strong className="font-display font-black text-xl text-blue-600 block">Resmi</strong>
-                  <span className="text-[11px] text-slate-500">Situs .go.id</span>
+                  <span className="text-[11px] text-slate-500">Sumber Terpercaya</span>
                 </div>
               </div>
             </div>
 
-            {/* Right Interactive Administrative Console (Bespoke Real Studio) */}
-            <div className="lg:col-span-6">
-              <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/90 shadow-2xl shadow-blue-950/10 space-y-5 relative overflow-hidden">
-                
-                {/* Console Top Bar */}
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-100">
-                  <div className="flex items-center gap-2.5">
-                    <div className="w-3 h-3 rounded-full bg-emerald-500 animate-pulse-soft" />
-                    <div>
-                      <span className="text-xs font-black uppercase tracking-wider text-slate-800 block">
-                        Simulasi Navigator Urusan
-                      </span>
-                      <span className="text-[11px] text-slate-400">Coba klik tahapan di bawah untuk uji alur</span>
-                    </div>
-                  </div>
-
-                  {/* Progress Indicator */}
-                  <div className="inline-flex items-center gap-2 px-3 py-1 bg-blue-50 border border-blue-100 rounded-full text-xs font-bold text-blue-700">
-                    <span>{progressPct}% Selesai</span>
-                    <span className="text-[10px] text-slate-400">({completedCount}/{simSteps.length})</span>
-                  </div>
-                </div>
-
-                {/* Event Template Tabs */}
-                <div className="flex items-center gap-1.5 p-1 bg-slate-100/90 rounded-2xl border border-slate-200/60 overflow-x-auto no-scrollbar">
-                  {HERO_SIMULATIONS.map((sim, idx) => (
-                    <button
-                      key={sim.id}
-                      type="button"
-                      onClick={() => handleSelectSim(idx)}
-                      className={`flex-1 min-w-[110px] py-2 px-3 rounded-xl text-xs font-bold transition-all duration-200 text-center cursor-pointer ${
-                        activeSimIndex === idx
-                          ? "bg-white text-blue-600 shadow-sm shadow-slate-900/10 border border-slate-200/60"
-                          : "text-slate-600 hover:text-slate-900 hover:bg-white/50"
-                      }`}
-                    >
-                      {sim.name}
-                    </button>
-                  ))}
-                </div>
-
-                {/* Event Heading Inside Console */}
-                <div className="space-y-1">
-                  <span className="text-[11px] font-bold text-blue-600 uppercase tracking-wide">
-                    Urutan Langkah Logis
-                  </span>
-                  <h3 className="font-display font-extrabold text-lg text-[#0f274a]">
-                    {currentSim.subtitle}
-                  </h3>
-                </div>
-
-                {/* Interactive Checklist Step Cards */}
-                <div className="space-y-2.5">
-                  {simSteps.map((step, sIdx) => {
-                    const isDone = step.completed;
-                    return (
-                      <div
-                        key={step.id}
-                        onClick={() => handleToggleSimStep(step.id)}
-                        className={`p-3.5 rounded-2xl border transition-all duration-200 flex items-start gap-3 cursor-pointer group select-none ${
-                          isDone
-                            ? "bg-emerald-50/40 border-emerald-200/80"
-                            : "bg-slate-50/70 hover:bg-blue-50/40 border-slate-200/80 hover:border-blue-300"
-                        }`}
-                      >
-                        {/* Checkbox Icon */}
-                        <div className="mt-0.5 flex-shrink-0 text-slate-400 group-hover:text-blue-600 transition-colors">
-                          {isDone ? (
-                            <CheckCircle className="w-5 h-5 text-emerald-600 fill-emerald-100" />
-                          ) : (
-                            <Circle className="w-5 h-5 text-slate-300 group-hover:text-blue-500 transition-colors" />
-                          )}
-                        </div>
-
-                        {/* Step Details */}
-                        <div className="flex-1 space-y-1">
-                          <div className="flex items-center justify-between gap-2">
-                            <h4 className={`text-xs font-bold ${isDone ? "line-through text-slate-400" : "text-[#0f274a] group-hover:text-blue-700"}`}>
-                              {sIdx + 1}. {step.title}
-                            </h4>
-                            <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-white border border-slate-200/80 text-slate-600 flex-shrink-0">
-                              {step.agency}
-                            </span>
-                          </div>
-
-                          <div className="flex items-center gap-3 text-[11px] text-slate-500">
-                            <span className="flex items-center gap-1 font-medium">
-                              <FileCheck2 className="w-3 h-3 text-blue-500" />
-                              <span>Syarat: {step.doc}</span>
-                            </span>
-                            <span>·</span>
-                            <span className="flex items-center gap-1 font-medium">
-                              <Clock className="w-3 h-3 text-slate-400" />
-                              <span>{step.duration}</span>
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-
-                {/* Bottom Console Call to Action */}
-                <div className="pt-2 flex items-center justify-between">
-                  <span className="text-xs text-slate-500">
-                    💡 Berkas terhubung otomatis tanpa calo
-                  </span>
-                  <Link
-                    href="/dashboard"
-                    className="inline-flex items-center gap-1.5 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold transition-all shadow-md shadow-blue-600/20"
-                  >
-                    <span>Buka Roadmap Lengkap</span>
-                    <ArrowRight className="w-3.5 h-3.5" />
-                  </Link>
-                </div>
-
+            {/* Right Lottie Animation */}
+            <div className="lg:col-span-6 flex justify-center lg:justify-end items-center lg:translate-x-8">
+              <div className="w-full max-w-xl lg:max-w-[600px] h-[400px] sm:h-[450px] lg:h-[550px] lg:scale-105">
+                <DotLottieReact
+                  src="https://lottie.host/5c88da22-7a0d-4c52-bac2-b2feeeee4e20/GnqrTQ7DBT.lottie"
+                  loop
+                  autoplay
+                />
               </div>
             </div>
 

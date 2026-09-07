@@ -39,7 +39,7 @@ export function AccountRoadmaps({ mode }: { mode: "active" | "history" }) {
 
   return (
     <main className="flex-1 bg-slate-50/70">
-      <div className="mx-auto w-full max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8">
+      <div className="mx-auto w-full max-w-7xl space-y-8 px-4 pt-28 pb-12 lg:pt-32 lg:pb-16 sm:px-6 lg:px-8">
         <header className="flex flex-col justify-between gap-4 border-b border-slate-200 pb-6 sm:flex-row sm:items-end">
           <div>
             <span className="text-[11px] font-bold uppercase tracking-wider text-blue-600">

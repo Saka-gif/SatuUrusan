@@ -112,7 +112,7 @@ export function Navbar() {
 
   return (
     <header
-      className={`sticky top-0 z-40 w-full transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+      className={`fixed top-0 z-40 w-full transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${
         scrolled
           ? "pt-2 sm:pt-3 pb-1 px-3 sm:px-6"
           : "pt-4 sm:pt-6 pb-2 px-4 sm:px-6 lg:px-8"
@@ -205,7 +205,7 @@ export function Navbar() {
             <>
               <Link
                 href="/masuk"
-                className="px-3.5 py-2 text-xs sm:text-sm font-bold text-slate-700 hover:text-blue-600 hover:bg-blue-50/60 rounded-full transition-colors whitespace-nowrap"
+                className="px-4 py-2 text-xs sm:text-sm font-bold text-slate-700 bg-white border border-slate-200/90 shadow-sm hover:border-blue-300 hover:text-blue-600 hover:bg-blue-50/60 rounded-full transition-all duration-300 whitespace-nowrap"
               >
                 Masuk
               </Link>
@@ -282,7 +282,7 @@ export function Navbar() {
                 <Link
                   href="/masuk"
                   onClick={() => setMenuOpen(false)}
-                  className="flex items-center justify-center py-3 text-sm font-bold text-slate-700 bg-slate-100 hover:bg-slate-200 rounded-xl transition-colors"
+                  className="flex items-center justify-center py-3 text-sm font-bold text-slate-700 bg-white border border-slate-200 hover:border-blue-300 hover:text-blue-600 hover:bg-blue-50 rounded-xl transition-all shadow-sm"
                 >
                   Masuk
                 </Link>

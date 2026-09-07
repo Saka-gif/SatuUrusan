@@ -75,7 +75,7 @@ export function WorkGuide() {
   return (
     <main className="flex-1 bg-gradient-to-b from-slate-50 via-white to-slate-50">
       {/* Hero Banner */}
-      <section className="bg-gradient-to-r from-[#0f274a] via-[#173960] to-[#1e4976] text-white py-16 sm:py-24 relative overflow-hidden">
+      <section className="bg-gradient-to-r from-[#0f274a] via-[#173960] to-[#1e4976] text-white pt-32 pb-16 sm:pt-40 sm:pb-24 relative overflow-hidden">
         <div className="absolute top-0 right-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl pointer-events-none" />
         <div className="max-w-4xl mx-auto px-4 sm:px-6 text-center space-y-4 relative z-10">
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-500/20 border border-blue-400/30 text-blue-300 text-xs font-bold shadow-2xs">

@@ -22,7 +22,6 @@ import {
   FileText, 
   Trophy, 
   Compass, 
-<<<<<<< HEAD
   Info,
   Sparkles,
   Layers,
@@ -32,9 +31,6 @@ import {
   UserRound,
   CheckCircle,
   X
-=======
-  Info
->>>>>>> origin/main
 } from "lucide-react";
 import confetti from "canvas-confetti";
 
@@ -46,19 +42,7 @@ function DashboardContent() {
   const [isLoading, setIsLoading] = useState(true);
   const [showAddModal, setShowAddModal] = useState(false);
   const [selectedEventSlug, setSelectedEventSlug] = useState("pindah-domisili");
-<<<<<<< HEAD
   const [profileName, setProfileName] = useState("Teman Satu");
-=======
-  const [profileName] = useState(() => {
-    if (typeof window === "undefined") return "Teman Satu";
-    try {
-      const session = window.localStorage.getItem("satuurusan_session");
-      return session ? (JSON.parse(session) as { name?: string }).name || "Teman Satu" : "Teman Satu";
-    } catch {
-      return "Teman Satu";
-    }
-  });
->>>>>>> origin/main
 
   useEffect(() => {
     const rawSession = window.localStorage.getItem("satuurusan_session");
@@ -119,10 +103,7 @@ function DashboardContent() {
         prev.map((r) => (r.id === updatedRm.id ? updatedRm : r))
       );
 
-<<<<<<< HEAD
       // Trigger celebratory confetti when reaching 100%
-=======
->>>>>>> origin/main
       if (updatedRm.progress_pct === 100) {
         confetti({
           particleCount: 120,
@@ -136,27 +117,15 @@ function DashboardContent() {
     }
   };
 
-<<<<<<< HEAD
   const handleCreateRoadmap = async (slugToCreate?: string) => {
-    const slug = slugToCreate || selectedEventSlug;
-    const eventObj = lifeEvents.find((e) => {
-      const eSlug = e.slug || e.title.toLowerCase().replace(/\s+/g, "-");
-      return eSlug === slug || e.title.toLowerCase().includes(slug);
-    }) || lifeEvents[0];
-
-    const newRm = await createUserRoadmap(slug, eventObj.title);
-    setRoadmaps((prev) => [newRm, ...prev]);
-    setSelectedRoadmapId(newRm.id);
-    setShowAddModal(false);
-=======
-  const handleCreateRoadmap = async () => {
     try {
+      const slug = slugToCreate || selectedEventSlug;
       const eventObj = lifeEvents.find((e) => {
-        const slug = e.title.toLowerCase().replace(/\s+/g, "-");
-        return slug === selectedEventSlug || e.title.toLowerCase().includes(selectedEventSlug);
+        const eSlug = e.slug || e.title.toLowerCase().replace(/\s+/g, "-");
+        return eSlug === slug || e.title.toLowerCase().includes(slug);
       }) || lifeEvents[0];
 
-      const newRm = await createUserRoadmap(selectedEventSlug, eventObj.title);
+      const newRm = await createUserRoadmap(slug, eventObj.title);
       if (newRm) {
         setRoadmaps((prev) => [newRm, ...prev]);
         setSelectedRoadmapId(newRm.id);
@@ -166,7 +135,6 @@ function DashboardContent() {
       console.error("Gagal membuat roadmap baru", err);
       alert("Terjadi kesalahan saat membuat peta urusan baru. Silakan coba lagi.");
     }
->>>>>>> origin/main
   };
 
   const handleDeleteRoadmap = async (id: string) => {
@@ -174,26 +142,18 @@ function DashboardContent() {
 
     try {
       await deleteUserRoadmap(id);
-<<<<<<< HEAD
-      const remaining = roadmaps.filter((r) => r.id !== id);
-      setRoadmaps(remaining);
-      if (remaining.length > 0) {
-        setSelectedRoadmapId(remaining[0].id);
-      } else {
-        setSelectedRoadmapId("");
-      }
-=======
       setRoadmaps((prev) => {
         const remaining = prev.filter((r) => r.id !== id);
         if (remaining.length > 0 && selectedRoadmapId === id) {
           setSelectedRoadmapId(remaining[0].id);
+        } else if (remaining.length === 0) {
+          setSelectedRoadmapId("");
         }
         return remaining;
       });
     } catch (err) {
       console.error("Gagal menghapus roadmap", err);
       alert("Terjadi kesalahan saat menghapus roadmap. Silakan coba lagi.");
->>>>>>> origin/main
     }
   };
 
@@ -201,7 +161,7 @@ function DashboardContent() {
     <main aria-busy={isLoading} className="min-h-screen bg-slate-50/70 text-slate-800 flex flex-col font-sans">
       <Navbar />
 
-      <div className="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-8 flex-1 space-y-8">
+      <div className="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 pt-28 pb-12 lg:pt-32 lg:pb-16 flex-1 space-y-8">
         
         {/* Welcome Banner */}
         <div className="rounded-3xl bg-gradient-to-r from-[#0f274a] via-[#17345b] to-[#1e4976] p-6 sm:p-10 text-white shadow-xl flex flex-col md:flex-row md:items-center justify-between gap-6 relative overflow-hidden">
@@ -305,15 +265,9 @@ function DashboardContent() {
         {activeRoadmap ? (
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
             
-<<<<<<< HEAD
             {/* Left Col: Tasks Checklist */}
             <div id="urusan" className="lg:col-span-8 space-y-6">
               <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/90 shadow-sm space-y-6">
-=======
-            {/* Left Column: Tasks Checklist */}
-            <div id="urusan" className="lg:col-span-8 space-y-6">
-              <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/80 shadow-sm space-y-6">
->>>>>>> origin/main
                 
                 {/* Header */}
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-slate-100">
@@ -360,11 +314,7 @@ function DashboardContent() {
                   </div>
                 </div>
 
-<<<<<<< HEAD
                 {/* Task Checklist Items */}
-=======
-                {/* Task Items */}
->>>>>>> origin/main
                 <div className="space-y-3 pt-2">
                   {activeRoadmap.tasks?.map((task, idx) => (
                     <div
@@ -499,7 +449,6 @@ function DashboardContent() {
                 </button>
               </div>
 
-<<<<<<< HEAD
               {/* Quick Actions Card */}
               <div className="bg-white rounded-3xl p-6 border border-slate-200/90 shadow-sm space-y-3">
                 <h3 className="font-display font-bold text-sm text-[#0f274a]">Aksi Cepat</h3>
@@ -524,9 +473,6 @@ function DashboardContent() {
               </div>
 
               {/* Disclaimer reminder */}
-=======
-              {/* Disclaimer */}
->>>>>>> origin/main
               <div className="bg-blue-50/60 rounded-2xl p-5 border border-blue-100 text-xs text-slate-600 space-y-2">
                 <div className="flex items-center gap-2 text-blue-900 font-bold">
                   <Info className="w-4 h-4 text-blue-600 flex-shrink-0" />
@@ -601,9 +547,16 @@ function DashboardContent() {
 
       {/* Modal Add Roadmap */}
       {showAddModal && (
-<<<<<<< HEAD
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-in fade-in duration-200">
-          <div className="bg-white rounded-3xl max-w-md w-full p-6 sm:p-8 shadow-2xl border border-slate-200 space-y-6 animate-in zoom-in-95">
+        <div 
+          role="dialog"
+          aria-modal="true"
+          onClick={() => setShowAddModal(false)}
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-in fade-in duration-200"
+        >
+          <div 
+            onClick={(e) => e.stopPropagation()}
+            className="bg-white rounded-3xl max-w-md w-full p-6 sm:p-8 shadow-2xl border border-slate-200 space-y-6 animate-in zoom-in-95"
+          >
             <div className="flex items-start justify-between gap-4">
               <div>
                 <span className="text-[11px] font-bold uppercase tracking-wider text-blue-600">
@@ -623,28 +576,6 @@ function DashboardContent() {
               >
                 <X className="w-4 h-4" />
               </button>
-=======
-        <div 
-          role="dialog"
-          aria-modal="true"
-          onClick={() => setShowAddModal(false)}
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-in fade-in duration-200"
-        >
-          <div 
-            onClick={(e) => e.stopPropagation()}
-            className="bg-white rounded-3xl max-w-md w-full p-6 sm:p-8 shadow-2xl border border-slate-200 space-y-6 animate-in zoom-in-95"
-          >
-            <div>
-              <span className="text-[11px] font-bold uppercase tracking-wider text-blue-600">
-                Pilih Peristiwa Hidup
-              </span>
-              <h3 className="font-display font-extrabold text-xl text-[#0f274a] mt-1">
-                Buat Peta Urusan Baru
-              </h3>
-              <p className="text-xs text-slate-500 mt-1">
-                Pilih template alur yang sesuai dengan kebutuhan Anda saat ini:
-              </p>
->>>>>>> origin/main
             </div>
 
             <div className="space-y-2.5 max-h-72 overflow-y-auto pr-1">
@@ -710,8 +641,4 @@ export default function DashboardPage() {
       <DashboardContent />
     </Suspense>
   );
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> origin/main

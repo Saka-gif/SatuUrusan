@@ -57,217 +57,222 @@ export function Footer() {
   ];
 
   return (
-    <footer className="bg-[#071324] text-slate-300 border-t border-slate-800/80 mt-auto relative overflow-hidden selection:bg-blue-600 selection:text-white">
-      {/* Background ambient lighting */}
-      <div className="absolute top-0 right-1/4 w-[36rem] h-[36rem] bg-blue-600/10 rounded-full blur-[140px] pointer-events-none" />
-      <div className="absolute bottom-0 left-1/4 w-[36rem] h-[36rem] bg-indigo-600/10 rounded-full blur-[140px] pointer-events-none" />
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[48rem] h-[48rem] bg-sky-500/5 rounded-full blur-[160px] pointer-events-none" />
+    <>
+      <section className="bg-white relative overflow-hidden selection:bg-blue-600 selection:text-white border-t border-slate-200">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          
+          {/* ========================================================================= */}
+          {/* 1. HERO CALLOUT SHOWCASE BANNER (Glassmorphic Dual-Column Showcase)       */}
+          {/* ========================================================================= */}
+          <div className="pt-16 sm:pt-20 pb-12">
+            <div className="relative rounded-3xl bg-gradient-to-br from-blue-50/80 via-white to-slate-50 border border-slate-200/80 p-8 sm:p-12 lg:p-14 overflow-hidden shadow-2xl">
+              {/* Inner Glow Decorative Corner Elements */}
+              <div className="absolute -right-20 -top-20 w-80 h-80 bg-blue-100 rounded-full blur-3xl pointer-events-none" />
+              <div className="absolute -left-20 -bottom-20 w-80 h-80 bg-indigo-100/60 rounded-full blur-3xl pointer-events-none" />
 
-      {/* Grid pattern overlay */}
-      <div 
-        className="absolute inset-0 opacity-[0.03] pointer-events-none bg-[radial-gradient(#ffffff_1px,transparent_1px)] [background-size:24px_24px]" 
-      />
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center relative z-10">
+                
+                {/* Left Column: Bold Value Proposition */}
+                <div className="lg:col-span-7 space-y-6 text-left">
+                  {/* Badge */}
+                  <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-white border border-slate-200 text-slate-700 text-xs sm:text-sm font-bold shadow-sm">
+                    <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse-soft" />
+                    <Sparkles className="w-3.5 h-3.5 text-blue-500" />
+                    <span>Navigator Administrasi Mandiri · 100% Bebas Calo</span>
+                  </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        
-        {/* ========================================================================= */}
-        {/* 1. HERO CALLOUT SHOWCASE BANNER (Glassmorphic Dual-Column Showcase)       */}
-        {/* ========================================================================= */}
-        <div className="pt-16 sm:pt-20 pb-12">
-          <div className="relative rounded-3xl bg-gradient-to-br from-[#0e223d]/90 via-[#102a4c]/80 to-[#0a182c]/90 border border-blue-500/30 p-8 sm:p-12 lg:p-14 overflow-hidden shadow-2xl backdrop-blur-2xl">
-            {/* Inner Glow Decorative Corner Elements */}
-            <div className="absolute -right-20 -top-20 w-80 h-80 bg-blue-500/25 rounded-full blur-3xl pointer-events-none" />
-            <div className="absolute -left-20 -bottom-20 w-80 h-80 bg-indigo-500/20 rounded-full blur-3xl pointer-events-none" />
+                  {/* Headline */}
+                  <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl font-black text-[#0f274a] tracking-tight leading-[1.15]">
+                    Siap menyelesaikan urusan dokumenmu <span className="text-blue-600">tanpa ribet?</span>
+                  </h2>
 
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center relative z-10">
-              
-              {/* Left Column: Bold Value Proposition */}
-              <div className="lg:col-span-7 space-y-6 text-left">
-                {/* Badge */}
-                <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-blue-500/15 border border-blue-400/30 text-blue-300 text-xs sm:text-sm font-bold shadow-inner">
-                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse-soft" />
-                  <Sparkles className="w-3.5 h-3.5 text-blue-300" />
-                  <span>Navigator Administrasi Mandiri · 100% Bebas Calo</span>
-                </div>
+                  {/* Subtitle */}
+                  <p className="text-base sm:text-lg text-slate-600 leading-relaxed font-normal max-w-xl">
+                    Pilih peristiwa hidupmu, ikuti checklist langkah runtut, dan langsung terhubung ke portal instansi resmi pemerintah Republik Indonesia.
+                  </p>
 
-                {/* Headline */}
-                <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight leading-[1.15]">
-                  Siap menyelesaikan urusan dokumenmu <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-sky-300 to-indigo-300">tanpa ribet?</span>
-                </h2>
+                  {/* Action Buttons */}
+                  <div className="pt-2 flex flex-wrap items-center gap-3.5">
+                    <Link
+                      href="/mulai"
+                      className="inline-flex items-center gap-2.5 px-7 py-3.5 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-extrabold text-sm sm:text-base tracking-wide shadow-xl shadow-blue-600/20 hover:shadow-blue-600/40 transition-all duration-300 transform hover:-translate-y-0.5 group"
+                    >
+                      <span>Mulai Susun Urusan</span>
+                      <ArrowRight className="w-4 h-4 text-blue-200 group-hover:translate-x-1 transition-transform" />
+                    </Link>
 
-                {/* Subtitle */}
-                <p className="text-base sm:text-lg text-slate-300 leading-relaxed font-normal max-w-xl">
-                  Pilih peristiwa hidupmu, ikuti checklist langkah runtut, dan langsung terhubung ke portal instansi resmi pemerintah Republik Indonesia.
-                </p>
+                    <button
+                      type="button"
+                      onClick={openAiAssistant}
+                      className="inline-flex items-center gap-2.5 px-6 py-3.5 rounded-2xl bg-white hover:bg-slate-50 text-slate-700 font-bold text-sm sm:text-base border border-slate-200 shadow-sm hover:border-blue-300 transition-all duration-300 cursor-pointer group"
+                    >
+                      <Bot className="w-4 h-4 text-blue-500 group-hover:scale-110 transition-transform" />
+                      <span>Tanya Asisten AI</span>
+                    </button>
+                  </div>
 
-                {/* Action Buttons */}
-                <div className="pt-2 flex flex-wrap items-center gap-3.5">
-                  <Link
-                    href="/mulai"
-                    className="inline-flex items-center gap-2.5 px-7 py-3.5 rounded-2xl bg-blue-600 hover:bg-blue-500 text-white font-extrabold text-sm sm:text-base tracking-wide shadow-xl shadow-blue-600/30 hover:shadow-blue-500/50 transition-all duration-300 transform hover:-translate-y-0.5 group"
-                  >
-                    <span>Mulai Susun Urusan</span>
-                    <ArrowRight className="w-4 h-4 text-blue-200 group-hover:translate-x-1 transition-transform" />
-                  </Link>
-
-                  <button
-                    type="button"
-                    onClick={openAiAssistant}
-                    className="inline-flex items-center gap-2.5 px-6 py-3.5 rounded-2xl bg-white/10 hover:bg-white/15 text-white font-bold text-sm sm:text-base border border-white/15 hover:border-blue-400/40 transition-all duration-300 cursor-pointer group"
-                  >
-                    <Bot className="w-4 h-4 text-blue-400 group-hover:scale-110 transition-transform" />
-                    <span>Tanya Asisten AI</span>
-                  </button>
-                </div>
-
-                {/* Micro guarantees */}
-                <div className="pt-3 flex flex-wrap items-center gap-4 sm:gap-6 text-xs sm:text-sm text-slate-400 font-medium">
-                  <span className="flex items-center gap-1.5">
-                    <CheckCircle2 className="w-4 h-4 text-emerald-400 flex-shrink-0" />
-                    <span>50+ Panduan Terverifikasi</span>
-                  </span>
-                  <span className="flex items-center gap-1.5">
-                    <CheckCircle2 className="w-4 h-4 text-emerald-400 flex-shrink-0" />
-                    <span>Aman & Bebas Biaya</span>
-                  </span>
-                  <span className="flex items-center gap-1.5">
-                    <Globe className="w-4 h-4 text-blue-400 flex-shrink-0" />
-                    <span>Kanal Resmi .go.id</span>
-                  </span>
-                </div>
-              </div>
-
-              {/* Right Column: Visual Interactive Mini Roadmap Card */}
-              <div className="lg:col-span-5">
-                <div className="bg-[#0b1b30]/90 border border-blue-400/20 rounded-2xl p-5 sm:p-6 shadow-2xl backdrop-blur-md space-y-4">
-                  {/* Card Header */}
-                  <div className="flex items-center justify-between border-b border-slate-700/60 pb-3.5">
-                    <div className="flex items-center gap-2.5">
-                      <div className="w-8 h-8 rounded-lg bg-blue-500/20 border border-blue-400/30 flex items-center justify-center">
-                        <Compass className="w-4 h-4 text-blue-400" />
-                      </div>
-                      <div>
-                        <h4 className="text-sm font-bold text-white leading-tight">Live Alur: Pindah Domisili</h4>
-                        <span className="text-[11px] text-slate-400">Tahapan Terstruktur Antar-Dinas</span>
-                      </div>
-                    </div>
-                    <span className="text-[11px] font-bold px-2.5 py-1 rounded-full bg-emerald-500/15 border border-emerald-400/30 text-emerald-400">
-                      3/4 Selesai
+                  {/* Micro guarantees */}
+                  <div className="pt-3 flex flex-wrap items-center gap-4 sm:gap-6 text-xs sm:text-sm text-slate-500 font-medium">
+                    <span className="flex items-center gap-1.5">
+                      <CheckCircle2 className="w-4 h-4 text-emerald-500 flex-shrink-0" />
+                      <span>50+ Panduan Terverifikasi</span>
+                    </span>
+                    <span className="flex items-center gap-1.5">
+                      <CheckCircle2 className="w-4 h-4 text-emerald-500 flex-shrink-0" />
+                      <span>Aman & Bebas Biaya</span>
+                    </span>
+                    <span className="flex items-center gap-1.5">
+                      <Globe className="w-4 h-4 text-blue-500 flex-shrink-0" />
+                      <span>Kanal Resmi .go.id</span>
                     </span>
                   </div>
-
-                  {/* Visual Steps Mockup */}
-                  <div className="space-y-2.5">
-                    {/* Step 1 */}
-                    <div className="flex items-center justify-between p-3 rounded-xl bg-slate-900/60 border border-slate-800/80">
-                      <div className="flex items-center gap-3">
-                        <div className="w-6 h-6 rounded-full bg-emerald-500/20 flex items-center justify-center text-emerald-400 text-xs font-bold">
-                          ✓
-                        </div>
-                        <div>
-                          <p className="text-xs sm:text-sm font-bold text-slate-200">1. Surat Pindah (SKPWNI)</p>
-                          <span className="text-[11px] text-slate-400">Disdukcapil Asal · Dokumen Terbit</span>
-                        </div>
-                      </div>
-                      <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-emerald-950/60 text-emerald-300 border border-emerald-800/50">
-                        Selesai
-                      </span>
-                    </div>
-
-                    {/* Step 2 */}
-                    <div className="flex items-center justify-between p-3 rounded-xl bg-slate-900/60 border border-slate-800/80">
-                      <div className="flex items-center gap-3">
-                        <div className="w-6 h-6 rounded-full bg-emerald-500/20 flex items-center justify-center text-emerald-400 text-xs font-bold">
-                          ✓
-                        </div>
-                        <div>
-                          <p className="text-xs sm:text-sm font-bold text-slate-200">2. KK & KTP-el Baru</p>
-                          <span className="text-[11px] text-slate-400">Disdukcapil Tujuan · Terbit Baru</span>
-                        </div>
-                      </div>
-                      <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-emerald-950/60 text-emerald-300 border border-emerald-800/50">
-                        Selesai
-                      </span>
-                    </div>
-
-                    {/* Step 3 */}
-                    <div className="flex items-center justify-between p-3 rounded-xl bg-blue-950/40 border border-blue-500/30">
-                      <div className="flex items-center gap-3">
-                        <div className="w-6 h-6 rounded-full bg-blue-500/30 flex items-center justify-center text-blue-300 text-xs font-bold animate-pulse">
-                          3
-                        </div>
-                        <div>
-                          <p className="text-xs sm:text-sm font-bold text-white">3. Pindah Faskes BPJS</p>
-                          <span className="text-[11px] text-blue-300">Aplikasi Mobile JKN · Online</span>
-                        </div>
-                      </div>
-                      <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-blue-900/60 text-blue-200 border border-blue-700/50">
-                        Proses
-                      </span>
-                    </div>
-                  </div>
-
-                  {/* Card Footer Link */}
-                  <Link
-                    href="/dashboard"
-                    className="flex items-center justify-between pt-1 text-xs font-bold text-blue-400 hover:text-blue-300 group transition-colors"
-                  >
-                    <span>Coba Simulator Roadmap Interaktif</span>
-                    <ArrowUpRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-                  </Link>
                 </div>
+
+                {/* Right Column: Visual Interactive Mini Roadmap Card */}
+                <div className="lg:col-span-5">
+                  <div className="bg-white border border-slate-200 rounded-2xl p-5 sm:p-6 shadow-xl space-y-4">
+                    {/* Card Header */}
+                    <div className="flex items-center justify-between border-b border-slate-100 pb-3.5">
+                      <div className="flex items-center gap-2.5">
+                        <div className="w-8 h-8 rounded-lg bg-blue-50 border border-blue-100 flex items-center justify-center">
+                          <Compass className="w-4 h-4 text-blue-600" />
+                        </div>
+                        <div>
+                          <h4 className="text-sm font-bold text-[#0f274a] leading-tight">Live Alur: Pindah Domisili</h4>
+                          <span className="text-[11px] text-slate-500">Tahapan Terstruktur Antar-Dinas</span>
+                        </div>
+                      </div>
+                      <span className="text-[11px] font-bold px-2.5 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-700">
+                        3/4 Selesai
+                      </span>
+                    </div>
+
+                    {/* Visual Steps Mockup */}
+                    <div className="space-y-2.5">
+                      {/* Step 1 */}
+                      <div className="flex items-center justify-between p-3 rounded-xl bg-slate-50 border border-slate-100">
+                        <div className="flex items-center gap-3">
+                          <div className="w-6 h-6 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600 text-xs font-bold">
+                            ✓
+                          </div>
+                          <div>
+                            <p className="text-xs sm:text-sm font-bold text-slate-700">1. Surat Pindah (SKPWNI)</p>
+                            <span className="text-[11px] text-slate-500">Disdukcapil Asal · Dokumen Terbit</span>
+                          </div>
+                        </div>
+                        <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-emerald-100 text-emerald-700 border border-emerald-200">
+                          Selesai
+                        </span>
+                      </div>
+
+                      {/* Step 2 */}
+                      <div className="flex items-center justify-between p-3 rounded-xl bg-slate-50 border border-slate-100">
+                        <div className="flex items-center gap-3">
+                          <div className="w-6 h-6 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600 text-xs font-bold">
+                            ✓
+                          </div>
+                          <div>
+                            <p className="text-xs sm:text-sm font-bold text-slate-700">2. KK & KTP-el Baru</p>
+                            <span className="text-[11px] text-slate-500">Disdukcapil Tujuan · Terbit Baru</span>
+                          </div>
+                        </div>
+                        <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-emerald-100 text-emerald-700 border border-emerald-200">
+                          Selesai
+                        </span>
+                      </div>
+
+                      {/* Step 3 */}
+                      <div className="flex items-center justify-between p-3 rounded-xl bg-blue-50/50 border border-blue-200">
+                        <div className="flex items-center gap-3">
+                          <div className="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 text-xs font-bold animate-pulse">
+                            3
+                          </div>
+                          <div>
+                            <p className="text-xs sm:text-sm font-bold text-[#0f274a]">3. Pindah Faskes BPJS</p>
+                            <span className="text-[11px] text-blue-600">Aplikasi Mobile JKN · Online</span>
+                          </div>
+                        </div>
+                        <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-blue-100 text-blue-700 border border-blue-200">
+                          Proses
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Card Footer Link */}
+                    <Link
+                      href="/dashboard"
+                      className="flex items-center justify-between pt-1 text-xs font-bold text-blue-600 hover:text-blue-500 group transition-colors"
+                    >
+                      <span>Coba Simulator Roadmap Interaktif</span>
+                      <ArrowUpRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                    </Link>
+                  </div>
+                </div>
+
               </div>
+            </div>
+          </div>
 
+          {/* ========================================================================= */}
+          {/* 2. VALUE & TRUST PILLARS STRIP (Visual High-Impact Feature Badges)        */}
+          {/* ========================================================================= */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 py-8 border-b border-slate-200">
+            <div className="flex items-start gap-3.5 p-4 rounded-2xl bg-white border border-slate-200 shadow-sm">
+              <div className="w-10 h-10 rounded-xl bg-emerald-50 border border-emerald-100 flex items-center justify-center text-emerald-600 flex-shrink-0">
+                <ShieldCheck className="w-5 h-5" />
+              </div>
+              <div className="space-y-1">
+                <h5 className="text-sm font-bold text-[#0f274a]">100% Bebas Calo</h5>
+                <p className="text-xs text-slate-500 leading-relaxed">Panduan mandiri terhubung ke sistem resmi dinas.</p>
+              </div>
+            </div>
+
+            <div className="flex items-start gap-3.5 p-4 rounded-2xl bg-white border border-slate-200 shadow-sm">
+              <div className="w-10 h-10 rounded-xl bg-blue-50 border border-blue-100 flex items-center justify-center text-blue-600 flex-shrink-0">
+                <Zap className="w-5 h-5" />
+              </div>
+              <div className="space-y-1">
+                <h5 className="text-sm font-bold text-[#0f274a]">Alur Logis & Efisien</h5>
+                <p className="text-xs text-slate-500 leading-relaxed">Urutan tahapan terstruktur agar tidak bolak-balik.</p>
+              </div>
+            </div>
+
+            <div className="flex items-start gap-3.5 p-4 rounded-2xl bg-white border border-slate-200 shadow-sm">
+              <div className="w-10 h-10 rounded-xl bg-purple-50 border border-purple-100 flex items-center justify-center text-purple-600 flex-shrink-0">
+                <Lock className="w-5 h-5" />
+              </div>
+              <div className="space-y-1">
+                <h5 className="text-sm font-bold text-[#0f274a]">Privasi Terjaga</h5>
+                <p className="text-xs text-slate-500 leading-relaxed">Tidak menyimpan dokumen rahasia di server publik.</p>
+              </div>
+            </div>
+
+            <div className="flex items-start gap-3.5 p-4 rounded-2xl bg-white border border-slate-200 shadow-sm">
+              <div className="w-10 h-10 rounded-xl bg-sky-50 border border-sky-100 flex items-center justify-center text-sky-600 flex-shrink-0">
+                <Bot className="w-5 h-5" />
+              </div>
+              <div className="space-y-1">
+                <h5 className="text-sm font-bold text-[#0f274a]">Asisten AI 24/7</h5>
+                <p className="text-xs text-slate-500 leading-relaxed">Bantuan interaktif langsung memahami syarat berkas.</p>
+              </div>
             </div>
           </div>
         </div>
+      </section>
 
-        {/* ========================================================================= */}
-        {/* 2. VALUE & TRUST PILLARS STRIP (Visual High-Impact Feature Badges)        */}
-        {/* ========================================================================= */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 py-8 border-y border-slate-800/80">
-          <div className="flex items-start gap-3.5 p-4 rounded-2xl bg-slate-900/40 border border-slate-800/60">
-            <div className="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 flex-shrink-0">
-              <ShieldCheck className="w-5 h-5" />
-            </div>
-            <div className="space-y-1">
-              <h5 className="text-sm font-bold text-white">100% Bebas Calo</h5>
-              <p className="text-xs text-slate-400 leading-relaxed">Panduan mandiri terhubung ke sistem resmi dinas.</p>
-            </div>
-          </div>
+      <footer className="bg-[#071324] text-slate-300 mt-auto relative overflow-hidden selection:bg-blue-600 selection:text-white">
+        {/* Background ambient lighting for Dark Footer */}
+        <div className="absolute top-0 right-1/4 w-[36rem] h-[36rem] bg-blue-600/10 rounded-full blur-[140px] pointer-events-none" />
+        <div className="absolute bottom-0 left-1/4 w-[36rem] h-[36rem] bg-indigo-600/10 rounded-full blur-[140px] pointer-events-none" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[48rem] h-[48rem] bg-sky-500/5 rounded-full blur-[160px] pointer-events-none" />
 
-          <div className="flex items-start gap-3.5 p-4 rounded-2xl bg-slate-900/40 border border-slate-800/60">
-            <div className="w-10 h-10 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-400 flex-shrink-0">
-              <Zap className="w-5 h-5" />
-            </div>
-            <div className="space-y-1">
-              <h5 className="text-sm font-bold text-white">Alur Logis & Efisien</h5>
-              <p className="text-xs text-slate-400 leading-relaxed">Urutan tahapan terstruktur agar tidak bolak-balik.</p>
-            </div>
-          </div>
+        {/* Grid pattern overlay */}
+        <div 
+          className="absolute inset-0 opacity-[0.03] pointer-events-none bg-[radial-gradient(#ffffff_1px,transparent_1px)] [background-size:24px_24px]" 
+        />
 
-          <div className="flex items-start gap-3.5 p-4 rounded-2xl bg-slate-900/40 border border-slate-800/60">
-            <div className="w-10 h-10 rounded-xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center text-purple-400 flex-shrink-0">
-              <Lock className="w-5 h-5" />
-            </div>
-            <div className="space-y-1">
-              <h5 className="text-sm font-bold text-white">Privasi Terjaga</h5>
-              <p className="text-xs text-slate-400 leading-relaxed">Tidak menyimpan dokumen rahasia di server publik.</p>
-            </div>
-          </div>
-
-          <div className="flex items-start gap-3.5 p-4 rounded-2xl bg-slate-900/40 border border-slate-800/60">
-            <div className="w-10 h-10 rounded-xl bg-sky-500/10 border border-sky-500/20 flex items-center justify-center text-sky-400 flex-shrink-0">
-              <Bot className="w-5 h-5" />
-            </div>
-            <div className="space-y-1">
-              <h5 className="text-sm font-bold text-white">Asisten AI 24/7</h5>
-              <p className="text-xs text-slate-400 leading-relaxed">Bantuan interaktif langsung memahami syarat berkas.</p>
-            </div>
-          </div>
-        </div>
-
-        {/* ========================================================================= */}
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          {/* ========================================================================= */}
         {/* 3. MAIN FOOTER DIRECTORY & NAVIGATION COLUMNS                             */}
         {/* ========================================================================= */}
         <div className="grid grid-cols-1 md:grid-cols-12 gap-10 lg:gap-12 py-16">
@@ -475,5 +480,6 @@ export function Footer() {
 
       </div>
     </footer>
+    </>
   );
 }

@@ -1,13 +1,14 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
 import { 
   Compass, 
   ListOrdered, 
   CheckSquare, 
   ExternalLink, 
   ArrowRight, 
-  ChevronRight,
+  X,
   Info
 } from "lucide-react";
 import Link from "next/link";
@@ -56,127 +57,209 @@ const PROCESS_STEPS = [
 ];
 
 export function ProcessSection() {
-  const [activeStep, setActiveStep] = useState(0);
-  const current = PROCESS_STEPS[activeStep];
-  const IconComponent = current.icon;
+  const [activeStep, setActiveStep] = useState<number | null>(null);
+  const [mounted, setMounted] = useState(false);
 
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // Prevent scrolling when sidebar is open
+  useEffect(() => {
+    if (activeStep !== null) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "unset";
+    }
+    return () => {
+      document.body.style.overflow = "unset";
+    };
+  }, [activeStep]);
+
+  const rotations = ["-rotate-3", "rotate-2", "-rotate-2", "rotate-3"];
+  
   return (
-    <section className="py-24 bg-[#0a192f] text-white relative overflow-hidden" id="cara-kerja">
-      {/* Background soft ambient glow */}
-      <div className="absolute top-1/3 left-0 w-96 h-96 bg-blue-600/10 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute bottom-0 right-0 w-96 h-96 bg-indigo-600/10 rounded-full blur-3xl pointer-events-none" />
+    <section className="py-24 bg-[#f8fafc] relative overflow-hidden" id="cara-kerja">
+      {/* Background ambient light */}
+      <div className="absolute top-1/4 left-0 w-96 h-96 bg-blue-100/60 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute bottom-0 right-0 w-96 h-96 bg-indigo-50/50 rounded-full blur-3xl pointer-events-none" />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div className="max-w-[90rem] mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
         {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto space-y-4 mb-16">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-500/10 border border-blue-400/20 text-blue-300 text-xs font-bold shadow-2xs">
-            <span className="w-1.5 h-1.5 rounded-full bg-blue-400 animate-pulse-soft" />
+        <div className="text-center max-w-3xl mx-auto space-y-4 mb-24">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 border border-blue-200 text-blue-700 text-xs font-bold shadow-sm">
+            <span className="w-1.5 h-1.5 rounded-full bg-blue-600 animate-pulse-soft" />
             <span>Prinsip & Cara Kerja</span>
           </div>
-          <h2 className="font-display text-3xl sm:text-5xl font-black text-white tracking-tight">
+          <h2 className="font-display text-3xl sm:text-5xl font-black text-[#0f274a] tracking-tight">
             Kami bukan dinas pemerintah.<br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-sky-300 to-amber-300">
+            <span className="text-blue-600">
               Kami merapikan jalannya.
             </span>
           </h2>
-          <p className="text-sm sm:text-base text-slate-400 leading-relaxed max-w-2xl mx-auto">
+          <p className="text-sm sm:text-base text-slate-500 leading-relaxed max-w-2xl mx-auto">
             SatuUrusan tidak mencetak KTP atau menggantikan instansi mana pun. Kami adalah pemandu netral yang memastikan Anda tahu apa yang harus disiapkan sebelum melangkah ke kanal resmi.
           </p>
         </div>
 
-        {/* Interactive Step Navigator */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-          {PROCESS_STEPS.map((step, idx) => {
-            const StepIcon = step.icon;
-            const isActive = activeStep === idx;
+        {/* Desktop Interactive Step Navigator with SVG Connectors */}
+        <div className="relative w-full mx-auto mb-16 hidden lg:block h-[340px]">
+          {/* Connector 1 (Card 1 is higher, Card 2 is lower) */}
+          <div className="absolute top-[35%] left-[18.5%] w-[10%] h-[50px] z-20 pointer-events-none">
+            <svg viewBox="0 0 100 100" className="w-full h-full overflow-visible">
+              <path d="M 10 20 Q 90 80 170 60" fill="none" stroke="#3b82f6" strokeWidth="5" strokeLinecap="round" />
+              <circle cx="10" cy="20" r="9" fill="#3b82f6" />
+              <circle cx="170" cy="60" r="9" fill="#3b82f6" />
+            </svg>
+          </div>
 
-            return (
-              <button
-                key={step.number}
-                type="button"
-                onClick={() => setActiveStep(idx)}
-                className={`text-left p-5 sm:p-6 rounded-2xl border transition-all duration-300 ease-out transform hover:-translate-y-1 relative overflow-hidden group cursor-pointer ${
-                  isActive
-                    ? "bg-white/10 border-blue-400/50 shadow-xl shadow-blue-500/10 ring-1 ring-blue-400/30"
-                    : "bg-slate-900/50 border-slate-800 hover:bg-white/5 hover:border-blue-400/40"
-                }`}
-              >
-                {/* Active indicator bar */}
-                {isActive && (
-                  <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-400 to-amber-400" />
-                )}
+          {/* Connector 2 (Card 2 is lower, Card 3 is higher) U-shape downward */}
+          <div className="absolute top-[55%] left-[44%] w-[10%] h-[50px] z-20 pointer-events-none">
+            <svg viewBox="0 0 100 100" className="w-full h-full overflow-visible">
+              <path d="M 10 30 C 60 110, 120 110, 170 10" fill="none" stroke="#3b82f6" strokeWidth="5" strokeLinecap="round" />
+              <circle cx="10" cy="30" r="9" fill="#3b82f6" />
+              <circle cx="170" cy="10" r="9" fill="#3b82f6" />
+            </svg>
+          </div>
 
-                <div className="flex items-center justify-between mb-3.5">
-                  <span className={`font-mono text-xs font-black tracking-wider ${isActive ? "text-amber-300" : "text-slate-500"}`}>
-                    LANGKAH {step.number}
-                  </span>
-                  <div className={`w-8 h-8 rounded-xl flex items-center justify-center ${isActive ? "bg-blue-500/20 text-blue-300" : "bg-slate-800 text-slate-500 group-hover:text-blue-300"}`}>
-                    <StepIcon className="w-4 h-4" />
-                  </div>
-                </div>
-                <h3 className={`font-display font-bold text-sm sm:text-base ${isActive ? "text-white" : "text-slate-400 group-hover:text-slate-200"}`}>
-                  {step.title}
-                </h3>
-              </button>
-            );
-          })}
-        </div>
+          {/* Connector 3 (Card 3 is higher, Card 4 is lowest) */}
+          <div className="absolute top-[45%] left-[69%] w-[10%] h-[50px] z-20 pointer-events-none">
+            <svg viewBox="0 0 100 100" className="w-full h-full overflow-visible">
+              <path d="M 10 10 Q 90 80 170 80" fill="none" stroke="#3b82f6" strokeWidth="5" strokeLinecap="round" />
+              <circle cx="10" cy="10" r="9" fill="#3b82f6" />
+              <circle cx="170" cy="80" r="9" fill="#3b82f6" />
+            </svg>
+          </div>
 
-        {/* Highlight Stage Card */}
-        <div className="bg-gradient-to-br from-slate-900/95 via-[#0f274a] to-slate-900/95 rounded-3xl border border-blue-500/20 p-6 sm:p-12 shadow-2xl backdrop-blur-xl relative overflow-hidden">
-          {/* Big number watermark */}
-          <span className="font-display font-black text-7xl sm:text-9xl text-white/5 absolute right-6 sm:right-12 top-6 sm:top-1/2 -translate-y-1/2 pointer-events-none select-none">
-            {current.number}
-          </span>
-
-          <div className="max-w-2xl space-y-6 relative z-10">
-            <div className="flex items-center gap-4">
-              <div className={`w-14 h-14 rounded-2xl flex items-center justify-center shadow-lg bg-gradient-to-br ${current.accent} text-white`}>
-                <IconComponent className="w-7 h-7" />
-              </div>
-              <div>
-                <span className="text-xs font-bold text-amber-300 uppercase tracking-widest block">
-                  {current.tagline}
-                </span>
-                <h3 className="font-display text-2xl sm:text-3xl font-extrabold text-white mt-1">
-                  {current.title}
-                </h3>
-              </div>
-            </div>
-
-            <p className="text-sm sm:text-base text-slate-300 leading-relaxed">
-              {current.description}
-            </p>
-
-            {/* Context Tip Box */}
-            <div className="p-4 rounded-2xl bg-blue-500/10 border border-blue-400/20 text-xs sm:text-sm text-blue-200 flex items-start gap-3">
-              <Info className="w-5 h-5 text-amber-300 flex-shrink-0 mt-0.5" />
-              <span>{current.tip}</span>
-            </div>
-
-            {/* Step navigation actions */}
-            <div className="pt-2 flex flex-wrap items-center gap-4">
-              <Link
-                href="/mulai"
-                className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold text-xs shadow-xl shadow-blue-600/30 transition-all transform hover:-translate-y-0.5"
-              >
-                <span>Coba Sekarang</span>
-                <ArrowRight className="w-4 h-4" />
-              </Link>
-              <button
-                type="button"
-                onClick={() => setActiveStep((prev) => (prev + 1) % PROCESS_STEPS.length)}
-                className="inline-flex items-center gap-1.5 px-4 py-3.5 rounded-xl text-xs font-bold text-slate-300 hover:text-white hover:bg-white/10 transition-colors cursor-pointer"
-              >
-                <span>Langkah Berikutnya</span>
-                <ChevronRight className="w-4 h-4" />
-              </button>
-            </div>
+          <div className="grid grid-cols-4 gap-8 xl:gap-12 relative z-10 h-full items-center">
+            {PROCESS_STEPS.map((step, idx) => {
+              // Staggering height/margin slightly to add dynamic feel like the design
+              const margins = ["mt-0", "mt-12", "mt-4", "mt-20"];
+              return (
+                <button
+                  key={step.number}
+                  type="button"
+                  onClick={() => setActiveStep(idx)}
+                  className={`text-left p-6 xl:p-8 rounded-[2rem] bg-white shadow-xl transition-all duration-300 transform hover:-translate-y-2 hover:shadow-2xl cursor-pointer flex flex-col h-[280px] group ${rotations[idx]} ${margins[idx]} ${
+                    activeStep === idx ? "ring-2 ring-blue-500 border-blue-500 scale-105" : "border border-slate-100 hover:border-blue-200"
+                  }`}
+                >
+                  <h3 className="font-display text-4xl xl:text-5xl font-black text-[#0f274a] group-hover:text-blue-600 transition-colors mb-6">
+                    {step.number}
+                  </h3>
+                  <h4 className="font-bold text-lg xl:text-xl text-slate-800 mb-3">{step.title}</h4>
+                  <p className="text-xs xl:text-sm text-slate-500 leading-relaxed line-clamp-3 xl:line-clamp-4">
+                    {step.description}
+                  </p>
+                </button>
+              );
+            })}
           </div>
         </div>
 
+        {/* Mobile Vertical Layout with SVG Connectors */}
+        <div className="flex flex-col items-center w-full pb-10 pt-4 lg:hidden relative z-10">
+           {PROCESS_STEPS.map((step, idx) => {
+              return (
+                <div key={step.number} className="w-full flex flex-col items-center">
+                  {/* Vertical SVG Connector */}
+                  {idx > 0 && (
+                    <div className="w-12 h-24 -mt-8 -mb-4 relative z-20 pointer-events-none">
+                      <svg viewBox="0 0 50 100" className="w-full h-full overflow-visible">
+                        {idx % 2 === 1 ? (
+                           <path d="M 25 5 C 45 40, 5 60, 25 95" fill="none" stroke="#3b82f6" strokeWidth="4" strokeLinecap="round" />
+                        ) : (
+                           <path d="M 25 5 C 5 40, 45 60, 25 95" fill="none" stroke="#3b82f6" strokeWidth="4" strokeLinecap="round" />
+                        )}
+                        <circle cx="25" cy="5" r="7" fill="#3b82f6" />
+                        <circle cx="25" cy="95" r="7" fill="#3b82f6" />
+                      </svg>
+                    </div>
+                  )}
+
+                  {/* Square Card for Mobile */}
+                  <button
+                    type="button"
+                    onClick={() => setActiveStep(idx)}
+                    className={`relative z-10 w-full max-w-[280px] aspect-square flex flex-col text-left p-7 rounded-[2rem] bg-white shadow-xl transition-all duration-300 transform hover:-translate-y-1 hover:shadow-2xl cursor-pointer group ${rotations[idx]} ${
+                      activeStep === idx ? "ring-2 ring-blue-500 border-blue-500 scale-[1.02]" : "border border-slate-100 hover:border-blue-200"
+                    }`}
+                  >
+                    <h3 className="font-display text-4xl font-black text-[#0f274a] group-hover:text-blue-600 transition-colors mb-6">
+                      {step.number}
+                    </h3>
+                    <h4 className="font-bold text-lg text-slate-800 leading-snug mb-3">{step.title}</h4>
+                    <p className="text-sm text-slate-500 line-clamp-3">
+                      {step.description}
+                    </p>
+                  </button>
+                </div>
+              );
+            })}
+        </div>
+
       </div>
+
+      {/* Sidebar Overlay Modal */}
+      {mounted && activeStep !== null && createPortal(
+        <div className="fixed inset-0 z-[100] flex justify-end">
+          <div 
+            className="absolute inset-0 bg-slate-900/40 transition-opacity"
+            onClick={() => setActiveStep(null)}
+          />
+          <div className="relative w-full max-w-md bg-white h-full shadow-2xl flex flex-col animate-in slide-in-from-right duration-300 z-10">
+            {/* Sidebar Header */}
+            <div className="flex items-center justify-between p-6 border-b border-slate-100">
+              <span className="font-display font-bold text-blue-600">Langkah {PROCESS_STEPS[activeStep].number}</span>
+              <button 
+                onClick={() => setActiveStep(null)}
+                className="p-2 text-slate-400 hover:text-slate-700 bg-slate-50 hover:bg-slate-100 rounded-full transition-colors"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+            
+            {/* Sidebar Content */}
+            <div className="p-6 sm:p-8 flex-1 overflow-y-auto">
+              <div className={`w-16 h-16 rounded-2xl flex items-center justify-center mb-8 shadow-lg ${PROCESS_STEPS[activeStep].iconBg} border border-slate-100`}>
+                {(() => {
+                  const Icon = PROCESS_STEPS[activeStep].icon;
+                  return <Icon className="w-8 h-8" />;
+                })()}
+              </div>
+              
+              <span className="text-xs font-bold text-blue-600 uppercase tracking-widest block mb-2">
+                {PROCESS_STEPS[activeStep].tagline}
+              </span>
+              <h3 className="font-display text-2xl sm:text-3xl font-extrabold text-[#0f274a] mb-6">
+                {PROCESS_STEPS[activeStep].title}
+              </h3>
+              
+              <p className="text-slate-600 leading-relaxed mb-8">
+                {PROCESS_STEPS[activeStep].description}
+              </p>
+              
+              <div className="p-4 rounded-2xl bg-blue-50 border border-blue-100 text-sm text-blue-800 flex items-start gap-3">
+                <Info className="w-5 h-5 text-blue-500 flex-shrink-0 mt-0.5" />
+                <span>{PROCESS_STEPS[activeStep].tip}</span>
+              </div>
+            </div>
+            
+            {/* Sidebar Footer */}
+            <div className="p-6 border-t border-slate-100 bg-slate-50">
+              <Link
+                href="/mulai"
+                className="flex items-center justify-center gap-2 w-full py-4 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm shadow-lg shadow-blue-600/20 transition-colors"
+              >
+                <span>Mulai Susun Urusan</span>
+                <ArrowRight className="w-4 h-4" />
+              </Link>
+            </div>
+          </div>
+        </div>,
+        document.body
+      )}
     </section>
   );
 }
