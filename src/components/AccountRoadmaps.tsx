@@ -3,29 +3,26 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { CheckCircle2, Clock, ClipboardList, History, LoaderCircle, ArrowRight, AlertCircle } from "lucide-react";
-import { fetchUserRoadmaps } from "@/lib/supabase/service";
+import { 
+  CheckCircle2, 
+  Clock, 
+  ClipboardList, 
+  History, 
+  LoaderCircle, 
+  ArrowRight,
+  FolderOpen,
+  Plus,
+  Compass,
+  FileCheck2,
+  Trash2
+} from "lucide-react";
+import { fetchUserRoadmaps, deleteUserRoadmap } from "@/lib/supabase/service";
 import { UserRoadmap } from "@/lib/supabase/types";
 
 export function AccountRoadmaps({ mode }: { mode: "active" | "history" }) {
   const router = useRouter();
   const [roadmaps, setRoadmaps] = useState<UserRoadmap[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState("");
-
-  const loadRoadmaps = async () => {
-    setIsLoading(true);
-    setError("");
-    try {
-      const data = await fetchUserRoadmaps();
-      setRoadmaps(data);
-    } catch (err) {
-      console.error("Gagal memuat urusan akun", err);
-      setError("Data urusan belum dapat dimuat. Periksa koneksi lalu coba lagi.");
-    } finally {
-      setIsLoading(false);
-    }
-  };
 
   useEffect(() => {
     if (!window.localStorage.getItem("satuurusan_session")) {
@@ -35,111 +32,226 @@ export function AccountRoadmaps({ mode }: { mode: "active" | "history" }) {
 
     fetchUserRoadmaps()
       .then(setRoadmaps)
-      .catch((err) => {
-        console.error("Gagal memuat urusan akun", err);
-        setError("Data urusan belum dapat dimuat. Periksa koneksi lalu coba lagi.");
-      })
       .finally(() => setIsLoading(false));
   }, [router]);
 
   const completedTasks = roadmaps.flatMap((roadmap) =>
     (roadmap.tasks || [])
       .filter((task) => task.is_completed)
-      .map((task) => ({ ...task, roadmapTitle: roadmap.title }))
+      .map((task) => ({ ...task, roadmapId: roadmap.id, roadmapTitle: roadmap.title }))
   );
+
+  const handleDelete = async (id: string) => {
+    if (!confirm("Apakah Anda yakin ingin menghapus peta urusan ini?")) return;
+    try {
+      await deleteUserRoadmap(id);
+      setRoadmaps((prev) => prev.filter((r) => r.id !== id));
+    } catch (err) {
+      console.error("Gagal menghapus roadmap", err);
+    }
+  };
 
   if (isLoading) {
     return (
-      <div className="flex min-h-[420px] items-center justify-center text-sm text-slate-500">
-        <LoaderCircle className="mr-2 h-4 w-4 animate-spin text-blue-600" /> Memuat data urusan...
-      </div>
+      <main className="min-h-screen flex items-center justify-center bg-[#f8fafc] text-xs text-slate-500">
+        <LoaderCircle className="mr-2 h-5 w-5 animate-spin text-blue-600" />
+        <span>Memuat data urusan...</span>
+      </main>
     );
   }
 
   return (
-    <main className="account-page flex-1 bg-slate-50/70">
-      <div className="mx-auto w-full max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8">
-        <header className="flex flex-col justify-between gap-4 border-b border-slate-200 pb-6 sm:flex-row sm:items-end">
-          <div>
-            <span className="text-[11px] font-bold uppercase tracking-wider text-blue-600">
-              Ruang akun
-            </span>
-            <h1 className="mt-1 font-display text-3xl font-black tracking-tight text-[#0f274a]">
-              {mode === "active" ? "Urusan Saya" : "Riwayat Aktivitas"}
+    <main className="flex-1 bg-[#f8fafc] text-slate-800 font-sans min-h-screen">
+      <div className="mx-auto w-full max-w-7xl space-y-8 px-4 sm:px-6 lg:px-8 pt-32 pb-16 lg:pt-36 lg:pb-20">
+        
+        {/* Header */}
+        <header className="flex flex-col justify-between gap-4 border-b border-slate-200/90 pb-6 sm:flex-row sm:items-end">
+          <div className="space-y-2">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-blue-50 border border-blue-200 text-blue-700 text-xs font-bold shadow-2xs">
+              {mode === "active" ? (
+                <FolderOpen className="w-3.5 h-3.5 text-blue-600" />
+              ) : (
+                <History className="w-3.5 h-3.5 text-violet-600" />
+              )}
+              <span>{mode === "active" ? "Kelola Seluruh Peta Urusan" : "Arsip & Riwayat Langkah"}</span>
+            </div>
+            
+            <h1 className="font-display text-3xl sm:text-4xl font-black tracking-tight text-[#0f274a]">
+              {mode === "active" ? "Peta Urusan Saya" : "Riwayat Aktivitas Selesai"}
             </h1>
-            <p className="mt-2 max-w-xl text-sm leading-relaxed text-slate-500">
+            
+            <p className="max-w-xl text-xs sm:text-sm leading-relaxed text-slate-500">
               {mode === "active"
-                ? "Kelola peta langkah, cek progres, dan lanjutkan urusan yang sedang kamu kerjakan."
-                : "Lihat langkah yang sudah selesai dari seluruh peta urusanmu."}
+                ? "Pantau dan kelola seluruh peta langkah peristiwa hidup yang sedang kamu jalankan."
+                : "Daftar seluruh tahapan dan dokumen prasyarat yang telah berhasil kamu selesaikan."}
             </p>
           </div>
-          {mode === "active" && (
-            <Link href="/dashboard" className="inline-flex items-center justify-center gap-2 rounded-xl bg-blue-600 px-4 py-2.5 text-xs font-bold text-white shadow-sm transition hover:bg-blue-700">
-              Buka Dashboard <ArrowRight className="h-3.5 w-3.5" />
+
+          <div className="flex items-center gap-2.5">
+            <Link
+              href="/dashboard"
+              className="inline-flex items-center justify-center gap-2 rounded-2xl bg-blue-600 hover:bg-blue-700 px-5 py-3 text-xs font-bold text-white shadow-md shadow-blue-600/25 transition-all transform hover:-translate-y-0.5"
+            >
+              <span>Buka Dashboard Utama</span>
+              <ArrowRight className="h-3.5 w-3.5" />
             </Link>
-          )}
+          </div>
         </header>
 
-        {error && (
-          <div className="flex items-center justify-between gap-3 rounded-2xl border border-rose-200 bg-rose-50 px-4 py-3 text-xs text-rose-700" role="alert">
-            <span className="flex items-center gap-2"><AlertCircle className="h-4 w-4 flex-shrink-0" />{error}</span>
-            <button type="button" onClick={() => void loadRoadmaps()} className="font-bold text-rose-800 underline">Coba lagi</button>
-          </div>
-        )}
+        {mode === "active" ? (
+          <section className="grid gap-6 md:grid-cols-2 lg:grid-cols-3" aria-label="Daftar peta urusan">
+            {roadmaps.map((roadmap) => {
+              const completedCount = roadmap.tasks?.filter((t) => t.is_completed).length || 0;
+              const totalCount = roadmap.tasks?.length || 0;
 
-        {error ? null : mode === "active" ? (
-          <section className="grid gap-4 md:grid-cols-2" aria-label="Daftar peta urusan">
-            {roadmaps.map((roadmap) => (
-              <article key={roadmap.id} className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-                <div className="flex items-start justify-between gap-4">
-                  <div>
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-blue-600">Peta urusan</span>
-                    <h2 className="mt-1 font-display text-lg font-bold text-[#0f274a]">{roadmap.title}</h2>
+              return (
+                <article
+                  key={roadmap.id}
+                  className="rounded-3xl border border-slate-200/90 bg-white p-6 shadow-sm hover:shadow-md hover:border-blue-300 transition-all duration-300 flex flex-col justify-between space-y-5"
+                >
+                  <div className="space-y-3">
+                    <div className="flex items-start justify-between gap-3">
+                      <div className="space-y-1">
+                        <span className="text-[10px] font-extrabold uppercase tracking-wider text-blue-600">
+                          Peta Peristiwa
+                        </span>
+                        <h2 className="font-display text-lg font-extrabold text-[#0f274a] leading-snug">
+                          {roadmap.title.replace("Peta Urusan: ", "")}
+                        </h2>
+                      </div>
+                      <span
+                        className={`rounded-full px-2.5 py-1 text-[11px] font-extrabold ${
+                          roadmap.progress_pct === 100
+                            ? "bg-emerald-100 text-emerald-700"
+                            : "bg-blue-100/80 text-blue-700"
+                        }`}
+                      >
+                        {roadmap.progress_pct}%
+                      </span>
+                    </div>
+
+                    <p className="text-xs leading-relaxed text-slate-500 line-clamp-2">
+                      {roadmap.description || "Panduan runtut dokumen prasyarat antar dinas resmi."}
+                    </p>
                   </div>
-                  <span className="rounded-full bg-blue-50 px-2 py-1 text-[10px] font-bold text-blue-700">{roadmap.progress_pct}%</span>
-                </div>
-                <p className="mt-2 text-xs leading-relaxed text-slate-500">{roadmap.description}</p>
-                <div className="mt-5 h-2 overflow-hidden rounded-full bg-slate-100">
-                  <div className="h-full rounded-full bg-gradient-to-r from-blue-600 to-cyan-500" style={{ width: `${roadmap.progress_pct}%` }} />
-                </div>
-                <div className="mt-4 flex items-center justify-between text-[11px] text-slate-500">
-                  <span>{roadmap.tasks?.filter((task) => task.is_completed).length || 0} dari {roadmap.tasks?.length || 0} langkah selesai</span>
-                  <Link href={`/dashboard?id=${roadmap.id}`} className="font-bold text-blue-600 hover:text-blue-800 hover:underline inline-flex items-center gap-1">
-                    <span>Lihat Detail Checklist</span>
-                    <ArrowRight className="w-3 h-3" />
-                  </Link>
-                </div>
-              </article>
-            ))}
+
+                  <div className="space-y-3 pt-2">
+                    {/* Progress Bar */}
+                    <div className="space-y-1.5">
+                      <div className="flex items-center justify-between text-[11px] font-bold text-slate-600">
+                        <span>Progres</span>
+                        <span className={roadmap.progress_pct === 100 ? "text-emerald-600" : "text-blue-600"}>
+                          {completedCount}/{totalCount} langkah
+                        </span>
+                      </div>
+                      <div className="h-2.5 overflow-hidden rounded-full bg-slate-100">
+                        <div
+                          className={`h-full rounded-full transition-all duration-500 ${
+                            roadmap.progress_pct === 100
+                              ? "bg-gradient-to-r from-emerald-500 to-teal-400"
+                              : "bg-gradient-to-r from-blue-600 to-indigo-500"
+                          }`}
+                          style={{ width: `${roadmap.progress_pct}%` }}
+                        />
+                      </div>
+                    </div>
+
+                    {/* Action links */}
+                    <div className="flex items-center justify-between pt-2 border-t border-slate-100 text-xs">
+                      <button
+                        type="button"
+                        onClick={() => handleDelete(roadmap.id)}
+                        className="text-slate-400 hover:text-rose-600 p-1 rounded-lg hover:bg-rose-50 transition-colors cursor-pointer"
+                        title="Hapus peta urusan"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+
+                      <Link
+                        href={`/dashboard?id=${roadmap.id}`}
+                        className="font-bold text-blue-600 hover:text-blue-800 hover:underline inline-flex items-center gap-1"
+                      >
+                        <span>Buka Checklist</span>
+                        <ArrowRight className="w-3.5 h-3.5" />
+                      </Link>
+                    </div>
+                  </div>
+                </article>
+              );
+            })}
           </section>
         ) : (
           <section className="space-y-3" aria-label="Riwayat langkah selesai">
             {completedTasks.map((task) => (
-              <article key={task.id} className="flex items-start gap-3 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
-                <CheckCircle2 className="mt-0.5 h-5 w-5 flex-shrink-0 text-emerald-600" />
-                <div className="min-w-0 flex-1">
-                  <h2 className="text-sm font-bold text-[#0f274a]">{task.title}</h2>
-                  <p className="mt-1 text-xs text-slate-500">{task.roadmapTitle}</p>
+              <article
+                key={task.id}
+                className="flex items-start gap-4 rounded-3xl border border-slate-200/80 bg-white p-5 shadow-xs hover:border-emerald-200 hover:shadow-sm transition-all"
+              >
+                <div className="w-10 h-10 rounded-2xl bg-emerald-50 text-emerald-600 border border-emerald-100 flex items-center justify-center flex-shrink-0">
+                  <CheckCircle2 className="h-5 w-5" />
                 </div>
-                <span className="hidden items-center gap-1 text-[11px] font-semibold text-emerald-600 sm:flex"><History className="h-3.5 w-3.5" /> Selesai</span>
+
+                <div className="min-w-0 flex-1 space-y-1">
+                  <div className="flex flex-wrap items-center justify-between gap-2">
+                    <h2 className="font-display font-bold text-sm text-[#0f274a]">
+                      {task.title}
+                    </h2>
+                    <span className="inline-flex items-center gap-1 text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-emerald-100/80 text-emerald-800">
+                      <History className="h-3 w-3" />
+                      <span>Selesai</span>
+                    </span>
+                  </div>
+
+                  <p className="text-xs text-slate-500">
+                    Dari {task.roadmapTitle}
+                  </p>
+                  
+                  {task.description && (
+                    <p className="text-xs text-slate-600 pt-1 leading-relaxed">
+                      {task.description}
+                    </p>
+                  )}
+                </div>
+
+                <Link
+                  href={`/dashboard?id=${task.roadmapId}`}
+                  className="hidden sm:inline-flex items-center gap-1 text-xs font-bold text-blue-600 hover:underline self-center flex-shrink-0"
+                >
+                  <span>Lihat di Roadmap</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </Link>
               </article>
             ))}
           </section>
         )}
 
-        {!error && ((mode === "active" && roadmaps.length === 0) || (mode === "history" && completedTasks.length === 0)) && (
-          <div className="rounded-2xl border border-dashed border-slate-300 bg-white p-10 text-center space-y-3">
-            {mode === "active" ? <ClipboardList className="mx-auto h-9 w-9 text-blue-500" /> : <Clock className="mx-auto h-9 w-9 text-slate-400" />}
-            <h2 className="font-display font-bold text-[#0f274a]">{mode === "active" ? "Belum ada urusan tersimpan" : "Belum ada aktivitas selesai"}</h2>
-            <p className="mx-auto max-w-sm text-xs leading-relaxed text-slate-500">{mode === "active" ? "Buat peta urusan pertamamu dari dashboard untuk mulai menyusun langkah." : "Checklist yang kamu selesaikan akan muncul di sini."}</p>
-            {mode === "active" && (
-              <div className="pt-2">
-                <Link href="/dashboard" className="inline-flex items-center gap-1.5 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold transition-all shadow-sm">
-                  <span>Buka Dashboard & Buat Urusan</span>
-                  <ArrowRight className="w-3.5 h-3.5" />
-                </Link>
-              </div>
-            )}
+        {/* Empty State */}
+        {((mode === "active" && roadmaps.length === 0) || (mode === "history" && completedTasks.length === 0)) && (
+          <div className="rounded-3xl border border-slate-200/90 bg-white p-12 text-center space-y-4 shadow-sm">
+            <div className="w-14 h-14 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center mx-auto border border-blue-100">
+              {mode === "active" ? <ClipboardList className="h-7 w-7" /> : <Clock className="h-7 w-7 text-slate-400" />}
+            </div>
+            
+            <div className="space-y-1">
+              <h2 className="font-display font-extrabold text-xl text-[#0f274a]">
+                {mode === "active" ? "Belum ada Peta Urusan" : "Belum ada Langkah Selesai"}
+              </h2>
+              <p className="mx-auto max-w-md text-xs sm:text-sm leading-relaxed text-slate-500">
+                {mode === "active"
+                  ? "Pilih salah satu peristiwa hidup untuk menyusun daftar langkah, dokumen prasyarat, dan urutan prioritas instansi."
+                  : "Setiap langkah checklist yang kamu centang di dashboard akan tersimpan riwayatnya di sini."}
+              </p>
+            </div>
+
+            <div className="pt-2">
+              <Link
+                href="/dashboard"
+                className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-2xl text-xs font-bold shadow-md shadow-blue-600/25 transition-all transform hover:-translate-y-0.5"
+              >
+                <span>Buka Dashboard & Buat Peta Urusan</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </Link>
+            </div>
           </div>
         )}
       </div>
