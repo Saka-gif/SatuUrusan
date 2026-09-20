@@ -116,6 +116,8 @@ export function AiAssistantModal() {
   const chatEndRef = useRef<HTMLDivElement>(null);
   const messageIdRef = useRef(0);
 
+  void PRESET_RESPONSES;
+
   useEffect(() => {
     const handleOpen = () => setIsOpen(true);
     window.addEventListener("open-satu-ai", handleOpen);
@@ -170,13 +172,14 @@ export function AiAssistantModal() {
           text: data.content,
         }
       ]);
-    } catch (error: any) {
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : "Kesalahan tidak diketahui";
       setMessages((prev) => [
         ...prev,
         {
           id: `ai_${Date.now()}`,
           sender: "ai",
-          text: `Mohon maaf, sistem AI kami sedang sibuk atau mengalami kendala jaringan. (${error.message || 'Error'})`,
+          text: `Mohon maaf, sistem AI kami sedang sibuk atau mengalami kendala jaringan. (${message})`,
         }
       ]);
     } finally {
