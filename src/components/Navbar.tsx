@@ -14,7 +14,8 @@ import {
   ClipboardList, 
   History, 
   LogOut, 
-  Bell 
+  Bell,
+  AlertTriangle
 } from "lucide-react";
 
 export function Navbar() {
@@ -24,6 +25,7 @@ export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [profileName, setProfileName] = useState("Teman Satu");
+  const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
 
   useEffect(() => {
     let ticking = false;
@@ -101,25 +103,30 @@ export function Navbar() {
     }
   };
 
+  const requestLogout = () => {
+    setMenuOpen(false);
+    setShowLogoutConfirm(true);
+  };
+
   const handleLogout = () => {
     if (typeof window !== "undefined") {
       window.localStorage.removeItem("satuurusan_session");
       window.dispatchEvent(new CustomEvent("satuurusan-session-changed"));
     }
-    setMenuOpen(false);
+    setShowLogoutConfirm(false);
     router.push("/");
   };
 
   return (
     <header
-      className={`fixed top-0 z-40 w-full transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+      className={`site-nav sticky top-0 z-40 w-full transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${
         scrolled
           ? "pt-2 sm:pt-3 pb-1 px-3 sm:px-6"
           : "pt-4 sm:pt-6 pb-2 px-4 sm:px-6 lg:px-8"
       }`}
     >
       <div
-        className={`mx-auto w-full transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] flex items-center justify-between transform-gpu ${
+        className={`site-nav-inner mx-auto w-full transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] flex items-center justify-between transform-gpu ${
           scrolled
             ? "max-w-6xl bg-white/92 backdrop-blur-xl rounded-full border border-blue-200/80 shadow-xl shadow-blue-950/8 py-2 px-4 sm:px-6"
             : "max-w-7xl bg-white/85 backdrop-blur-md rounded-2xl sm:rounded-3xl border border-slate-200/90 shadow-sm py-3.5 sm:py-4 px-5 sm:px-8"
@@ -194,7 +201,7 @@ export function Navbar() {
               </div>
               <button
                 type="button"
-                onClick={handleLogout}
+                onClick={requestLogout}
                 className="p-2 text-slate-400 hover:text-rose-600 rounded-full hover:bg-rose-50 transition-colors cursor-pointer"
                 title="Keluar"
               >
@@ -205,7 +212,7 @@ export function Navbar() {
             <>
               <Link
                 href="/masuk"
-                className="px-4 py-2 text-xs sm:text-sm font-bold text-slate-700 bg-white border border-slate-200/90 shadow-sm hover:border-blue-300 hover:text-blue-600 hover:bg-blue-50/60 rounded-full transition-all duration-300 whitespace-nowrap"
+                className="px-3.5 py-2 text-xs sm:text-sm font-bold text-slate-700 hover:text-blue-600 hover:bg-blue-50/60 rounded-full transition-colors whitespace-nowrap"
               >
                 Masuk
               </Link>
@@ -271,7 +278,7 @@ export function Navbar() {
             {isAuthenticated ? (
               <button
                 type="button"
-                onClick={handleLogout}
+                onClick={requestLogout}
                 className="flex items-center justify-center gap-2 w-full py-2.5 text-xs font-bold text-rose-600 bg-rose-50 rounded-xl border border-rose-200 cursor-pointer"
               >
                 <LogOut className="w-3.5 h-3.5" />
@@ -282,7 +289,7 @@ export function Navbar() {
                 <Link
                   href="/masuk"
                   onClick={() => setMenuOpen(false)}
-                  className="flex items-center justify-center py-3 text-sm font-bold text-slate-700 bg-white border border-slate-200 hover:border-blue-300 hover:text-blue-600 hover:bg-blue-50 rounded-xl transition-all shadow-sm"
+                  className="flex items-center justify-center py-3 text-sm font-bold text-slate-700 bg-slate-100 hover:bg-slate-200 rounded-xl transition-colors"
                 >
                   Masuk
                 </Link>
@@ -296,6 +303,36 @@ export function Navbar() {
                 </Link>
               </div>
             )}
+          </div>
+        </div>
+      )}
+
+      {showLogoutConfirm && (
+        <div
+          className="fixed inset-0 z-[60] flex items-center justify-center bg-[#0b2038]/55 p-4 backdrop-blur-sm"
+          role="presentation"
+          onClick={() => setShowLogoutConfirm(false)}
+        >
+          <div
+            className="w-full max-w-sm rounded-3xl border border-slate-200 bg-white p-6 shadow-2xl"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="logout-dialog-title"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <div className="flex items-start gap-3">
+              <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-2xl bg-amber-50 text-amber-600">
+                <AlertTriangle className="h-5 w-5" />
+              </div>
+              <div>
+                <h2 id="logout-dialog-title" className="font-display text-lg font-extrabold text-[#0f274a]">Keluar dari akun?</h2>
+                <p className="mt-1 text-xs leading-relaxed text-slate-500">Progress urusanmu tetap tersimpan. Kamu hanya perlu masuk lagi untuk melanjutkannya.</p>
+              </div>
+            </div>
+            <div className="mt-6 flex justify-end gap-2">
+              <button type="button" onClick={() => setShowLogoutConfirm(false)} className="rounded-xl px-4 py-2.5 text-xs font-bold text-slate-600 hover:bg-slate-100">Tetap di sini</button>
+              <button type="button" onClick={handleLogout} className="rounded-xl bg-rose-600 px-4 py-2.5 text-xs font-bold text-white shadow-sm hover:bg-rose-700">Ya, keluar</button>
+            </div>
           </div>
         </div>
       )}

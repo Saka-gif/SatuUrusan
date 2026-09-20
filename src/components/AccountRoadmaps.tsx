@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { CheckCircle2, Clock, ClipboardList, History, LoaderCircle, ArrowRight } from "lucide-react";
+import { CheckCircle2, Clock, ClipboardList, History, LoaderCircle, ArrowRight, AlertCircle } from "lucide-react";
 import { fetchUserRoadmaps } from "@/lib/supabase/service";
 import { UserRoadmap } from "@/lib/supabase/types";
 
@@ -11,6 +11,21 @@ export function AccountRoadmaps({ mode }: { mode: "active" | "history" }) {
   const router = useRouter();
   const [roadmaps, setRoadmaps] = useState<UserRoadmap[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  const loadRoadmaps = async () => {
+    setIsLoading(true);
+    setError("");
+    try {
+      const data = await fetchUserRoadmaps();
+      setRoadmaps(data);
+    } catch (err) {
+      console.error("Gagal memuat urusan akun", err);
+      setError("Data urusan belum dapat dimuat. Periksa koneksi lalu coba lagi.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   useEffect(() => {
     if (!window.localStorage.getItem("satuurusan_session")) {
@@ -20,6 +35,10 @@ export function AccountRoadmaps({ mode }: { mode: "active" | "history" }) {
 
     fetchUserRoadmaps()
       .then(setRoadmaps)
+      .catch((err) => {
+        console.error("Gagal memuat urusan akun", err);
+        setError("Data urusan belum dapat dimuat. Periksa koneksi lalu coba lagi.");
+      })
       .finally(() => setIsLoading(false));
   }, [router]);
 
@@ -38,8 +57,8 @@ export function AccountRoadmaps({ mode }: { mode: "active" | "history" }) {
   }
 
   return (
-    <main className="flex-1 bg-slate-50/70">
-      <div className="mx-auto w-full max-w-7xl space-y-8 px-4 pt-28 pb-12 lg:pt-32 lg:pb-16 sm:px-6 lg:px-8">
+    <main className="account-page flex-1 bg-slate-50/70">
+      <div className="mx-auto w-full max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8">
         <header className="flex flex-col justify-between gap-4 border-b border-slate-200 pb-6 sm:flex-row sm:items-end">
           <div>
             <span className="text-[11px] font-bold uppercase tracking-wider text-blue-600">
@@ -61,7 +80,14 @@ export function AccountRoadmaps({ mode }: { mode: "active" | "history" }) {
           )}
         </header>
 
-        {mode === "active" ? (
+        {error && (
+          <div className="flex items-center justify-between gap-3 rounded-2xl border border-rose-200 bg-rose-50 px-4 py-3 text-xs text-rose-700" role="alert">
+            <span className="flex items-center gap-2"><AlertCircle className="h-4 w-4 flex-shrink-0" />{error}</span>
+            <button type="button" onClick={() => void loadRoadmaps()} className="font-bold text-rose-800 underline">Coba lagi</button>
+          </div>
+        )}
+
+        {error ? null : mode === "active" ? (
           <section className="grid gap-4 md:grid-cols-2" aria-label="Daftar peta urusan">
             {roadmaps.map((roadmap) => (
               <article key={roadmap.id} className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
@@ -101,7 +127,7 @@ export function AccountRoadmaps({ mode }: { mode: "active" | "history" }) {
           </section>
         )}
 
-        {((mode === "active" && roadmaps.length === 0) || (mode === "history" && completedTasks.length === 0)) && (
+        {!error && ((mode === "active" && roadmaps.length === 0) || (mode === "history" && completedTasks.length === 0)) && (
           <div className="rounded-2xl border border-dashed border-slate-300 bg-white p-10 text-center space-y-3">
             {mode === "active" ? <ClipboardList className="mx-auto h-9 w-9 text-blue-500" /> : <Clock className="mx-auto h-9 w-9 text-slate-400" />}
             <h2 className="font-display font-bold text-[#0f274a]">{mode === "active" ? "Belum ada urusan tersimpan" : "Belum ada aktivitas selesai"}</h2>

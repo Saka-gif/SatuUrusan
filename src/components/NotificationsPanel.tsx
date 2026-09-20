@@ -36,7 +36,7 @@ export function NotificationsPanel() {
   };
 
   return (
-    <main className="flex-1 bg-[#f7f7f5]">
+    <main className="notifications-page flex-1 bg-[#f7f7f5]">
       <div className="mx-auto w-full max-w-3xl px-4 py-9 sm:px-6">
         <header className="flex items-end justify-between gap-4 border-b border-slate-200 pb-6">
           <div>

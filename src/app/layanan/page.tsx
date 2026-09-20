@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Navbar } from "@/components/Navbar";
 import { serviceCategories } from "@/data/service-categories";
 import { ServiceCategory, ServiceItem } from "@/lib/supabase/types";
@@ -44,12 +44,22 @@ export default function ServicesPage() {
       cat.items?.some((i) => i.title.toLowerCase().includes(q) || i.description.toLowerCase().includes(q))
     );
   });
+  const visibleCategory = filteredCategories.find((cat) => cat.name === selectedCategory.name) || filteredCategories[0] || null;
+
+  useEffect(() => {
+    if (!selectedItem) return;
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setSelectedItem(null);
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [selectedItem]);
 
   return (
-    <div className="min-h-screen flex flex-col bg-slate-50">
+    <div className="min-h-screen flex flex-col bg-transparent">
       <Navbar />
 
-      <main className="flex-1 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 pt-28 pb-12 lg:pt-32 lg:pb-16 space-y-10">
+      <main className="services-page flex-1 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-10 space-y-10">
         {/* Hero Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-6 border-b border-slate-200">
           <div className="space-y-3 max-w-2xl">
@@ -58,10 +68,8 @@ export default function ServicesPage() {
               <span>Ruang Katalog Layanan Publik</span>
             </div>
             <h1 className="font-display font-black text-3xl sm:text-5xl text-[#0f274a] tracking-tight">
-              Mulai dari kebutuhan,<br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">
-                bukan nama instansi.
-              </span>
+              Apa yang ingin Anda urus?<br />
+              <span className="text-blue-700">Temukan jalannya di sini.</span>
             </h1>
             <p className="text-sm sm:text-base text-slate-600 leading-relaxed">
               Cari topik administrasi yang Anda butuhkan. Kami bantu menjelaskan prasyarat berkas dan mengarahkan ke kanal resmi.
@@ -109,7 +117,7 @@ export default function ServicesPage() {
                     type="button"
                     onClick={() => setSelectedCategory(cat)}
                     className={`w-full text-left p-4 rounded-2xl border transition-all duration-300 flex items-center justify-between group ${
-                      isSelected
+                      isSelected || visibleCategory?.name === cat.name
                         ? "bg-white border-blue-500 ring-2 ring-blue-500/20 shadow-md shadow-blue-500/10 text-[#0f274a]"
                         : "bg-white border-slate-200/90 hover:border-blue-400/60 hover:bg-blue-50/20 text-slate-700 shadow-sm hover:shadow-md hover:shadow-blue-500/5 hover:-translate-y-0.5"
                     }`}
@@ -146,22 +154,23 @@ export default function ServicesPage() {
                   <span className="text-xs font-bold text-blue-600 uppercase tracking-wider">
                     Daftar Prosedur Urusan
                   </span>
-                  <h2 className="font-display font-black text-2xl text-[#0f274a] mt-1">
-                    {selectedCategory.name}
+                    <h2 className="font-display font-black text-2xl text-[#0f274a] mt-1">
+                    {visibleCategory?.name || "Tidak ada hasil"}
                   </h2>
                   <p className="text-xs text-slate-500 mt-1">
-                    {selectedCategory.description}. Klik salah satu urusan untuk melihat syarat dokumen lengkap.
+                    {visibleCategory ? `${visibleCategory.description}. Klik salah satu urusan untuk melihat syarat dokumen lengkap.` : "Coba kata kunci lain untuk menemukan layanan yang sesuai."}
                   </p>
                 </div>
               </div>
 
               {/* Items Grid */}
               <div className="space-y-3">
-                {selectedCategory.items?.map((item) => (
-                  <div
+                {visibleCategory?.items?.map((item) => (
+                  <button
                     key={item.title}
+                    type="button"
                     onClick={() => setSelectedItem(item)}
-                    className="p-4 sm:p-5 rounded-2xl bg-white hover:bg-blue-50/40 border border-slate-200/80 hover:border-blue-300 hover:shadow-md hover:shadow-blue-500/10 hover:-translate-y-0.5 transition-all duration-300 cursor-pointer flex flex-col sm:flex-row sm:items-center justify-between gap-3 group relative overflow-hidden"
+                    className="w-full p-4 sm:p-5 rounded-2xl bg-white hover:bg-blue-50/40 border border-slate-200/80 hover:border-blue-300 hover:shadow-md hover:shadow-blue-500/10 hover:-translate-y-0.5 transition-all duration-300 cursor-pointer flex flex-col sm:flex-row sm:items-center justify-between gap-3 group relative overflow-hidden text-left"
                   >
                     <div className="absolute top-0 left-0 w-1 h-full bg-transparent group-hover:bg-blue-500 transition-all rounded-l-2xl" />
                     <div className="space-y-1">
@@ -183,8 +192,13 @@ export default function ServicesPage() {
                         <ArrowRight className="w-3.5 h-3.5 transform group-hover:translate-x-1 transition-transform" />
                       </span>
                     </div>
-                  </div>
+                  </button>
                 ))}
+                {!visibleCategory && (
+                  <div className="rounded-2xl border border-dashed border-slate-300 bg-slate-50/70 p-8 text-center text-xs text-slate-500">
+                    Tidak ada layanan yang cocok dengan pencarian &quot;{query}&quot;.
+                  </div>
+                )}
               </div>
 
               <div className="pt-2 flex items-center justify-between text-xs text-slate-500">
