@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { motion } from "framer-motion";
 import { DotLottieReact } from '@lottiefiles/dotlottie-react';
 import { 
   ArrowRight, 
@@ -84,7 +85,12 @@ export function HomeContent() {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-10 items-center">
             
             {/* Left Editorial Copy Column */}
-            <div className="lg:col-span-6 space-y-6 text-center lg:text-left">
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.1, ease: "easeOut" }}
+              className="lg:col-span-6 space-y-6 text-center lg:text-left"
+            >
               {/* Clean Status Pill */}
               <div className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-white border border-slate-200/90 shadow-xs text-xs font-bold text-slate-700">
                 <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse-soft" />
@@ -97,7 +103,11 @@ export function HomeContent() {
               <h1 className="font-display font-black text-4xl sm:text-5xl lg:text-6xl text-[#0f274a] tracking-tight leading-[1.12]">
                 Satu peristiwa hidup.<br />
                 <span className="text-blue-600">
-                  Satu alur yang teratur.
+                  <span className="relative inline-block isolate px-1">
+                    <span className="absolute bottom-2 sm:bottom-3 left-0 w-full h-[40%] bg-[#d9f96b] -z-10"></span>
+                    <span className="text-[#0f274a]">Satu alur</span>
+                  </span>{' '}
+                  yang teratur.
                 </span>
               </h1>
 
@@ -139,10 +149,15 @@ export function HomeContent() {
                   <span className="text-[11px] text-slate-500">Sumber Terpercaya</span>
                 </div>
               </div>
-            </div>
+            </motion.div>
 
             {/* Right Lottie Animation */}
-            <div className="lg:col-span-6 flex justify-center lg:justify-end items-center lg:translate-x-8">
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.8, delay: 0.3, ease: "easeOut" }}
+              className="lg:col-span-6 flex justify-center lg:justify-end items-center lg:translate-x-8"
+            >
               <div className="w-full max-w-xl lg:max-w-[600px] h-[400px] sm:h-[450px] lg:h-[550px] lg:scale-105">
                 <DotLottieReact
                   src="https://lottie.host/5c88da22-7a0d-4c52-bac2-b2feeeee4e20/GnqrTQ7DBT.lottie"
@@ -150,7 +165,7 @@ export function HomeContent() {
                   autoplay
                 />
               </div>
-            </div>
+            </motion.div>
 
           </div>
         </div>
@@ -159,7 +174,13 @@ export function HomeContent() {
       {/* Life Events Grid Section */}
       <section className="py-20 bg-white border-t border-slate-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.6, ease: "easeOut" }}
+            className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12"
+          >
             <div className="space-y-2 max-w-xl">
               <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-blue-50 border border-blue-200 text-blue-700 text-xs font-bold">
                 <span className="w-1.5 h-1.5 rounded-full bg-blue-600 animate-pulse-soft" />
@@ -172,9 +193,15 @@ export function HomeContent() {
             <p className="text-xs sm:text-sm text-slate-500 max-w-sm leading-relaxed">
               Satu peristiwa biasanya melibatkan 3 hingga 9 tahapan antar dinas yang saling berkaitan secara runtut.
             </p>
-          </div>
+          </motion.div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <motion.div 
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
+          >
             {lifeEvents.map((event) => (
               <EventCard
                 key={event.title}
@@ -183,7 +210,7 @@ export function HomeContent() {
                 onClick={() => setActiveEvent(event)}
               />
             ))}
-          </div>
+          </motion.div>
         </div>
       </section>
 

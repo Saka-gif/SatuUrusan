@@ -51,30 +51,32 @@ export default function ServicesPage() {
 
       <main className="flex-1 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 pt-28 pb-12 lg:pt-32 lg:pb-16 space-y-10">
         {/* Hero Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-6 border-b border-slate-200">
-          <div className="space-y-3 max-w-2xl">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-100/80 border border-blue-200 text-blue-700 text-xs font-bold">
-              <Layers className="w-3.5 h-3.5 text-blue-600" />
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-8 pb-10 border-b border-slate-200">
+          <div className="space-y-4 max-w-2xl">
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-blue-50 border border-blue-100 text-blue-700 text-xs font-bold">
+              <Layers className="w-4 h-4 text-blue-600" />
               <span>Ruang Katalog Layanan Publik</span>
             </div>
-            <h1 className="font-display font-black text-3xl sm:text-5xl text-[#0f274a] tracking-tight">
-              Mulai dari kebutuhan,<br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">
-                bukan nama instansi.
-              </span>
+            <h1 className="font-display font-black text-4xl sm:text-5xl text-[#0f274a] tracking-tight leading-[1.15]">
+              Mulai dari{' '}
+              <span className="relative inline-block isolate px-1">
+                <span className="absolute bottom-1.5 sm:bottom-2 left-0 w-full h-[40%] bg-[#d9f96b] -z-10"></span>
+                kebutuhan
+              </span>,<br className="hidden sm:block" />
+              {' '}bukan nama instansi.
             </h1>
-            <p className="text-sm sm:text-base text-slate-600 leading-relaxed">
+            <p className="text-sm sm:text-lg text-slate-600 leading-relaxed pt-1">
               Cari topik administrasi yang Anda butuhkan. Kami bantu menjelaskan prasyarat berkas dan mengarahkan ke kanal resmi.
             </p>
           </div>
 
-          <div className="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm flex items-center gap-4 flex-shrink-0">
-            <div className="w-12 h-12 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center font-black text-xl font-display">
+          <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/90 shadow-sm flex flex-col items-center justify-center gap-3 flex-shrink-0 min-w-[220px]">
+            <div className="w-16 h-16 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center font-black text-3xl font-display shadow-inner border border-blue-100/50">
               53+
             </div>
-            <div>
-              <span className="text-xs font-bold text-slate-800 block">Layanan Terpetakan</span>
-              <span className="text-[11px] text-slate-500">Seluruh Indonesia</span>
+            <div className="text-center space-y-0.5">
+              <span className="text-sm font-bold text-slate-800 block">Layanan Terpetakan</span>
+              <span className="text-[11px] font-medium text-slate-500 uppercase tracking-wider block">Seluruh Indonesia</span>
             </div>
           </div>
         </div>

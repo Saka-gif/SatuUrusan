@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { motion } from "framer-motion";
 import { 
   IdCard, 
   HeartPulse, 
@@ -63,7 +64,13 @@ export function ServiceExplorer() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Section Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
+          className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12"
+        >
           <div className="space-y-3 max-w-2xl">
             <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 border border-blue-200 text-blue-700 text-xs font-bold shadow-2xs">
               <span className="w-1.5 h-1.5 rounded-full bg-blue-600 animate-pulse-soft" />
@@ -88,10 +95,16 @@ export function ServiceExplorer() {
               className="w-full pl-10 pr-4 py-3 bg-white border border-slate-200 rounded-2xl text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 shadow-sm transition-all"
             />
           </div>
-        </div>
+        </motion.div>
 
         {/* Category Pills Slider / Grid with Fluid Hover */}
-        <div className="flex items-center gap-3 overflow-x-auto pb-4 mb-8 no-scrollbar">
+        <motion.div 
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
+          className="flex items-center gap-3 overflow-x-auto pt-2 pb-4 mb-8 -mt-2 no-scrollbar"
+        >
           {filteredCategories.map((category) => {
             const Icon = CATEGORY_ICONS[category.name] || IdCard;
             const isCurrent = selectedCategory?.name === category.name;
@@ -116,7 +129,7 @@ export function ServiceExplorer() {
               </button>
             );
           })}
-        </div>
+        </motion.div>
 
         {/* Selected Category Details & Service Items Cards */}
         {selectedCategory && (

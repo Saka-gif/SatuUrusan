@@ -1,7 +1,7 @@
 "use client";
-
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 import { BrandMark } from "./BrandMark";
 import { 
   ShieldCheck, 
@@ -128,84 +128,15 @@ export function Footer() {
                   </div>
                 </div>
 
-                {/* Right Column: Visual Interactive Mini Roadmap Card */}
-                <div className="lg:col-span-5">
-                  <div className="bg-white border border-slate-200 rounded-2xl p-5 sm:p-6 shadow-xl space-y-4">
-                    {/* Card Header */}
-                    <div className="flex items-center justify-between border-b border-slate-100 pb-3.5">
-                      <div className="flex items-center gap-2.5">
-                        <div className="w-8 h-8 rounded-lg bg-blue-50 border border-blue-100 flex items-center justify-center">
-                          <Compass className="w-4 h-4 text-blue-600" />
-                        </div>
-                        <div>
-                          <h4 className="text-sm font-bold text-[#0f274a] leading-tight">Live Alur: Pindah Domisili</h4>
-                          <span className="text-[11px] text-slate-500">Tahapan Terstruktur Antar-Dinas</span>
-                        </div>
-                      </div>
-                      <span className="text-[11px] font-bold px-2.5 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-700">
-                        3/4 Selesai
-                      </span>
-                    </div>
-
-                    {/* Visual Steps Mockup */}
-                    <div className="space-y-2.5">
-                      {/* Step 1 */}
-                      <div className="flex items-center justify-between p-3 rounded-xl bg-slate-50 border border-slate-100">
-                        <div className="flex items-center gap-3">
-                          <div className="w-6 h-6 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600 text-xs font-bold">
-                            ✓
-                          </div>
-                          <div>
-                            <p className="text-xs sm:text-sm font-bold text-slate-700">1. Surat Pindah (SKPWNI)</p>
-                            <span className="text-[11px] text-slate-500">Disdukcapil Asal · Dokumen Terbit</span>
-                          </div>
-                        </div>
-                        <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-emerald-100 text-emerald-700 border border-emerald-200">
-                          Selesai
-                        </span>
-                      </div>
-
-                      {/* Step 2 */}
-                      <div className="flex items-center justify-between p-3 rounded-xl bg-slate-50 border border-slate-100">
-                        <div className="flex items-center gap-3">
-                          <div className="w-6 h-6 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600 text-xs font-bold">
-                            ✓
-                          </div>
-                          <div>
-                            <p className="text-xs sm:text-sm font-bold text-slate-700">2. KK & KTP-el Baru</p>
-                            <span className="text-[11px] text-slate-500">Disdukcapil Tujuan · Terbit Baru</span>
-                          </div>
-                        </div>
-                        <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-emerald-100 text-emerald-700 border border-emerald-200">
-                          Selesai
-                        </span>
-                      </div>
-
-                      {/* Step 3 */}
-                      <div className="flex items-center justify-between p-3 rounded-xl bg-blue-50/50 border border-blue-200">
-                        <div className="flex items-center gap-3">
-                          <div className="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 text-xs font-bold animate-pulse">
-                            3
-                          </div>
-                          <div>
-                            <p className="text-xs sm:text-sm font-bold text-[#0f274a]">3. Pindah Faskes BPJS</p>
-                            <span className="text-[11px] text-blue-600">Aplikasi Mobile JKN · Online</span>
-                          </div>
-                        </div>
-                        <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-blue-100 text-blue-700 border border-blue-200">
-                          Proses
-                        </span>
-                      </div>
-                    </div>
-
-                    {/* Card Footer Link */}
-                    <Link
-                      href="/dashboard"
-                      className="flex items-center justify-between pt-1 text-xs font-bold text-blue-600 hover:text-blue-500 group transition-colors"
-                    >
-                      <span>Coba Simulator Roadmap Interaktif</span>
-                      <ArrowUpRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-                    </Link>
+                {/* Right Column: Lottie Animation */}
+                <div className="lg:col-span-5 flex justify-center lg:justify-end items-center lg:translate-x-4">
+                  <div className="w-full max-w-md h-[280px] sm:h-[320px] lg:h-[380px] lg:scale-105 pointer-events-none">
+                    <DotLottieReact
+                      src="https://lottie.host/95f383ee-165d-46d0-a596-09a94ecaf786/F6n6ISTx3T.lottie"
+                      loop
+                      autoplay
+                      className="w-full h-full object-contain"
+                    />
                   </div>
                 </div>
 
@@ -260,16 +191,7 @@ export function Footer() {
         </div>
       </section>
 
-      <footer className="bg-[#071324] text-slate-300 mt-auto relative overflow-hidden selection:bg-blue-600 selection:text-white">
-        {/* Background ambient lighting for Dark Footer */}
-        <div className="absolute top-0 right-1/4 w-[36rem] h-[36rem] bg-blue-600/10 rounded-full blur-[140px] pointer-events-none" />
-        <div className="absolute bottom-0 left-1/4 w-[36rem] h-[36rem] bg-indigo-600/10 rounded-full blur-[140px] pointer-events-none" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[48rem] h-[48rem] bg-sky-500/5 rounded-full blur-[160px] pointer-events-none" />
-
-        {/* Grid pattern overlay */}
-        <div 
-          className="absolute inset-0 opacity-[0.03] pointer-events-none bg-[radial-gradient(#ffffff_1px,transparent_1px)] [background-size:24px_24px]" 
-        />
+      <footer className="bg-[#0a192f] text-slate-300 mt-auto relative overflow-hidden selection:bg-blue-600 selection:text-white">
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           {/* ========================================================================= */}

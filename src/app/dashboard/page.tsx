@@ -225,265 +225,65 @@ function DashboardContent() {
           })}
         </section>
 
-        {/* Roadmap Selector Tabs */}
-        {roadmaps.length > 0 && (
-          <div className="space-y-2">
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">
-                Peta Urusan Aktif ({roadmaps.length})
-              </span>
-              <Link href="/urusan-saya" className="text-xs font-bold text-blue-600 hover:underline">
+        {/* Roadmaps Grid View */}
+        {roadmaps.length > 0 ? (
+          <div className="space-y-4">
+            <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3">
+              <div className="max-w-md">
+                <h2 className="font-display font-extrabold text-xl text-[#0f274a]">Peta Urusan Aktif</h2>
+                <p className="text-xs text-slate-500 mt-1">Pilih urusan untuk melihat detail checklist dan menyelesaikannya.</p>
+              </div>
+              <Link href="/urusan-saya" className="text-xs font-bold text-blue-600 hover:underline whitespace-nowrap">
                 Kelola Semua Urusan →
               </Link>
             </div>
-            <div className="flex items-center gap-2 overflow-x-auto pb-2 no-scrollbar">
-              {roadmaps.map((rm) => {
-                const isCurrent = rm.id === (activeRoadmap ? activeRoadmap.id : "");
-                return (
-                  <button
-                    key={rm.id}
-                    type="button"
-                    onClick={() => setSelectedRoadmapId(rm.id)}
-                    className={`flex-shrink-0 px-4 py-2.5 rounded-2xl text-xs font-bold border transition-all flex items-center gap-2 cursor-pointer ${
-                      isCurrent
-                        ? "bg-white text-blue-700 border-blue-400 shadow-md ring-2 ring-blue-500/20"
-                        : "bg-white/80 text-slate-600 border-slate-200 hover:bg-blue-50/50 hover:border-blue-200"
-                    }`}
-                  >
-                    <span>{rm.title.replace("Peta Urusan: ", "")}</span>
-                    <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${rm.progress_pct === 100 ? "bg-emerald-100 text-emerald-700" : "bg-blue-50 text-blue-600"}`}>
-                      {rm.progress_pct}%
-                    </span>
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-        )}
-
-        {/* Active Roadmap View */}
-        {activeRoadmap ? (
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
             
-            {/* Left Col: Tasks Checklist */}
-            <div id="urusan" className="lg:col-span-8 space-y-6">
-              <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/90 shadow-sm space-y-6">
-                
-                {/* Header */}
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-slate-100">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {roadmaps.map((rm) => (
+                <div key={rm.id} className="bg-white rounded-3xl p-6 border border-slate-200/90 shadow-sm flex flex-col justify-between space-y-4 hover:shadow-md transition-shadow">
                   <div>
                     <span className="text-[10px] font-bold uppercase tracking-wider text-blue-600">
-                      Checklist Alur & Dokumen
+                      Peta Urusan
                     </span>
-                    <h2 className="font-display font-extrabold text-xl sm:text-2xl text-[#0f274a] mt-0.5">
-                      {activeRoadmap.title}
-                    </h2>
-                    <p className="text-xs text-slate-500 mt-1">
-                      {activeRoadmap.description || "Daftar langkah penting terurut antar instansi"}
+                    <h3 className="font-display font-bold text-lg text-[#0f274a] mt-1 line-clamp-2">
+                      {rm.title}
+                    </h3>
+                    <p className="text-xs text-slate-500 mt-1.5 line-clamp-2">
+                      {rm.description || "Daftar langkah penting terurut antar instansi"}
                     </p>
                   </div>
-                  <div className="flex items-center gap-2 flex-shrink-0">
-                    <button
-                      type="button"
-                      onClick={() => handleDeleteRoadmap(activeRoadmap.id)}
-                      className="p-2 text-slate-400 hover:text-rose-600 rounded-xl hover:bg-rose-50 transition-colors cursor-pointer"
-                      title="Hapus Roadmap"
-                    >
-                      <Trash2 className="w-4 h-4" />
-                    </button>
-                  </div>
-                </div>
-
-                {/* Progress Bar */}
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between text-xs font-bold">
-                    <span className="text-slate-600">Progres Keseluruhan</span>
-                    <span className={activeRoadmap.progress_pct === 100 ? "text-emerald-600 font-bold" : "text-blue-600"}>
-                      {activeRoadmap.progress_pct}% Selesai ({activeRoadmap.tasks?.filter((t) => t.is_completed).length || 0}/{activeRoadmap.tasks?.length || 0} langkah)
-                    </span>
-                  </div>
-                  <div className="w-full h-3 bg-slate-100 rounded-full overflow-hidden">
-                    <div
-                      className={`h-full transition-all duration-500 rounded-full ${
-                        activeRoadmap.progress_pct === 100
-                          ? "bg-gradient-to-r from-emerald-500 to-teal-400"
-                          : "bg-gradient-to-r from-blue-600 to-indigo-500"
-                      }`}
-                      style={{ width: `${activeRoadmap.progress_pct}%` }}
-                    />
-                  </div>
-                </div>
-
-                {/* Task Checklist Items */}
-                <div className="space-y-3 pt-2">
-                  {activeRoadmap.tasks?.map((task, idx) => (
-                    <div
-                      key={task.id}
-                      className={`p-4 sm:p-5 rounded-2xl border transition-all duration-300 ${
-                        task.is_completed
-                          ? "bg-emerald-50/30 border-emerald-200/70"
-                          : "bg-white border-slate-200/90 hover:border-blue-300 hover:shadow-xs"
-                      }`}
-                    >
-                      <div className="flex items-start gap-3.5">
-                        <button
-                          type="button"
-                          onClick={() => handleToggleTask(task.id, task.is_completed)}
-                          className="mt-0.5 flex-shrink-0 focus:outline-none cursor-pointer"
-                          aria-label={task.is_completed ? "Tandai belum selesai" : "Tandai selesai"}
-                        >
-                          {task.is_completed ? (
-                            <CheckCircle2 className="w-5 h-5 text-emerald-600 fill-emerald-100" />
-                          ) : (
-                            <Circle className="w-5 h-5 text-slate-300 hover:text-blue-500 transition-colors" />
-                          )}
-                        </button>
-
-                        <div className="flex-1 space-y-2">
-                          <div className="flex flex-wrap items-center justify-between gap-2">
-                            <h4 className={`font-display font-bold text-sm ${task.is_completed ? "line-through text-slate-400" : "text-[#0f274a]"}`}>
-                              {idx + 1}. {task.title}
-                            </h4>
-                            <div className="flex items-center gap-1.5">
-                              <span className="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-blue-50 text-blue-700 border border-blue-100">
-                                {task.category}
-                              </span>
-                              <span className="text-[10px] font-semibold text-slate-500 flex items-center gap-1">
-                                <Clock className="w-3 h-3 text-blue-500" />
-                                {task.duration}
-                              </span>
-                            </div>
-                          </div>
-
-                          <p className="text-xs text-slate-600 leading-relaxed">
-                            {task.description}
-                          </p>
-
-                          {/* Requirements */}
-                          {task.requirements && task.requirements.length > 0 && (
-                            <div className="pt-1 flex flex-wrap items-center gap-1.5">
-                              <span className="text-[10px] font-bold text-slate-400">Siapkan:</span>
-                              {task.requirements.map((req, rIdx) => (
-                                <span
-                                  key={rIdx}
-                                  className="text-[10px] px-2.5 py-0.5 bg-slate-50 border border-slate-200 rounded-md text-slate-600 font-medium"
-                                >
-                                  {req}
-                                </span>
-                              ))}
-                            </div>
-                          )}
-
-                          {/* Official URL */}
-                          {task.official_url && task.official_url !== "#" && (
-                            <div className="pt-1">
-                              <a
-                                href={task.official_url}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="inline-flex items-center gap-1 text-[11px] font-bold text-blue-600 hover:text-blue-800 hover:underline"
-                              >
-                                <span>Buka Portal Resmi Instansi</span>
-                                <ExternalLink className="w-3 h-3" />
-                              </a>
-                            </div>
-                          )}
-                        </div>
-                      </div>
+                  
+                  <div className="space-y-2.5 pt-2 border-t border-slate-100">
+                    <div className="flex items-center justify-between text-xs font-bold">
+                      <span className="text-slate-600">Progres</span>
+                      <span className={rm.progress_pct === 100 ? "text-emerald-600" : "text-blue-600"}>
+                        {rm.progress_pct}%
+                      </span>
                     </div>
-                  ))}
-                </div>
+                    <div className="w-full h-2 bg-slate-100 rounded-full overflow-hidden">
+                      <div
+                        className={`h-full rounded-full ${
+                          rm.progress_pct === 100
+                            ? "bg-gradient-to-r from-emerald-500 to-teal-400"
+                            : "bg-gradient-to-r from-blue-600 to-cyan-500"
+                        }`}
+                        style={{ width: `${rm.progress_pct}%` }}
+                      />
+                    </div>
+                    <div className="text-[10px] text-slate-500 flex items-center justify-between">
+                      <span>{rm.tasks?.filter(t => t.is_completed).length || 0} dari {rm.tasks?.length || 0} langkah</span>
+                    </div>
+                  </div>
 
-              </div>
+                  <Link 
+                    href={`/dashboard/checklist/${rm.id}`}
+                    className="mt-4 w-full flex items-center justify-center gap-2 py-2.5 bg-slate-50 hover:bg-blue-50 text-[#0f274a] hover:text-blue-700 font-bold text-xs rounded-xl border border-slate-200 hover:border-blue-200 transition-colors"
+                  >
+                    Buka Checklist <ExternalLink className="w-3.5 h-3.5" />
+                  </Link>
+                </div>
+              ))}
             </div>
-
-            {/* Right Column: Status & Info */}
-            <div className="lg:col-span-4 space-y-6">
-              <div className="bg-white rounded-3xl p-6 border border-slate-200/90 shadow-sm space-y-4">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center font-bold border border-amber-100">
-                    <Trophy className="w-5 h-5 text-amber-500" />
-                  </div>
-                  <div>
-                    <h3 className="font-display font-bold text-sm text-[#0f274a]">
-                      Status Roadmap
-                    </h3>
-                    <span className="text-xs text-slate-500">
-                      {activeRoadmap.progress_pct === 100
-                        ? "Semua langkah telah selesai 🎉"
-                        : "Sedang dalam proses penyelesaian"}
-                    </span>
-                  </div>
-                </div>
-
-                <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-100 text-xs text-slate-600 space-y-2">
-                  <div className="flex items-center justify-between">
-                    <span>Total Langkah:</span>
-                    <strong className="text-slate-800">{activeRoadmap.tasks?.length || 0} urusan</strong>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span>Langkah Selesai:</span>
-                    <strong className="text-emerald-600 font-bold">
-                      {activeRoadmap.tasks?.filter((t) => t.is_completed).length || 0} urusan
-                    </strong>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span>Sisa Langkah:</span>
-                    <strong className="text-amber-600 font-bold">
-                      {(activeRoadmap.tasks?.length || 0) - (activeRoadmap.tasks?.filter((t) => t.is_completed).length || 0)} urusan
-                    </strong>
-                  </div>
-                </div>
-
-                <button
-                  type="button"
-                  onClick={() => {
-                    if (typeof window !== "undefined") {
-                      window.dispatchEvent(new CustomEvent("open-satu-ai"));
-                    }
-                  }}
-                  className="w-full flex items-center justify-center gap-2 py-2.5 bg-blue-50 hover:bg-blue-100 text-blue-700 font-bold text-xs rounded-xl border border-blue-200 transition-colors cursor-pointer"
-                >
-                  <span className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse-soft" />
-                  <span>Konsultasi Alur ke Asisten</span>
-                </button>
-              </div>
-
-              {/* Quick Actions Card */}
-              <div className="bg-white rounded-3xl p-6 border border-slate-200/90 shadow-sm space-y-3">
-                <h3 className="font-display font-bold text-sm text-[#0f274a]">Aksi Cepat</h3>
-                <div className="space-y-1">
-                  <Link href="/layanan" className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-xs text-slate-600 hover:bg-blue-50 hover:text-blue-600 transition-colors">
-                    <Search className="w-4 h-4 text-blue-500" />
-                    <span>Cari Katalog Layanan Baru</span>
-                  </Link>
-                  <Link href="/riwayat" className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-xs text-slate-600 hover:bg-blue-50 hover:text-blue-600 transition-colors">
-                    <ClipboardList className="w-4 h-4 text-violet-500" />
-                    <span>Lihat Riwayat Langkah Selesai</span>
-                  </Link>
-                  <Link href="/bantuan" className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-xs text-slate-600 hover:bg-blue-50 hover:text-blue-600 transition-colors">
-                    <Bell className="w-4 h-4 text-amber-500" />
-                    <span>Pusat Informasi & FAQ</span>
-                  </Link>
-                  <Link href="/urusan-saya" className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-xs text-slate-600 hover:bg-blue-50 hover:text-blue-600 transition-colors">
-                    <UserRound className="w-4 h-4 text-indigo-500" />
-                    <span>Kelola Seluruh Peta Urusan</span>
-                  </Link>
-                </div>
-              </div>
-
-              {/* Disclaimer reminder */}
-              <div className="bg-blue-50/60 rounded-2xl p-5 border border-blue-100 text-xs text-slate-600 space-y-2">
-                <div className="flex items-center gap-2 text-blue-900 font-bold">
-                  <Info className="w-4 h-4 text-blue-600 flex-shrink-0" />
-                  <span>Penting Diketahui</span>
-                </div>
-                <p className="leading-relaxed">
-                  SatuUrusan tidak memungut biaya apapun. Seluruh pengajuan dokumen resmi dan pembayaran pajak/PNBP hanya dilakukan melalui rekening negara/kanal resmi pemerintah.
-                </p>
-              </div>
-            </div>
-
           </div>
         ) : (
           /* Empty State when 0 roadmaps exist */

@@ -78,7 +78,7 @@ export function AccountRoadmaps({ mode }: { mode: "active" | "history" }) {
                 </div>
                 <div className="mt-4 flex items-center justify-between text-[11px] text-slate-500">
                   <span>{roadmap.tasks?.filter((task) => task.is_completed).length || 0} dari {roadmap.tasks?.length || 0} langkah selesai</span>
-                  <Link href={`/dashboard?id=${roadmap.id}`} className="font-bold text-blue-600 hover:text-blue-800 hover:underline inline-flex items-center gap-1">
+                  <Link href={`/dashboard/checklist/${roadmap.id}`} className="font-bold text-blue-600 hover:text-blue-800 hover:underline inline-flex items-center gap-1">
                     <span>Lihat Detail Checklist</span>
                     <ArrowRight className="w-3 h-3" />
                   </Link>

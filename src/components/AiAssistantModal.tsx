@@ -12,6 +12,9 @@ import {
   ChevronRight,
 } from "lucide-react";
 import Link from "next/link";
+import { DotLottieReact } from "@lottiefiles/dotlottie-react";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 
 type ChatMessage = {
   id: string;
@@ -189,22 +192,22 @@ export function AiAssistantModal() {
       {/* Floating trigger button on bottom-right */}
       <button
         onClick={() => setIsOpen(true)}
-        className="fixed bottom-6 right-6 z-40 flex items-center gap-2.5 px-4 py-3 bg-blue-600 hover:bg-blue-500 text-white rounded-full shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50 transition-all duration-300 transform hover:-translate-y-1 group border border-blue-400/30"
+        className="fixed bottom-2 right-2 z-40 w-24 h-24 sm:w-28 sm:h-28 hover:scale-105 transition-transform duration-300 drop-shadow-xl"
         aria-label="Buka Asisten Panduan"
       >
-        <span className="relative flex h-2.5 w-2.5">
-          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-sky-300 opacity-75" />
-          <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-white" />
-        </span>
-        <Compass className="w-4 h-4 text-blue-100 group-hover:rotate-45 transition-transform duration-300" />
-        <span className="font-bold text-xs tracking-wide">Tanya Panduan</span>
+        <DotLottieReact
+          autoplay
+          loop
+          src="https://lottie.host/14361b7e-f19a-438d-bca2-4c0b65644b4f/8FWbywVr7O.json"
+          className="w-full h-full"
+        />
       </button>
 
-      {/* Modal / Slide-in Drawer */}
+      {/* Modal / Pop-up */}
       {isOpen && (
-        <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 bg-slate-900/60 backdrop-blur-sm animate-in fade-in duration-200">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-in fade-in duration-200">
           <div
-            className="w-full sm:max-w-lg h-[85vh] sm:h-[620px] bg-white rounded-t-3xl sm:rounded-2xl shadow-2xl flex flex-col overflow-hidden border border-slate-200/80 animate-in slide-in-from-bottom-6 duration-300"
+            className="w-full sm:max-w-lg h-[80vh] sm:h-[620px] bg-white rounded-2xl shadow-2xl flex flex-col overflow-hidden border border-slate-200/80 animate-in zoom-in-95 duration-300"
             role="dialog"
             aria-modal="true"
           >
@@ -253,17 +256,23 @@ export function AiAssistantModal() {
                         : "bg-white text-slate-800 border border-slate-200/80 rounded-bl-none space-y-2.5"
                     }`}
                   >
-                    <div 
-                      className="whitespace-pre-line" 
-                      dangerouslySetInnerHTML={{
-                        __html: msg.text
-                          .replace(/</g, "&lt;")
-                          .replace(/>/g, "&gt;")
-                          .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
-                          .replace(/\*(.*?)\*/g, "<em>$1</em>")
-                          .replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2" target="_blank" class="text-blue-500 underline hover:text-blue-700">$1</a>')
-                      }}
-                    />
+                    <div className={`text-xs leading-relaxed space-y-2.5 ${msg.sender === 'user' ? 'text-white' : 'text-slate-800'}`}>
+                      <ReactMarkdown 
+                        remarkPlugins={[remarkGfm]}
+                        components={{
+                          table: ({node, ...props}) => <div className="overflow-x-auto my-2 rounded-lg border border-slate-200"><table className="w-full text-left border-collapse text-[11px]" {...props} /></div>,
+                          th: ({node, ...props}) => <th className="border-b border-slate-200 px-3 py-2 bg-slate-50 font-bold whitespace-nowrap" {...props} />,
+                          td: ({node, ...props}) => <td className="border-b border-slate-100 px-3 py-2" {...props} />,
+                          a: ({node, ...props}) => <a className="text-blue-500 underline hover:text-blue-700 font-medium" target="_blank" {...props} />,
+                          p: ({node, ...props}) => <p className="m-0" {...props} />,
+                          ul: ({node, ...props}) => <ul className="list-disc pl-4 space-y-1 my-1" {...props} />,
+                          ol: ({node, ...props}) => <ol className="list-decimal pl-4 space-y-1 my-1" {...props} />,
+                          strong: ({node, ...props}) => <strong className="font-bold text-[#0f274a]" {...props} />,
+                        }}
+                      >
+                        {msg.text.replace(/<br\s*\/?>/gi, '\n')}
+                      </ReactMarkdown>
+                    </div>
 
                     {/* Step by step highlight */}
                     {msg.steps && msg.steps.length > 0 && (
