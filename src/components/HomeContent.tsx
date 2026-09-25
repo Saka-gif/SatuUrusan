@@ -1,77 +1,125 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { DotLottieReact } from '@lottiefiles/dotlottie-react';
 import { 
   ArrowRight, 
-  Clock,
+  Clock, 
+  CheckCircle2, 
+  Circle,
+  ExternalLink,
+  Sparkles,
+  Layers,
   FileCheck2,
-  CheckCircle,
-  Circle
+  ChevronDown,
+  RotateCcw,
+  Check,
+  ShieldCheck
 } from "lucide-react";
 import { EventCard } from "./EventCard";
 import { ServiceExplorer } from "./ServiceExplorer";
 import { ProcessSection } from "./ProcessSection";
 import { lifeEvents } from "@/data/life-events";
 import { LifeEvent } from "@/lib/supabase/types";
-
-// Realistic live roadmap templates for the interactive console
-const HERO_SIMULATIONS = [
-  {
-    id: "pindah",
-    name: "Pindah Domisili",
-    subtitle: "Pindah Antar Kota / Provinsi",
-    steps: [
-      { id: "s1", title: "Surat Pindah (SKPWNI)", agency: "Disdukcapil Asal", duration: "1 Hari Kerja", doc: "KTP & KK Asli", completed: true },
-      { id: "s2", title: "Penerbitan KK & KTP-el Baru", agency: "Disdukcapil Tujuan", duration: "1-3 Hari", doc: "SKPWNI Asal", completed: false },
-      { id: "s3", title: "Pindah Faskes BPJS", agency: "BPJS Kesehatan", duration: "Instan Online", doc: "Mobile JKN", completed: false },
-      { id: "s4", title: "Lapor Pengurus RT/RW Baru", agency: "Kelurahan", duration: "Hari yang sama", doc: "KK Baru", completed: false },
-    ]
-  },
-  {
-    id: "usaha",
-    name: "Membuka Usaha (UMKM)",
-    subtitle: "Pendaftaran Usaha & Legalitas",
-    steps: [
-      { id: "u1", title: "Registrasi Akun OSS RBA", agency: "Kementerian Investasi", duration: "5 Menit", doc: "NIK KTP & Email", completed: true },
-      { id: "u2", title: "Penerbitan NIB Ber-QR", agency: "Sistem OSS", duration: "Instan", doc: "Data Usaha & KBLI", completed: false },
-      { id: "u3", title: "NPWP Badan / Usaha", agency: "DJP Online", duration: "1 Hari Kerja", doc: "NIB & KTP", completed: false },
-      { id: "u4", title: "Sertifikasi Standar / Halal", agency: "BPJPH / Instansi Teknis", duration: "14 Hari Kerja", doc: "NIB & Foto Produk", completed: false },
-    ]
-  },
-  {
-    id: "nikah",
-    name: "Pernikahan & Keluarga",
-    subtitle: "Administrasi Sebelum & Sesudah Akad",
-    steps: [
-      { id: "n1", title: "Surat Pengantar Kelurahan (N1-N4)", agency: "Kelurahan", duration: "1 Hari Kerja", doc: "KTP & KK Asli", completed: true },
-      { id: "n2", title: "Pendaftaran Berkas di KUA / Dukcapil", agency: "Kemenag / Catatan Sipil", duration: "Min. H-10 Kerja", doc: "Surat N1-N4 & Foto", completed: false },
-      { id: "n3", title: "Pemisahan KK & Pembuatan KK Baru", agency: "Disdukcapil", duration: "1-2 Hari", doc: "Buku Nikah Asli", completed: false },
-      { id: "n4", title: "Penyatuan Nomor BPJS Kesehatan", agency: "BPJS Kesehatan", duration: "Instan Online", doc: "KK Pasangan Baru", completed: false },
-    ]
-  }
-];
+import { eventTaskTemplates, createUserRoadmap } from "@/lib/supabase/service";
 
 export function HomeContent() {
+  const router = useRouter();
   const [activeEvent, setActiveEvent] = useState<LifeEvent>(lifeEvents[0]);
-  const [activeSimIndex, setActiveSimIndex] = useState(0);
-  const [simSteps, setSimSteps] = useState(HERO_SIMULATIONS[0].steps);
+  const [activeSteps, setActiveSteps] = useState<Array<{
+    id: string;
+    title: string;
+    desc: string;
+    cat: string;
+    dur: string;
+    reqs: string[];
+    url: string;
+    completed: boolean;
+  }>>([]);
+  const [isCreatingRoadmap, setIsCreatingRoadmap] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [profileName, setProfileName] = useState("Teman Satu");
+  const simRef = useRef<HTMLDivElement>(null);
 
-  const currentSim = HERO_SIMULATIONS[activeSimIndex];
+  // Sync session
+  useEffect(() => {
+    const syncSession = () => {
+      if (typeof window === "undefined") return;
+      const rawSession = window.localStorage.getItem("satuurusan_session");
+      if (rawSession) {
+        try {
+          const session = JSON.parse(rawSession) as { name?: string };
+          setIsAuthenticated(true);
+          setProfileName(session.name || "Teman Satu");
+        } catch {
+          setIsAuthenticated(false);
+        }
+      } else {
+        setIsAuthenticated(false);
+      }
+    };
 
-  const handleSelectSim = (idx: number) => {
-    setActiveSimIndex(idx);
-    setSimSteps(HERO_SIMULATIONS[idx].steps);
+    syncSession();
+    window.addEventListener("storage", syncSession);
+    window.addEventListener("satuurusan-session-changed", syncSession);
+    return () => {
+      window.removeEventListener("storage", syncSession);
+      window.removeEventListener("satuurusan-session-changed", syncSession);
+    };
+  }, []);
+
+  // Sync steps when active event changes
+  useEffect(() => {
+    const template = eventTaskTemplates[activeEvent.slug] || eventTaskTemplates["pindah-domisili"] || [];
+    setActiveSteps(
+      template.map((t, idx) => ({
+        id: `sim_step_${activeEvent.slug}_${idx}`,
+        ...t,
+        completed: idx === 0, // Mark first step as completed by default for demo
+      }))
+    );
+  }, [activeEvent]);
+
+  const handleSelectEvent = (event: LifeEvent) => {
+    setActiveEvent(event);
+    // Smooth scroll down to simulation console if on mobile
+    if (typeof window !== "undefined" && window.innerWidth < 1024 && simRef.current) {
+      simRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
   };
 
-  const handleToggleSimStep = (stepId: string) => {
-    setSimSteps(prev => prev.map(s => s.id === stepId ? { ...s, completed: !s.completed } : s));
+  const handleToggleStep = (stepId: string) => {
+    setActiveSteps((prev) =>
+      prev.map((s) => (s.id === stepId ? { ...s, completed: !s.completed } : s))
+    );
   };
 
-  const completedCount = simSteps.filter(s => s.completed).length;
-  const progressPct = Math.round((completedCount / simSteps.length) * 100);
+  const handleResetSteps = () => {
+    setActiveSteps((prev) => prev.map((s) => ({ ...s, completed: false })));
+  };
+
+  const handleCreateAndOpenRoadmap = async () => {
+    setIsCreatingRoadmap(true);
+    try {
+      const rm = await createUserRoadmap(activeEvent.slug, activeEvent.title);
+      if (rm && rm.id) {
+        router.push(`/dashboard?id=${rm.id}`);
+      } else {
+        router.push("/dashboard");
+      }
+    } catch (err) {
+      console.error("Gagal membuat roadmap:", err);
+      router.push("/dashboard");
+    } finally {
+      setIsCreatingRoadmap(false);
+    }
+  };
+
+  const completedCount = activeSteps.filter((s) => s.completed).length;
+  const totalCount = activeSteps.length;
+  const progressPct = totalCount > 0 ? Math.round((completedCount / totalCount) * 100) : 0;
 
   return (
     <main className="flex-1">
@@ -118,20 +166,41 @@ export function HomeContent() {
 
               {/* Action Buttons */}
               <div className="pt-2 flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3.5">
-                <Link
-                  href="/mulai"
-                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-7 py-3.5 rounded-2xl bg-[#0f274a] hover:bg-blue-600 text-white font-bold text-sm shadow-xl shadow-blue-950/15 hover:shadow-blue-600/30 transition-all duration-300 transform hover:-translate-y-1"
-                >
-                  <span>Mulai Susun Urusan</span>
-                  <ArrowRight className="w-4 h-4 text-blue-200" />
-                </Link>
+                {isAuthenticated ? (
+                  <>
+                    <Link
+                      href="/dashboard"
+                      className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-7 py-3.5 rounded-2xl bg-gradient-to-r from-[#0f274a] to-blue-600 hover:from-[#17345b] hover:to-blue-700 text-white font-bold text-sm shadow-xl shadow-blue-950/15 hover:shadow-blue-600/30 transition-all duration-300 transform hover:-translate-y-1"
+                    >
+                      <span>Buka Dashboard Saya</span>
+                      <ArrowRight className="w-4 h-4 text-blue-200" />
+                    </Link>
 
-                <Link
-                  href="/layanan"
-                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-2xl bg-white hover:bg-blue-50/80 text-slate-700 hover:text-blue-600 font-bold text-sm border border-slate-200 shadow-sm hover:border-blue-300 transition-all duration-300 transform hover:-translate-y-0.5"
-                >
-                  <span>Katalog 50+ Layanan</span>
-                </Link>
+                    <Link
+                      href="/layanan"
+                      className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-2xl bg-white hover:bg-blue-50/80 text-slate-700 hover:text-blue-600 font-bold text-sm border border-slate-200 shadow-sm hover:border-blue-300 transition-all duration-300 transform hover:-translate-y-0.5"
+                    >
+                      <span>Katalog 50+ Layanan</span>
+                    </Link>
+                  </>
+                ) : (
+                  <>
+                    <Link
+                      href="/mulai"
+                      className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-7 py-3.5 rounded-2xl bg-[#0f274a] hover:bg-blue-600 text-white font-bold text-sm shadow-xl shadow-blue-950/15 hover:shadow-blue-600/30 transition-all duration-300 transform hover:-translate-y-1"
+                    >
+                      <span>Mulai Susun Urusan</span>
+                      <ArrowRight className="w-4 h-4 text-blue-200" />
+                    </Link>
+
+                    <Link
+                      href="/layanan"
+                      className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-2xl bg-white hover:bg-blue-50/80 text-slate-700 hover:text-blue-600 font-bold text-sm border border-slate-200 shadow-sm hover:border-blue-300 transition-all duration-300 transform hover:-translate-y-0.5"
+                    >
+                      <span>Katalog 50+ Layanan</span>
+                    </Link>
+                  </>
+                )}
               </div>
 
               {/* Trust Indicators Bar */}
@@ -191,7 +260,7 @@ export function HomeContent() {
               </h2>
             </div>
             <p className="text-xs sm:text-sm text-slate-500 max-w-sm leading-relaxed">
-              Satu peristiwa biasanya melibatkan 3 hingga 9 tahapan antar dinas yang saling berkaitan secara runtut.
+              Klik salah satu peristiwa di bawah untuk melihat simulasi alur dokumen, syarat berkas, dan estimasi waktu antar dinas secara langsung.
             </p>
           </motion.div>
 
@@ -206,8 +275,8 @@ export function HomeContent() {
               <EventCard
                 key={event.title}
                 event={event}
-                isSelected={activeEvent.title === event.title}
-                onClick={() => setActiveEvent(event)}
+                isSelected={activeEvent.slug === event.slug}
+                onClick={() => handleSelectEvent(event)}
               />
             ))}
           </motion.div>

@@ -35,7 +35,7 @@ export default function RegisterPage() {
     }));
     window.dispatchEvent(new CustomEvent("satuurusan-session-changed"));
     setTimeout(() => {
-      router.push("/onboarding");
+      router.push("/");
     }, 400);
   };
 

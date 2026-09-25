@@ -151,11 +151,17 @@ export function EventCard({
       </div>
 
       {/* Bottom Action Footer with smooth hover reveal */}
-      <div className="mt-6 pt-4 border-t border-slate-100/90 flex items-center justify-between text-xs font-bold text-slate-400 group-hover:text-blue-600 transition-colors">
-        <span className="font-medium text-slate-500 group-hover:text-blue-600 transition-colors">
-          Buka simulasi alur
+      <div className="mt-6 pt-4 border-t border-slate-100/90 flex items-center justify-between text-xs font-bold transition-colors">
+        <span className={`font-semibold transition-colors ${
+          isSelected ? "text-blue-600 font-bold" : "text-slate-500 group-hover:text-blue-600"
+        }`}>
+          {isSelected ? "Sedang aktif ditampilkan ↓" : "Buka simulasi alur"}
         </span>
-        <div className="w-8 h-8 rounded-xl bg-slate-50 border border-slate-100 group-hover:bg-blue-600 group-hover:text-white group-hover:border-blue-600 flex items-center justify-center transition-all duration-300 transform group-hover:translate-x-1 shadow-2xs">
+        <div className={`w-8 h-8 rounded-xl border flex items-center justify-center transition-all duration-300 transform group-hover:translate-x-1 shadow-2xs ${
+          isSelected 
+            ? "bg-blue-600 text-white border-blue-600 scale-105" 
+            : "bg-slate-50 border-slate-100 group-hover:bg-blue-600 group-hover:text-white group-hover:border-blue-600"
+        }`}>
           <ChevronRight className="w-4 h-4" />
         </div>
       </div>

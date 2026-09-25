@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { Navbar } from "@/components/Navbar";
 import { serviceCategories } from "@/data/service-categories";
 import { ServiceCategory, ServiceItem } from "@/lib/supabase/types";
 import { 
@@ -47,9 +46,7 @@ export default function ServicesPage() {
 
   return (
     <div className="min-h-screen flex flex-col bg-slate-50">
-      <Navbar />
-
-      <main className="flex-1 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 pt-28 pb-12 lg:pt-32 lg:pb-16 space-y-10">
+      <main className="flex-1 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 pt-32 pb-16 lg:pt-36 lg:pb-20 space-y-10">
         {/* Hero Header */}
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-8 pb-10 border-b border-slate-200">
           <div className="space-y-4 max-w-2xl">

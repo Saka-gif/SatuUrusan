@@ -14,7 +14,7 @@ export default function StartPage() {
       email: "demo@satuurusan.id",
     }));
     window.dispatchEvent(new CustomEvent("satuurusan-session-changed"));
-    router.push("/dashboard");
+    router.push("/");
   };
 
   return (
@@ -36,7 +36,7 @@ export default function StartPage() {
 
       {/* Hero Center */}
       <div className="max-w-4xl mx-auto w-full py-12 relative z-10 text-center space-y-6">
-        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-100/80 border border-blue-200 text-blue-700 text-xs font-bold">
+        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-50 border border-blue-200 text-blue-700 text-xs font-bold shadow-2xs">
           <Compass className="w-3.5 h-3.5 text-blue-600" />
           <span>Langkah Awal yang Teratur</span>
         </div>
@@ -55,17 +55,17 @@ export default function StartPage() {
         <div className="pt-4 flex flex-col sm:flex-row items-center justify-center gap-3.5">
           <Link
             href="/daftar"
-            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-xl bg-gradient-to-r from-[#0f274a] via-[#17345b] to-[#2563eb] hover:from-[#17345b] hover:to-[#1d4ed8] text-white font-bold text-sm shadow-xl shadow-blue-950/20 hover:shadow-blue-950/30 transition-all transform hover:-translate-y-0.5"
+            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-2xl bg-gradient-to-r from-[#0f274a] via-[#17345b] to-[#2563eb] hover:from-[#17345b] hover:to-[#1d4ed8] text-white font-bold text-sm shadow-xl shadow-blue-950/20 hover:shadow-blue-600/30 transition-all transform hover:-translate-y-0.5"
           >
             <span>Buat Akun Sekarang</span>
-            <ArrowRight className="w-4 h-4 text-blue-300" />
+            <ArrowRight className="w-4 h-4 text-blue-200" />
           </Link>
           <button
             type="button"
             onClick={handleDemoClick}
-            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-white hover:bg-slate-50 text-slate-700 font-bold text-sm border border-slate-200 shadow-sm transition-all cursor-pointer"
+            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-2xl bg-white hover:bg-blue-50/70 text-slate-700 hover:text-blue-600 font-bold text-sm border border-slate-200 shadow-xs hover:border-blue-300 transition-all cursor-pointer transform hover:-translate-y-0.5"
           >
-            <span>Lihat Mode Demo</span>
+            <span>⚡ Masuk Akun Demo</span>
           </button>
         </div>
 

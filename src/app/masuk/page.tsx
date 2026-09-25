@@ -24,7 +24,7 @@ export default function LoginPage() {
     }));
     window.dispatchEvent(new CustomEvent("satuurusan-session-changed"));
     setTimeout(() => {
-      router.push("/dashboard");
+      router.push("/");
     }, 300);
   };
 
@@ -38,7 +38,7 @@ export default function LoginPage() {
     }));
     window.dispatchEvent(new CustomEvent("satuurusan-session-changed"));
     setTimeout(() => {
-      router.push("/dashboard");
+      router.push("/");
     }, 300);
   };
 
@@ -117,7 +117,7 @@ export default function LoginPage() {
           disabled={isLoading}
           className="w-full py-3.5 bg-gradient-to-r from-[#0f274a] via-[#17345b] to-[#2563eb] hover:from-[#17345b] hover:to-[#1d4ed8] text-white font-bold text-xs rounded-2xl shadow-xl shadow-blue-950/20 hover:shadow-blue-600/30 transition-all flex items-center justify-center gap-2 transform hover:-translate-y-0.5 mt-2 cursor-pointer"
         >
-          <span>{isLoading ? "Memproses..." : "Masuk ke Dashboard"}</span>
+          <span>{isLoading ? "Memproses..." : "Masuk Akun"}</span>
           <ArrowRight className="w-3.5 h-3.5 text-blue-200" />
         </button>
 
