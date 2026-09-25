@@ -227,30 +227,48 @@ export function Footer() {
                 </div>
 
               </div>
-
             </div>
-          </div>
-        </div>
 
-      <footer className="bg-[#0a192f] text-slate-300 mt-auto relative overflow-hidden selection:bg-blue-600 selection:text-white">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6 mt-6 pb-4">
+              <div className="footer-feature-card flex items-start gap-3.5 rounded-2xl border border-white/10 bg-white/[0.04] p-5">
+                <div className="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 flex-shrink-0">
+                  <ShieldCheck className="w-5 h-5" />
+                </div>
+                <div className="space-y-1">
+                  <h5 className="text-sm font-bold text-white">100% Bebas Calo</h5>
+                  <p className="text-xs text-slate-400 leading-relaxed">Panduan mandiri terhubung ke sistem resmi dinas.</p>
+                </div>
+              </div>
 
-          <div className="footer-feature-card flex items-start gap-3.5 rounded-2xl border border-white/10 bg-white/[0.04] p-5">
-            <div className="w-10 h-10 rounded-xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center text-purple-400 flex-shrink-0">
-              <Lock className="w-5 h-5" />
-            </div>
-            <div className="space-y-1">
-              <h5 className="text-sm font-bold text-white">Privasi Terjaga</h5>
-              <p className="text-xs text-slate-400 leading-relaxed">Tidak menyimpan dokumen rahasia di server publik.</p>
-            </div>
-          </div>
+              <div className="footer-feature-card flex items-start gap-3.5 rounded-2xl border border-white/10 bg-white/[0.04] p-5">
+                <div className="w-10 h-10 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-400 flex-shrink-0">
+                  <Zap className="w-5 h-5" />
+                </div>
+                <div className="space-y-1">
+                  <h5 className="text-sm font-bold text-white">Alur Logis & Efisien</h5>
+                  <p className="text-xs text-slate-400 leading-relaxed">Urutan tahapan terstruktur agar tidak bolak-balik.</p>
+                </div>
+              </div>
 
-          <div className="footer-feature-card flex items-start gap-3.5 rounded-2xl border border-white/10 bg-white/[0.04] p-5">
-            <div className="w-10 h-10 rounded-xl bg-sky-500/10 border border-sky-500/20 flex items-center justify-center text-sky-400 flex-shrink-0">
-              <Bot className="w-5 h-5" />
-            </div>
-            <div className="space-y-1">
-              <h5 className="text-sm font-bold text-white">Asisten AI 24/7</h5>
-              <p className="text-xs text-slate-400 leading-relaxed">Bantuan interaktif langsung memahami syarat berkas.</p>
+              <div className="footer-feature-card flex items-start gap-3.5 rounded-2xl border border-white/10 bg-white/[0.04] p-5">
+                <div className="w-10 h-10 rounded-xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center text-purple-400 flex-shrink-0">
+                  <Lock className="w-5 h-5" />
+                </div>
+                <div className="space-y-1">
+                  <h5 className="text-sm font-bold text-white">Privasi Terjaga</h5>
+                  <p className="text-xs text-slate-400 leading-relaxed">Tidak menyimpan dokumen rahasia di server publik.</p>
+                </div>
+              </div>
+
+              <div className="footer-feature-card flex items-start gap-3.5 rounded-2xl border border-white/10 bg-white/[0.04] p-5">
+                <div className="w-10 h-10 rounded-xl bg-sky-500/10 border border-sky-500/20 flex items-center justify-center text-sky-400 flex-shrink-0">
+                  <Bot className="w-5 h-5" />
+                </div>
+                <div className="space-y-1">
+                  <h5 className="text-sm font-bold text-white">Asisten AI 24/7</h5>
+                  <p className="text-xs text-slate-400 leading-relaxed">Bantuan interaktif langsung memahami syarat berkas.</p>
+                </div>
+              </div>
             </div>
           </div>
         </div>
