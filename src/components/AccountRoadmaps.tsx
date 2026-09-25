@@ -134,9 +134,6 @@ export function AccountRoadmaps({ mode }: { mode: "active" | "history" }) {
                       {roadmap.description || "Panduan runtut dokumen prasyarat antar dinas resmi."}
                     </p>
                   </div>
-                  <span className="rounded-full bg-blue-50 px-2 py-1 text-[10px] font-bold text-blue-700">{roadmap.progress_pct}%</span>
-                </div>
-                <p className="mt-2 text-xs leading-relaxed text-slate-500">{roadmap.description}</p>
                 <div className="mt-5 h-2 overflow-hidden rounded-full bg-slate-100">
                   <div className="h-full rounded-full bg-gradient-to-r from-blue-600 to-cyan-500" style={{ width: `${roadmap.progress_pct}%` }} />
                 </div>
@@ -148,7 +145,8 @@ export function AccountRoadmaps({ mode }: { mode: "active" | "history" }) {
                   </Link>
                 </div>
               </article>
-            ))}
+              );
+            })}
           </section>
         ) : (
           <section className="space-y-3" aria-label="Riwayat langkah selesai">
