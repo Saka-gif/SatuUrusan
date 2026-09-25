@@ -23,10 +23,6 @@ import {
 export function Footer() {
   const pathname = usePathname();
   const shouldHideFooter = [
-    "/dashboard", 
-    "/urusan-saya", 
-    "/riwayat", 
-    "/notifikasi",
     "/daftar",
     "/masuk",
     "/mulai",

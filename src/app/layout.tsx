@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Plus_Jakarta_Sans, Outfit } from "next/font/google";
 import "./globals.css";
+import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { AiAssistantModal } from "@/components/AiAssistantModal";
 import { CursorGlow } from "@/components/CursorGlow";
@@ -44,6 +45,7 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col font-sans bg-[#f8fafc] text-[#0f172a] selection:bg-blue-500/20 selection:text-blue-900 relative">
         <CursorGlow />
+        <Navbar />
         <div className="flex-1 flex flex-col relative z-20">{children}</div>
         <Footer />
         <AiAssistantModal />
