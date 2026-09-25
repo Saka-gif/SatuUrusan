@@ -1,5 +1,11 @@
+import { Navbar } from "@/components/Navbar";
 import { AccountRoadmaps } from "@/components/AccountRoadmaps";
 
 export default function HistoryPage() {
-  return <AccountRoadmaps mode="history" />;
+  return (
+    <>
+      <Navbar />
+      <AccountRoadmaps mode="history" />
+    </>
+  );
 }

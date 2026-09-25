@@ -38,24 +38,10 @@ Contoh penolakan: "Maaf, saya adalah asisten navigasi administrasi publik. Saya 
 4. Gunakan Markdown untuk memperjelas jawaban (misal: bullet points untuk langkah-langkah).
 `;
 
-type ChatRequestMessage = {
-  sender?: unknown;
-  text?: unknown;
-};
-
-type GroqResponse = {
-  choices?: Array<{ message?: { content?: string } }>;
-};
-
-function isChatRequestMessage(value: unknown): value is ChatRequestMessage {
-  return typeof value === "object" && value !== null;
-}
-
 export async function POST(req: NextRequest) {
   try {
     const GROQ_KEYS = getGroqKeys();
-    const body = await req.json() as { messages?: unknown };
-    const messages = body.messages;
+    const { messages } = await req.json();
 
     if (!messages || !Array.isArray(messages)) {
       return NextResponse.json({ error: "Invalid messages array" }, { status: 400 });
@@ -68,9 +54,9 @@ export async function POST(req: NextRequest) {
     // Prepare messages for Groq API
     const apiMessages = [
       { role: "system", content: SYSTEM_PROMPT },
-      ...messages.filter(isChatRequestMessage).map((message) => ({
-        role: message.sender === "user" ? "user" : "assistant",
-        content: typeof message.text === "string" ? message.text : "",
+      ...messages.map((m: any) => ({
+        role: m.sender === "user" ? "user" : "assistant",
+        content: m.text,
       }))
     ];
 
@@ -109,7 +95,7 @@ export async function POST(req: NextRequest) {
           continue; // Try next key on other errors too (like invalid key)
         }
 
-        const data = await response.json() as GroqResponse;
+        const data = await response.json();
         successfulResponse = data;
         break; // Success! Exit the retry loop
       } catch (error) {
@@ -127,14 +113,14 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const aiMessage = successfulResponse.choices?.[0]?.message?.content || "Maaf, saya tidak dapat merespons saat ini.";
+    const aiMessage = successfulResponse.choices[0]?.message?.content || "Maaf, saya tidak dapat merespons saat ini.";
 
     return NextResponse.json({
       role: "assistant",
       content: aiMessage
     });
 
-  } catch (error: unknown) {
+  } catch (error: any) {
     console.error("[SatuAI] Internal Server Error:", error);
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }

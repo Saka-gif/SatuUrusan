@@ -1,8 +1,9 @@
 "use client";
 
-import { useState, useEffect, Suspense, useMemo } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
+import { Navbar } from "@/components/Navbar";
 import { 
   fetchUserRoadmaps, 
   createUserRoadmap, 
@@ -28,14 +29,8 @@ import {
   ClipboardList,
   Bell,
   UserRound,
-  ShieldCheck,
   CheckCircle,
-  X,
-  ArrowRight,
-  TrendingUp,
-  FolderOpen,
-  Calendar,
-  AlertCircle
+  X
 } from "lucide-react";
 import confetti from "canvas-confetti";
 
@@ -48,7 +43,6 @@ function DashboardContent() {
   const [showAddModal, setShowAddModal] = useState(false);
   const [selectedEventSlug, setSelectedEventSlug] = useState("pindah-domisili");
   const [profileName, setProfileName] = useState("Teman Satu");
-  const [profileEmail, setProfileEmail] = useState("");
 
   useEffect(() => {
     const rawSession = window.localStorage.getItem("satuurusan_session");
@@ -58,9 +52,8 @@ function DashboardContent() {
     }
 
     try {
-      const parsed = JSON.parse(rawSession) as { name?: string; email?: string };
+      const parsed = JSON.parse(rawSession) as { name?: string };
       setProfileName(parsed.name || "Teman Satu");
-      setProfileEmail(parsed.email || "warga@satuurusan.id");
     } catch {
       router.replace("/masuk");
       return;
@@ -87,21 +80,10 @@ function DashboardContent() {
   }, [router, searchParams]);
 
   const activeRoadmap = roadmaps.find((r) => r.id === selectedRoadmapId) || roadmaps[0];
-  
-  const completedTasks = useMemo(() => {
-    return roadmaps.reduce(
-      (total, roadmap) => total + (roadmap.tasks?.filter((task) => task.is_completed).length || 0),
-      0
-    );
-  }, [roadmaps]);
-
-  const totalTasks = useMemo(() => {
-    return roadmaps.reduce(
-      (total, roadmap) => total + (roadmap.tasks?.length || 0),
-      0
-    );
-  }, [roadmaps]);
-
+  const completedTasks = roadmaps.reduce(
+    (total, roadmap) => total + (roadmap.tasks?.filter((task) => task.is_completed).length || 0),
+    0
+  );
   const inProgressCount = roadmaps.filter((roadmap) => roadmap.progress_pct > 0 && roadmap.progress_pct < 100).length;
   const completedRoadmapsCount = roadmaps.filter((roadmap) => roadmap.progress_pct === 100).length;
   const needsActionCount = roadmaps.filter((roadmap) => roadmap.progress_pct < 100).length;
@@ -176,29 +158,25 @@ function DashboardContent() {
   };
 
   return (
-    <main aria-busy={isLoading} className="min-h-screen bg-[#f8fafc] text-slate-800 flex flex-col font-sans">
-      <div className="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 pt-32 pb-16 lg:pt-36 lg:pb-20 flex-1 space-y-8">
-        
-        {/* Modern Welcome Banner */}
-        <div className="rounded-3xl bg-gradient-to-r from-[#0b1d3a] via-[#122e58] to-[#1e4976] p-6 sm:p-10 text-white shadow-2xl shadow-blue-950/20 flex flex-col lg:flex-row lg:items-center justify-between gap-6 relative overflow-hidden border border-blue-900/40">
-          {/* Ambient light glow */}
-          <div className="absolute top-0 right-0 w-96 h-96 bg-blue-500/15 rounded-full blur-3xl pointer-events-none" />
-          <div className="absolute -bottom-10 -left-10 w-80 h-80 bg-indigo-500/15 rounded-full blur-3xl pointer-events-none" />
-          
-          <div className="space-y-3 relative z-10 max-w-2xl">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white/10 border border-white/15 text-blue-200 text-xs font-bold backdrop-blur-sm">
-              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse-soft" />
-              <span>Dashboard Personal Warga</span>
-              <span className="text-white/30">|</span>
-              <span className="text-sky-300 font-semibold">{roadmaps.length} Urusan Aktif</span>
-            </div>
+    <main aria-busy={isLoading} className="min-h-screen bg-slate-50/70 text-slate-800 flex flex-col font-sans">
+      <Navbar />
 
-            <h1 className="font-display text-2xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-white leading-tight">
+      <div className="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 pt-28 pb-12 lg:pt-32 lg:pb-16 flex-1 space-y-8">
+        
+        {/* Welcome Banner */}
+        <div className="rounded-3xl bg-gradient-to-r from-[#0f274a] via-[#17345b] to-[#1e4976] p-6 sm:p-10 text-white shadow-xl flex flex-col md:flex-row md:items-center justify-between gap-6 relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl pointer-events-none" />
+          
+          <div className="space-y-2 relative z-10 max-w-2xl">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white/10 border border-white/15 text-blue-200 text-xs font-bold">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse-soft" />
+              <span>Personal Life-Event Roadmap</span>
+            </div>
+            <h1 className="font-display text-2xl sm:text-4xl font-extrabold tracking-tight">
               Halo, {profileName} <span aria-hidden="true">👋</span>
             </h1>
-
-            <p className="text-xs sm:text-sm text-slate-300 leading-relaxed max-w-xl">
-              Pantau progres dokumen prasyarat, urutan prioritas antar dinas, dan checklist langkah tanpa calo dan bebas pungli.
+            <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
+              Pantau progres dokumen prasyarat, urutan prioritas antar dinas, dan checklist langkah tanpa rasa bingung.
             </p>
           </div>
 
@@ -210,16 +188,15 @@ function DashboardContent() {
                   window.dispatchEvent(new CustomEvent("open-satu-ai"));
                 }
               }}
-              className="inline-flex items-center gap-2 px-4 py-3 rounded-2xl bg-white/10 hover:bg-white/20 border border-white/20 text-white text-xs font-bold transition-all cursor-pointer backdrop-blur-sm shadow-sm transform hover:-translate-y-0.5"
+              className="inline-flex items-center gap-2 px-4 py-3 rounded-2xl bg-white/10 hover:bg-white/20 border border-white/20 text-white text-xs font-bold transition-all cursor-pointer"
             >
-              <Sparkles className="w-4 h-4 text-amber-300 animate-spin-slow" />
+              <Sparkles className="w-4 h-4 text-amber-300" />
               <span>Tanya SatuAI</span>
             </button>
-
             <button
               type="button"
               onClick={() => setShowAddModal(true)}
-              className="inline-flex items-center gap-2 px-5 py-3 rounded-2xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white text-xs font-bold shadow-xl shadow-blue-600/30 transition-all transform hover:-translate-y-0.5 cursor-pointer"
+              className="inline-flex items-center gap-2 px-5 py-3 rounded-2xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold shadow-lg shadow-blue-600/30 transition-all transform hover:-translate-y-0.5 cursor-pointer"
             >
               <Plus className="w-4 h-4" />
               <span>Buat Peta Urusan Baru</span>
@@ -227,64 +204,22 @@ function DashboardContent() {
           </div>
         </div>
 
-        {/* Overview Stats Cards */}
+        {/* Overview Stats */}
         <section className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4" aria-label="Ringkasan urusan">
           {[
-            { 
-              label: "Total Urusan", 
-              value: roadmaps.length, 
-              color: "text-blue-600", 
-              bgColor: "bg-blue-50/80", 
-              borderColor: "border-blue-100", 
-              icon: FileText,
-              sub: "Peta aktif terdaftar"
-            },
-            { 
-              label: "Sedang Berjalan", 
-              value: inProgressCount, 
-              color: "text-amber-600", 
-              bgColor: "bg-amber-50/80", 
-              borderColor: "border-amber-100", 
-              icon: Clock,
-              sub: "Tahapan dalam proses"
-            },
-            { 
-              label: "Langkah Selesai", 
-              value: `${completedTasks}/${totalTasks}`, 
-              color: "text-emerald-600", 
-              bgColor: "bg-emerald-50/80", 
-              borderColor: "border-emerald-100", 
-              icon: CheckCircle2,
-              sub: "Checklist tercentang"
-            },
-            { 
-              label: "Perlu Tindakan", 
-              value: needsActionCount, 
-              color: "text-rose-600", 
-              bgColor: "bg-rose-50/80", 
-              borderColor: "border-rose-100", 
-              icon: Info,
-              sub: "Menunggu penyelesaian"
-            },
+            { label: "Total Urusan", value: roadmaps.length, color: "text-blue-600", icon: FileText },
+            { label: "Sedang Berjalan", value: inProgressCount, color: "text-amber-600", icon: Clock },
+            { label: "Langkah Selesai", value: completedTasks, color: "text-emerald-600", icon: CheckCircle2 },
+            { label: "Perlu Tindakan", value: needsActionCount, color: "text-rose-600", icon: Info },
           ].map((stat) => {
             const Icon = stat.icon;
             return (
-              <div 
-                key={stat.label} 
-                className="bg-white rounded-3xl p-4 sm:p-5 border border-slate-200/80 shadow-xs hover:shadow-md transition-all duration-300 transform hover:-translate-y-0.5 space-y-2"
-              >
+              <div key={stat.label} className="bg-white rounded-2xl p-4 border border-slate-200/80 shadow-sm">
                 <div className="flex items-center justify-between gap-2">
-                  <span className="text-[11px] sm:text-xs font-bold text-slate-500">{stat.label}</span>
-                  <div className={`w-8 h-8 rounded-xl ${stat.bgColor} ${stat.borderColor} border flex items-center justify-center flex-shrink-0`}>
-                    <Icon className={`w-4 h-4 ${stat.color}`} />
-                  </div>
+                  <span className="text-[11px] font-semibold text-slate-500">{stat.label}</span>
+                  <Icon className={`w-4 h-4 ${stat.color}`} />
                 </div>
-                <strong className={`block font-display font-black text-2xl sm:text-3xl ${stat.color}`}>
-                  {stat.value}
-                </strong>
-                <span className="text-[10px] sm:text-[11px] text-slate-400 block">
-                  {stat.sub}
-                </span>
+                <strong className={`block mt-2 font-display text-2xl ${stat.color}`}>{stat.value}</strong>
               </div>
             );
           })}
@@ -353,7 +288,7 @@ function DashboardContent() {
         ) : (
           /* Empty State when 0 roadmaps exist */
           <div className="bg-white rounded-3xl p-8 sm:p-12 text-center border border-slate-200/90 space-y-6 shadow-sm">
-            <div className="w-16 h-16 rounded-3xl bg-blue-50 text-blue-600 flex items-center justify-center mx-auto border border-blue-100 shadow-sm">
+            <div className="w-16 h-16 rounded-3xl bg-blue-50 text-blue-600 flex items-center justify-center mx-auto border border-blue-100">
               <Compass className="w-8 h-8" />
             </div>
             
@@ -369,14 +304,14 @@ function DashboardContent() {
             <button
               type="button"
               onClick={() => setShowAddModal(true)}
-              className="inline-flex items-center gap-2 px-6 py-3.5 bg-blue-600 text-white text-xs sm:text-sm font-bold rounded-2xl shadow-lg shadow-blue-600/25 hover:bg-blue-700 cursor-pointer transition-all transform hover:-translate-y-0.5"
+              className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 text-white text-xs sm:text-sm font-bold rounded-2xl shadow-md shadow-blue-600/25 hover:bg-blue-700 cursor-pointer transition-all transform hover:-translate-y-0.5"
             >
               <Plus className="w-4 h-4" />
               <span>Buat Peta Urusan Sekarang</span>
             </button>
 
             {/* Quick Starter Templates */}
-            <div className="pt-6 border-t border-slate-100">
+            <div className="pt-4 border-t border-slate-100">
               <span className="text-xs font-bold text-slate-400 uppercase tracking-wider block mb-3">
                 Atau pilih langsung alur siap pakai:
               </span>
@@ -393,7 +328,7 @@ function DashboardContent() {
                     key={item.slug}
                     type="button"
                     onClick={() => handleCreateRoadmap(item.slug)}
-                    className="p-3.5 rounded-2xl border border-slate-200 hover:border-blue-400 hover:bg-blue-50/40 text-left transition-all group cursor-pointer shadow-2xs"
+                    className="p-3.5 rounded-2xl border border-slate-200 hover:border-blue-400 hover:bg-blue-50/40 text-left transition-all group cursor-pointer"
                   >
                     <strong className="text-xs font-bold text-[#0f274a] group-hover:text-blue-600 block transition-colors">
                       {item.title}
@@ -431,13 +366,13 @@ function DashboardContent() {
                   Buat Peta Urusan Baru
                 </h3>
                 <p className="text-xs text-slate-500 mt-1">
-                  Pilih alur yang sedang kamu jalani untuk kami petakan:
+                  Pilih template alur yang sesuai dengan kebutuhan Anda saat ini:
                 </p>
               </div>
               <button
                 type="button"
                 onClick={() => setShowAddModal(false)}
-                className="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 flex items-center justify-center cursor-pointer"
+                className="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 flex items-center justify-center"
               >
                 <X className="w-4 h-4" />
               </button>

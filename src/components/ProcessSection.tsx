@@ -58,6 +58,11 @@ const PROCESS_STEPS = [
 
 export function ProcessSection() {
   const [activeStep, setActiveStep] = useState<number | null>(null);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   // Prevent scrolling when sidebar is open
   useEffect(() => {
@@ -197,7 +202,7 @@ export function ProcessSection() {
       </div>
 
       {/* Sidebar Overlay Modal */}
-      {activeStep !== null && typeof document !== "undefined" && createPortal(
+      {mounted && activeStep !== null && createPortal(
         <div className="fixed inset-0 z-[100] flex justify-end">
           <div 
             className="absolute inset-0 bg-slate-900/40 transition-opacity"
