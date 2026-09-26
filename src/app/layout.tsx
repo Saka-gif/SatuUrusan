@@ -46,7 +46,7 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col font-sans bg-[#f8fafc] text-[#0f172a] selection:bg-blue-500/20 selection:text-blue-900 relative">
         <CursorGlow />
         <Navbar />
-        <div className="flex-1 flex flex-col relative z-20">{children}</div>
+        <div className="flex-1 flex flex-col">{children}</div>
         <Footer />
         <AiAssistantModal />
       </body>

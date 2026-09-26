@@ -225,6 +225,92 @@ export const eventTaskTemplates: Record<string, Array<{ title: string; desc: str
       reqs: ["NIK", "NISN", "NPSN", "Bukti Penghasilan Orang Tua / Terdaftar DTKS"],
       url: "https://kip-kuliah.kemdikbud.go.id"
     }
+  ],
+  "kehilangan-dokumen": [
+    {
+      title: "Minta Surat Keterangan Kehilangan dari Kepolisian (SKTLK)",
+      desc: "Datang ke Polsek/Polres terdekat untuk membuat laporan kehilangan surat berharga (KTP, ATM, BPKB, dll).",
+      cat: "Kepolisian",
+      dur: "1-2 jam",
+      reqs: ["Fotokopi dokumen yang hilang (jika ada)", "Surat pengantar RT/RW (opsional)"],
+      url: "https://polri.go.id"
+    },
+    {
+      title: "Cetak Ulang KTP-el atau KK di Disdukcapil",
+      desc: "Bawa surat kehilangan kepolisian ke Dukcapil untuk dicetak ulang tanpa merubah NIK.",
+      cat: "Kependudukan",
+      dur: "1-3 hari kerja",
+      reqs: ["Surat Keterangan Kehilangan Asli", "Fotokopi KTP/KK (jika ada)"],
+      url: "https://dukcapil.kemendagri.go.id"
+    },
+    {
+      title: "Blokir dan Cetak Ulang Kartu ATM/Buku Tabungan",
+      desc: "Hubungi call center bank untuk blokir instan, lalu datang ke cabang untuk cetak kartu baru.",
+      cat: "Keuangan",
+      dur: "1 hari kerja",
+      reqs: ["KTP Asli (Baru / Surat Keterangan)", "Surat Kehilangan Kepolisian Asli", "Sejumlah uang untuk biaya ganti kartu"],
+      url: "#"
+    }
+  ],
+  "pajak-kendaraan": [
+    {
+      title: "Bayar Pajak Kendaraan Bermotor (Tahunan) via SIGNAL",
+      desc: "Bayar pajak tahunan secara online menggunakan aplikasi Samsat Digital Nasional (SIGNAL).",
+      cat: "Pajak",
+      dur: "Instan",
+      reqs: ["NIK KTP Sesuai STNK", "Aplikasi SIGNAL", "Nomor Rangka Mesin (BBNKB)"],
+      url: "https://samsatdigital.id"
+    },
+    {
+      title: "Balik Nama Kendaraan Bermotor (BBNKB)",
+      desc: "Ubah nama kepemilikan di BPKB dan STNK jika baru membeli kendaraan bekas.",
+      cat: "Pajak & Kepolisian",
+      dur: "7-14 hari kerja",
+      reqs: ["KTP Pemilik Baru Asli", "BPKB Asli", "STNK Asli", "Kwitansi Pembelian Bermaterai", "Hasil Cek Fisik Kendaraan"],
+      url: "#"
+    },
+    {
+      title: "Perpanjang STNK 5 Tahunan & Ganti Plat Nomor",
+      desc: "Membawa kendaraan ke Samsat asal untuk cek fisik dan pencetakan plat (TNKB) baru.",
+      cat: "Pajak & Kepolisian",
+      dur: "1-2 hari kerja",
+      reqs: ["KTP Asli", "STNK Asli", "BPKB Asli", "Kendaraan dibawa untuk cek fisik"],
+      url: "#"
+    }
+  ],
+  "ahli-waris": [
+    {
+      title: "Urus Surat Keterangan Kematian (RS / Kelurahan)",
+      desc: "Dapatkan surat keterangan meninggal dunia dari dokter, lalu lapor ke Kelurahan untuk pengantar akta.",
+      cat: "Kesehatan & Kependudukan",
+      dur: "1 hari",
+      reqs: ["KTP Almarhum", "KTP Pelapor", "KK Asli"],
+      url: "#"
+    },
+    {
+      title: "Terbitkan Akta Kematian di Disdukcapil",
+      desc: "Ubah status di KK dan cetak Akta Kematian yang merupakan syarat utama pencairan aset waris.",
+      cat: "Kependudukan",
+      dur: "3-5 hari kerja",
+      reqs: ["Surat Kematian Kelurahan", "KK & KTP Almarhum Asli", "KTP Saksi 2 Orang"],
+      url: "https://dukcapil.kemendagri.go.id"
+    },
+    {
+      title: "Buat Surat Keterangan Ahli Waris (SKAW)",
+      desc: "Urus SKAW di Kelurahan dan Kecamatan (untuk WNI Pribumi) atau Notaris (Keturunan) sebagai dasar hukum.",
+      cat: "Hukum & Pertanahan",
+      dur: "7-14 hari kerja",
+      reqs: ["Akta Kematian", "Buku Nikah Almarhum", "Akta Kelahiran Semua Ahli Waris", "KTP & KK Semua Ahli Waris"],
+      url: "#"
+    },
+    {
+      title: "Balik Nama Sertifikat Tanah Waris di BPN",
+      desc: "Turun wariskan sertifikat tanah/bangunan ke atas nama ahli waris atau bersama di kantor BPN.",
+      cat: "Pertanahan",
+      dur: "30-90 hari kerja",
+      reqs: ["Sertifikat Asli", "SKAW Asli", "Akta Kematian", "Bukti Bayar BPHTB Waris", "KTP & KK Ahli Waris"],
+      url: "https://atrbpn.go.id"
+    }
   ]
 };
 

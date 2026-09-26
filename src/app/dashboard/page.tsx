@@ -161,8 +161,6 @@ function DashboardContent() {
 
   return (
     <main aria-busy={isLoading} className="min-h-screen bg-slate-50/70 text-slate-800 flex flex-col font-sans">
-      <Navbar />
-
       <div className="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 pt-28 pb-12 lg:pt-32 lg:pb-16 flex-1 space-y-8">
         
         {/* Welcome Banner */}
@@ -338,6 +336,9 @@ function DashboardContent() {
                   { slug: "memiliki-anak", title: "Kelahiran Anggota Baru", desc: "Akta lahir, tambah KK, BPJS bayi, KIA" },
                   { slug: "memulai-usaha", title: "Membuka Usaha (UMKM)", desc: "NIB OSS RBA, sertifikat halal, PIRT" },
                   { slug: "pendidikan", title: "Pendidikan & Sekolah", desc: "PPDB online, legalisir ijazah, KIP" },
+                  { slug: "kehilangan-dokumen", title: "Kehilangan Dokumen", desc: "SKTLK Polri, KTP, ATM, Tabungan" },
+                  { slug: "pajak-kendaraan", title: "Pajak & Kendaraan", desc: "STNK, BPKB, Balik Nama, SIGNAL" },
+                  { slug: "ahli-waris", title: "Pengurusan Ahli Waris", desc: "Akta Kematian, SKAW, Balik Nama Tanah" },
                 ].map((item) => (
                   <button
                     key={item.slug}
@@ -401,6 +402,9 @@ function DashboardContent() {
                 { slug: "memiliki-anak", title: "Kelahiran Anggota Keluarga", desc: "Akta lahir, tambah anak ke KK, BPJS bayi, KIA", count: 4 },
                 { slug: "memulai-usaha", title: "Membuka Usaha Mandiri (UMKM)", desc: "NIB OSS, sertifikasi halal, rekening bisnis", count: 4 },
                 { slug: "pendidikan", title: "Pendidikan & Sekolah", desc: "PPDB online, legalisir ijazah, KIP Kuliah", count: 3 },
+                { slug: "kehilangan-dokumen", title: "Kehilangan Dokumen Penting", desc: "SKTLK Polri, KTP, ATM, Buku Tabungan", count: 3 },
+                { slug: "pajak-kendaraan", title: "Pajak & Surat Kendaraan", desc: "Pajak tahunan SIGNAL, BBNKB, STNK", count: 3 },
+                { slug: "ahli-waris", title: "Pengurusan Ahli Waris", desc: "Akta Kematian, SKAW, Balik Nama Sertifikat", count: 4 },
               ].map((ev) => (
                 <button
                   key={ev.slug}
