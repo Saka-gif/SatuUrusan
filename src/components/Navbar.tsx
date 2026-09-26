@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import { BrandMark } from "./BrandMark";
+import { EditProfileModal } from "./EditProfileModal";
 import { 
   Menu, 
   X, 
@@ -24,6 +25,8 @@ export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [profileName, setProfileName] = useState("Teman Satu");
+  const [avatarUrl, setAvatarUrl] = useState("");
+  const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
 
   useEffect(() => {
     let ticking = false;
@@ -38,9 +41,10 @@ export function Navbar() {
       }
 
       try {
-        const session = JSON.parse(rawSession) as { name?: string };
+        const session = JSON.parse(rawSession) as { name?: string; avatar_url?: string };
         setIsAuthenticated(true);
         setProfileName(session.name || "Teman Satu");
+        setAvatarUrl(session.avatar_url || "");
       } catch {
         window.localStorage.removeItem("satuurusan_session");
         setIsAuthenticated(false);
@@ -197,12 +201,21 @@ export function Navbar() {
               >
                 <Bell className="w-4 h-4" />
               </Link>
-              <div className="flex items-center gap-2 pl-2 border-l border-slate-200">
-                <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-blue-600 to-indigo-600 text-white flex items-center justify-center font-bold text-xs shadow-xs">
-                  {profileName.slice(0, 1).toUpperCase()}
+              <button 
+                type="button"
+                onClick={() => setIsProfileModalOpen(true)}
+                className="flex items-center gap-2 pl-2 border-l border-slate-200 hover:bg-slate-50 py-1 px-2 rounded-lg transition-colors"
+                title="Edit Profil"
+              >
+                <div className="w-8 h-8 rounded-full bg-slate-100 text-white flex items-center justify-center font-bold text-xs shadow-xs overflow-hidden border border-slate-200">
+                  <img 
+                    src={avatarUrl || `https://api.dicebear.com/9.x/micah/svg?seed=${encodeURIComponent(profileName)}&backgroundColor=b6e3f4,c0aede,d1d4f9`} 
+                    alt="Avatar" 
+                    className="w-full h-full object-cover" 
+                  />
                 </div>
                 <span className="max-w-28 truncate text-xs font-bold text-slate-700">{profileName}</span>
-              </div>
+              </button>
               <button
                 type="button"
                 onClick={handleLogout}
@@ -310,6 +323,15 @@ export function Navbar() {
           </div>
         </div>
       )}
+
+      {/* Edit Profile Modal */}
+      <EditProfileModal 
+        isOpen={isProfileModalOpen} 
+        onClose={() => setIsProfileModalOpen(false)}
+        onProfileUpdated={() => {
+          window.dispatchEvent(new CustomEvent("satuurusan-session-changed"));
+        }}
+      />
     </header>
   );
 }

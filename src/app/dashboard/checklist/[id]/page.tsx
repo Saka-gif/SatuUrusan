@@ -26,6 +26,8 @@ export default function ChecklistPage({ params }: { params: Promise<{ id: string
   const router = useRouter();
   const [activeRoadmap, setActiveRoadmap] = useState<UserRoadmap | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
   
   // Use React.use to unwrap the Promise correctly in Next 15+
   const resolvedParams = use(params);
@@ -85,9 +87,9 @@ export default function ChecklistPage({ params }: { params: Promise<{ id: string
     }
   };
 
-  const handleDeleteRoadmap = async () => {
+  const confirmDelete = async () => {
     if (!activeRoadmap) return;
-    if (!confirm("Apakah Anda yakin ingin menghapus peta urusan ini?")) return;
+    setIsDeleting(true);
 
     try {
       await deleteUserRoadmap(activeRoadmap.id);
@@ -95,9 +97,10 @@ export default function ChecklistPage({ params }: { params: Promise<{ id: string
     } catch (err) {
       console.error("Gagal menghapus roadmap", err);
       alert("Terjadi kesalahan saat menghapus roadmap. Silakan coba lagi.");
+      setIsDeleting(false);
+      setIsDeleteDialogOpen(false);
     }
   };
-
   if (isLoading) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-slate-50 text-sm text-slate-500">
@@ -145,7 +148,7 @@ export default function ChecklistPage({ params }: { params: Promise<{ id: string
             <div className="flex items-center gap-2 flex-shrink-0">
               <button
                 type="button"
-                onClick={handleDeleteRoadmap}
+                onClick={() => setIsDeleteDialogOpen(true)}
                 className="p-2.5 text-slate-400 hover:text-rose-600 rounded-xl hover:bg-rose-50 transition-colors cursor-pointer"
                 title="Hapus Roadmap"
               >
@@ -166,8 +169,8 @@ export default function ChecklistPage({ params }: { params: Promise<{ id: string
               <div
                 className={`h-full transition-all duration-500 rounded-full ${
                   activeRoadmap.progress_pct === 100
-                    ? "bg-gradient-to-r from-emerald-500 to-teal-400"
-                    : "bg-gradient-to-r from-blue-600 to-indigo-500"
+                    ? "bg-emerald-500"
+                    : "bg-blue-600"
                 }`}
                 style={{ width: `${activeRoadmap.progress_pct}%` }}
               />
@@ -275,6 +278,51 @@ export default function ChecklistPage({ params }: { params: Promise<{ id: string
         </div>
         
       </div>
+
+      {/* Delete Confirmation Modal */}
+      {isDeleteDialogOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm">
+          <div className="bg-white rounded-3xl shadow-xl max-w-sm w-full p-6 animate-in fade-in zoom-in duration-200">
+            <div className="flex flex-col items-center text-center space-y-4">
+              <div className="w-16 h-16 bg-rose-50 rounded-full flex items-center justify-center text-rose-500 mb-2">
+                <Trash2 className="w-8 h-8" />
+              </div>
+              <h3 className="font-display font-bold text-xl text-slate-900">
+                Hapus Peta Urusan?
+              </h3>
+              <p className="text-sm text-slate-500 leading-relaxed">
+                Anda yakin ingin menghapus <strong>{activeRoadmap.title}</strong>? Semua progres checklist untuk urusan ini akan hilang dan tidak dapat dikembalikan.
+              </p>
+              
+              <div className="flex items-center gap-3 w-full pt-4">
+                <button
+                  type="button"
+                  onClick={() => setIsDeleteDialogOpen(false)}
+                  disabled={isDeleting}
+                  className="flex-1 py-3 px-4 rounded-xl font-bold text-slate-600 bg-slate-100 hover:bg-slate-200 transition-colors disabled:opacity-50"
+                >
+                  Batal
+                </button>
+                <button
+                  type="button"
+                  onClick={confirmDelete}
+                  disabled={isDeleting}
+                  className="flex-1 py-3 px-4 rounded-xl font-bold text-white bg-rose-600 hover:bg-rose-700 transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
+                >
+                  {isDeleting ? (
+                    <>
+                      <LoaderCircle className="w-4 h-4 animate-spin" />
+                      Menghapus
+                    </>
+                  ) : (
+                    "Ya, Hapus"
+                  )}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </main>
   );
 }

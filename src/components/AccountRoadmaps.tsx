@@ -74,7 +74,7 @@ export function AccountRoadmaps({ mode }: { mode: "active" | "history" }) {
                 </div>
                 <p className="mt-2 text-xs leading-relaxed text-slate-500">{roadmap.description}</p>
                 <div className="mt-5 h-2 overflow-hidden rounded-full bg-slate-100">
-                  <div className="h-full rounded-full bg-gradient-to-r from-blue-600 to-cyan-500" style={{ width: `${roadmap.progress_pct}%` }} />
+                  <div className="h-full rounded-full bg-blue-600" style={{ width: `${roadmap.progress_pct}%` }} />
                 </div>
                 <div className="mt-4 flex items-center justify-between text-[11px] text-slate-500">
                   <span>{roadmap.tasks?.filter((task) => task.is_completed).length || 0} dari {roadmap.tasks?.length || 0} langkah selesai</span>

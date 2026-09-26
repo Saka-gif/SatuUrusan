@@ -30,7 +30,9 @@ import {
   Bell,
   UserRound,
   CheckCircle,
-  X
+  X,
+  TrendingUp,
+  ArrowDown
 } from "lucide-react";
 import confetti from "canvas-confetti";
 
@@ -164,18 +166,16 @@ function DashboardContent() {
       <div className="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 pt-28 pb-12 lg:pt-32 lg:pb-16 flex-1 space-y-8">
         
         {/* Welcome Banner */}
-        <div className="rounded-3xl bg-gradient-to-r from-[#0f274a] via-[#17345b] to-[#1e4976] p-6 sm:p-10 text-white shadow-xl flex flex-col md:flex-row md:items-center justify-between gap-6 relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl pointer-events-none" />
-          
-          <div className="space-y-2 relative z-10 max-w-2xl">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white/10 border border-white/15 text-blue-200 text-xs font-bold">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse-soft" />
+        <div className="bg-[#0f274a] rounded-3xl p-6 sm:p-8 text-white flex flex-col md:flex-row md:items-center justify-between gap-6 relative overflow-hidden shadow-sm">
+          <div className="space-y-3 relative z-10 max-w-2xl">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 text-blue-50 text-[10px] font-bold uppercase tracking-wider">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
               <span>Personal Life-Event Roadmap</span>
             </div>
-            <h1 className="font-display text-2xl sm:text-4xl font-extrabold tracking-tight">
-              Halo, {profileName} <span aria-hidden="true">👋</span>
+            <h1 className="font-display text-2xl sm:text-3xl font-extrabold tracking-tight">
+              Halo, {profileName} <span aria-hidden="true" className="text-2xl">👋</span>
             </h1>
-            <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
+            <p className="text-xs sm:text-sm text-blue-100/80 leading-relaxed">
               Pantau progres dokumen prasyarat, urutan prioritas antar dinas, dan checklist langkah tanpa rasa bingung.
             </p>
           </div>
@@ -188,7 +188,7 @@ function DashboardContent() {
                   window.dispatchEvent(new CustomEvent("open-satu-ai"));
                 }
               }}
-              className="inline-flex items-center gap-2 px-4 py-3 rounded-2xl bg-white/10 hover:bg-white/20 border border-white/20 text-white text-xs font-bold transition-all cursor-pointer"
+              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 border-transparent text-white text-xs font-bold transition-colors cursor-pointer"
             >
               <Sparkles className="w-4 h-4 text-amber-300" />
               <span>Tanya SatuAI</span>
@@ -196,10 +196,10 @@ function DashboardContent() {
             <button
               type="button"
               onClick={() => setShowAddModal(true)}
-              className="inline-flex items-center gap-2 px-5 py-3 rounded-2xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold shadow-lg shadow-blue-600/30 transition-all transform hover:-translate-y-0.5 cursor-pointer"
+              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-blue-500 hover:bg-blue-400 text-white text-xs font-bold transition-colors cursor-pointer"
             >
               <Plus className="w-4 h-4" />
-              <span>Buat Peta Urusan Baru</span>
+              <span>Peta Urusan Baru</span>
             </button>
           </div>
         </div>
@@ -207,19 +207,34 @@ function DashboardContent() {
         {/* Overview Stats */}
         <section className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4" aria-label="Ringkasan urusan">
           {[
-            { label: "Total Urusan", value: roadmaps.length, color: "text-blue-600", icon: FileText },
-            { label: "Sedang Berjalan", value: inProgressCount, color: "text-amber-600", icon: Clock },
-            { label: "Langkah Selesai", value: completedTasks, color: "text-emerald-600", icon: CheckCircle2 },
-            { label: "Perlu Tindakan", value: needsActionCount, color: "text-rose-600", icon: Info },
+            { label: "Total Urusan", value: roadmaps.length, color: "text-blue-600", icon: FileText, trend: "+1", trendLabel: "vs bulan lalu", trendType: "up", trendColor: "text-emerald-600", trendBg: "bg-emerald-500/10" },
+            { label: "Sedang Berjalan", value: inProgressCount, color: "text-amber-600", icon: Clock, trend: "+1", trendLabel: "butuh proses", trendType: "up", trendColor: "text-emerald-600", trendBg: "bg-emerald-500/10" },
+            { label: "Langkah Selesai", value: completedTasks, color: "text-emerald-600", icon: CheckCircle2, trend: "+12.4%", trendLabel: "vs kemarin", trendType: "up", trendColor: "text-emerald-600", trendBg: "bg-emerald-500/10" },
+            { label: "Perlu Tindakan", value: needsActionCount, color: "text-rose-600", icon: Info, trend: "-2", trendLabel: "terselesaikan", trendType: "down", trendColor: "text-emerald-600", trendBg: "bg-emerald-500/10" },
           ].map((stat) => {
             const Icon = stat.icon;
+            const TrendIcon = stat.trendType === "up" ? TrendingUp : ArrowDown;
             return (
-              <div key={stat.label} className="bg-white rounded-2xl p-4 border border-slate-200/80 shadow-sm">
+              <div key={stat.label} className="bg-white rounded-2xl p-4 border border-slate-200/80 shadow-sm flex flex-col justify-between hover:shadow-md transition-shadow">
                 <div className="flex items-center justify-between gap-2">
                   <span className="text-[11px] font-semibold text-slate-500">{stat.label}</span>
-                  <Icon className={`w-4 h-4 ${stat.color}`} />
+                  <div className={`p-1.5 rounded-lg bg-slate-50 border border-slate-100 ${stat.color}`}>
+                    <Icon className="w-3.5 h-3.5" />
+                  </div>
                 </div>
-                <strong className={`block mt-2 font-display text-2xl ${stat.color}`}>{stat.value}</strong>
+                <strong className={`block mt-2.5 font-display text-2xl font-extrabold ${stat.color}`}>{stat.value}</strong>
+                
+                <div className="mt-3.5 flex items-center gap-1.5 sm:gap-2">
+                  <div className={`w-4 h-4 sm:w-5 sm:h-5 rounded-full flex items-center justify-center flex-shrink-0 ${stat.trendBg}`}>
+                    <TrendIcon className={`w-2.5 h-2.5 sm:w-3 sm:h-3 ${stat.trendColor}`} strokeWidth={3} />
+                  </div>
+                  <span className={`text-[10px] sm:text-xs font-bold ${stat.trendColor}`}>
+                    {stat.trend}
+                  </span>
+                  <span className="text-[10px] sm:text-[11px] text-slate-400 font-medium truncate">
+                    {stat.trendLabel}
+                  </span>
+                </div>
               </div>
             );
           })}
@@ -264,8 +279,8 @@ function DashboardContent() {
                       <div
                         className={`h-full rounded-full ${
                           rm.progress_pct === 100
-                            ? "bg-gradient-to-r from-emerald-500 to-teal-400"
-                            : "bg-gradient-to-r from-blue-600 to-cyan-500"
+                            ? "bg-emerald-500"
+                            : "bg-blue-600"
                         }`}
                         style={{ width: `${rm.progress_pct}%` }}
                       />
