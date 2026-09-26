@@ -110,6 +110,17 @@ export function Navbar() {
     router.push("/");
   };
 
+  const isAuthPage = [
+    "/masuk", 
+    "/daftar", 
+    "/mulai", 
+    "/onboarding"
+  ].some((path) => pathname === path || pathname.startsWith(path));
+
+  const isFocusMode = pathname.startsWith("/dashboard/checklist");
+
+  if (isAuthPage || isFocusMode) return null;
+
   return (
     <header
       className={`fixed top-0 z-40 w-full transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${

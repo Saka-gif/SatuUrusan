@@ -23,6 +23,7 @@ import {
 export function Footer() {
   const pathname = usePathname();
   const shouldHideFooter = [
+    "/dashboard/checklist",
     "/daftar",
     "/masuk",
     "/mulai",
